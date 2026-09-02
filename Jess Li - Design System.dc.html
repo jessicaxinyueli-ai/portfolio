@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&amp;family=Archivo+Expanded:wght@500;600;700;800;900&amp;family=Space+Mono:wght@400;700&amp;family=Noto+Sans+SC:wght@400;500;700&amp;family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:#fbfbfc;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+  ::selection{background:#bcdafc;}
+  @keyframes dsIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+</style>
+</helmet>
+<div style="--ink:#141416;--paper:#fbfbfc;--surface:#f4f4f6;--surface-2:#ececed;--line:rgba(20,20,22,.13);--line-strong:#141416;--muted:#54545b;--muted-2:#86868d;--accent:#141416;--sel:#bcdafc;--sel-ink:#1b7af7;--ok:#2f6b4f;--warn:#8a6d2f;--err:#8a3a3a;background:#fbfbfc;color:#141416;font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-weight:400;min-height:100vh;">
+
+  <!-- ======================= MASTHEAD ======================= -->
+  <header style="max-width:1100px;margin:0 auto;padding:clamp(96px,12vw,150px) clamp(24px,6vw,64px) clamp(40px,6vw,64px);">
+    <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;">Jess Li — Design System v1.0</div>
+    <h1 style="font-family:'Space Mono',monospace;font-weight:100;font-size:45px;line-height:.9;letter-spacing:-.02em;margin:0 0 24px;max-width:14ch;">The system behind the work.</h1>
+    <p style="font-family:'Work Sans',sans-serif;font-size:clamp(15px,1.5vw,18px);line-height:1.7;color:var(--muted);margin:0;max-width:60ch;">One cohesive language for every page, component, and interaction. Monochrome, typographic-first, and quietly precise. This document is the single source of truth for tokens, type, color, spacing, components, and motion.</p>
+    <nav style="display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:clamp(32px,4vw,44px);">
+      <a href="#brand" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 15px;" style-hover="border-color:var(--ink)">01 Brand</a>
+      <a href="#type" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 15px;" style-hover="border-color:var(--ink)">02 Type</a>
+      <a href="#color" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 15px;" style-hover="border-color:var(--ink)">03 Color</a>
+      <a href="#space" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 15px;" style-hover="border-color:var(--ink)">04 Spacing</a>
+      <a href="#grid" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 15px;" style-hover="border-color:var(--ink)">05 Grid</a>
+      <a href="#components" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 15px;" style-hover="border-color:var(--ink)">06 Components</a>
+      <a href="#motion" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 15px;" style-hover="border-color:var(--ink)">07 Motion</a>
+      <a href="#imagery" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 15px;" style-hover="border-color:var(--ink)">08 Imagery</a>
+    </nav>
+  </header>
+
+  <!-- ======================= 01 BRAND ======================= -->
+  <section id="brand" style="max-width:1100px;margin:0 auto;padding:clamp(48px,7vw,88px) clamp(24px,6vw,64px);border-top:1px solid var(--line-strong);">
+    <div style="display:flex;align-items:baseline;gap:16px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:26px;"><span>01</span><span style="color:var(--muted-2);">Brand</span></div>
+    <h2 style="font-family:'Space Mono',monospace;font-weight:100;font-size:45px;line-height:1.0;letter-spacing:-.018em;margin:0 0 clamp(32px,4vw,48px);max-width:18ch;">Calm, premium, and unmistakably deliberate.</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:clamp(40px,5vw,60px);">
+      <div style="background:var(--paper);padding:24px 26px;"><div style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:10px;">01</div><div style="font-family:'Archivo Expanded',sans-serif;font-weight:600;font-size:19px;margin-bottom:8px;">Typography is the interface</div><div style="font-size:14px;line-height:1.6;color:var(--muted);">Hierarchy is built with weight, scale, and space — not decoration.</div></div>
+      <div style="background:var(--paper);padding:24px 26px;"><div style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:10px;">02</div><div style="font-family:'Archivo Expanded',sans-serif;font-weight:600;font-size:19px;margin-bottom:8px;">Monochrome discipline</div><div style="font-size:14px;line-height:1.6;color:var(--muted);">One ink, one paper, graded greys. Color is reserved, never decorative.</div></div>
+      <div style="background:var(--paper);padding:24px 26px;"><div style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:10px;">03</div><div style="font-family:'Archivo Expanded',sans-serif;font-weight:600;font-size:19px;margin-bottom:8px;">Space is a material</div><div style="font-size:14px;line-height:1.6;color:var(--muted);">Whitespace does the work most borders and boxes try to do.</div></div>
+      <div style="background:var(--paper);padding:24px 26px;"><div style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:10px;">04</div><div style="font-family:'Archivo Expanded',sans-serif;font-weight:600;font-size:19px;margin-bottom:8px;">Motion with a reason</div><div style="font-size:14px;line-height:1.6;color:var(--muted);">Every animation reveals content, gives feedback, or shows state.</div></div>
+      <div style="background:var(--paper);padding:24px 26px;"><div style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:10px;">05</div><div style="font-family:'Archivo Expanded',sans-serif;font-weight:600;font-size:19px;margin-bottom:8px;">Detail earns trust</div><div style="font-size:14px;line-height:1.6;color:var(--muted);">Alignment, optical spacing, and consistency are the whole point.</div></div>
+      <div style="background:var(--paper);padding:24px 26px;"><div style="font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:10px;">06</div><div style="font-family:'Archivo Expanded',sans-serif;font-weight:600;font-size:19px;margin-bottom:8px;">One playful signature</div><div style="font-size:14px;line-height:1.6;color:var(--muted);">The cursor-tracking eyes are the single moment of warmth. Just one.</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(28px,4vw,52px);">
+      <div><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:12px;">Personality</div><p style="font-size:15px;line-height:1.7;color:var(--muted);margin:0;">Editorial and considered, like a well-set magazine. Confident without shouting. Precise without being cold. A designer who sweats the small type.</p></div>
+      <div><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:12px;">Tone of voice</div><p style="font-size:15px;line-height:1.7;color:var(--muted);margin:0;">Plain, specific, and honest. Short sentences. Real numbers over adjectives. Says the caveat out loud. Never uses filler verbs or hype.</p></div>
+      <div><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:12px;">Motion philosophy</div><p style="font-size:15px;line-height:1.7;color:var(--muted);margin:0;">Slow in, settle gently. Reveals over reactions. Nothing loops for attention. Everything respects reduced-motion and collapses to still.</p></div>
+    </div>
+  </section>
+
+  <!-- ======================= 02 TYPE ======================= -->
+  <section id="type" style="max-width:1100px;margin:0 auto;padding:clamp(48px,7vw,88px) clamp(24px,6vw,64px);border-top:1px solid var(--line-strong);">
+    <div style="display:flex;align-items:baseline;gap:16px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:26px;"><span>02</span><span style="color:var(--muted-2);">Typography</span></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:clamp(40px,5vw,56px);">
+      <div style="background:var(--paper);padding:22px 24px;"><div style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:40px;line-height:1;">Aa</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:14px;">Archivo Expanded</div><div style="font-size:13px;color:var(--muted);margin-top:4px;">Display accents · 600–800</div></div>
+      <div style="background:var(--paper);padding:22px 24px;"><div style="font-family:'Work Sans',sans-serif;font-weight:500;font-size:40px;line-height:1;">Aa</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:14px;">Work Sans</div><div style="font-size:13px;color:var(--muted);margin-top:4px;">Body · secondary · 400–700</div></div>
+      <div style="background:var(--paper);padding:22px 24px;"><div style="font-family:'Noto Sans SC',sans-serif;font-weight:500;font-size:40px;line-height:1;">李欣</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:14px;">Noto Sans SC</div><div style="font-size:13px;color:var(--muted);margin-top:4px;">Chinese · 400–700</div></div>
+      <div style="background:var(--paper);padding:22px 24px;"><div style="font-family:'Space Mono',monospace;font-weight:400;font-size:36px;line-height:1;">A1</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:14px;">Space Mono</div><div style="font-size:13px;color:var(--muted);margin-top:4px;">Headings / labels / numerals · 100–700</div></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);"><div style="font-family:'Space Mono',monospace;font-weight:100;font-size:45px;line-height:.88;letter-spacing:-.02em;">Display</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);text-align:right;flex:0 0 auto;">Space Mono 100 · 45px · lh .94 · -.02em</div></div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);"><div style="font-family:'Space Mono',monospace;font-weight:100;font-size:45px;line-height:1;letter-spacing:-.018em;">Heading 1</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);text-align:right;flex:0 0 auto;">Space Mono 100 · 45px · lh .94</div></div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);"><div style="font-family:'Space Mono',monospace;font-weight:100;font-size:45px;line-height:1.02;letter-spacing:-.015em;">Heading 2</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);text-align:right;flex:0 0 auto;">Space Mono 100 · 45px · lh 1.02</div></div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);"><div style="font-family:'Space Mono',monospace;font-weight:100;font-size:45px;line-height:1.08;">Heading 3</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);text-align:right;flex:0 0 auto;">Space Mono 100 · 45px · lh 1.08</div></div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);"><div style="font-family:'Work Sans',sans-serif;font-weight:400;font-size:18px;line-height:1.7;color:var(--ink);max-width:52ch;">Body Large — used for ledes and intros. Comfortable measure, generous leading.</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);text-align:right;flex:0 0 auto;">Work Sans 400 · 18px · lh 1.7</div></div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);"><div style="font-family:'Work Sans',sans-serif;font-weight:400;font-size:15px;line-height:1.75;color:var(--muted);max-width:60ch;">Body — the workhorse for paragraphs and case-study prose. Max measure 60–65ch for readability.</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);text-align:right;flex:0 0 auto;">Work Sans 400 · 15px · lh 1.75</div></div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);"><div style="font-family:'Work Sans',sans-serif;font-weight:400;font-size:13px;line-height:1.7;color:var(--muted);">Body Small — meta rows, secondary detail, captions in prose.</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);text-align:right;flex:0 0 auto;">Work Sans 400 · 13px · lh 1.7</div></div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);">Label / Eyebrow</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);text-align:right;flex:0 0 auto;">Space Mono · 11px · .16–.22em · uppercase</div></div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);"><div style="font-family:'Work Sans',sans-serif;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);">Caption — Fig. 01</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);text-align:right;flex:0 0 auto;">Work Sans · 10.5px · .14em · uppercase</div></div>
+    </div>
+    <p style="font-family:'Work Sans',sans-serif;font-size:13px;line-height:1.7;color:var(--muted);margin:26px 0 0;max-width:70ch;">Responsive scaling uses <span style="font-family:'Space Mono',monospace;font-size:12px;">clamp(min, vw, max)</span> so type fluidly interpolates between mobile and desktop with no breakpoint jumps. Display and headings scale most; body scales the least to protect readability.</p>
+  </section>
+
+  <!-- ======================= 03 COLOR ======================= -->
+  <section id="color" style="max-width:1100px;margin:0 auto;padding:clamp(48px,7vw,88px) clamp(24px,6vw,64px);border-top:1px solid var(--line-strong);">
+    <div style="display:flex;align-items:baseline;gap:16px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:26px;"><span>03</span><span style="color:var(--muted-2);">Color</span></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:clamp(32px,4vw,44px);">
+      <div><div style="height:110px;border-radius:3px;background:#141416;border:1px solid var(--line);"></div><div style="font-family:'Archivo Expanded',sans-serif;font-weight:600;font-size:14px;margin-top:12px;">Ink / Primary</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:3px;">#141416 · text, accent</div></div>
+      <div><div style="height:110px;border-radius:3px;background:#3a3a3f;border:1px solid var(--line);"></div><div style="font-family:'Archivo Expanded',sans-serif;font-weight:600;font-size:14px;margin-top:12px;">Ink 2 / Body</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:3px;">#3a3a3f · paragraphs</div></div>
+      <div><div style="height:110px;border-radius:3px;background:#54545b;border:1px solid var(--line);"></div><div style="font-family:'Archivo Expanded',sans-serif;font-weight:600;font-size:14px;margin-top:12px;">Muted</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:3px;">#54545b · secondary</div></div>
+      <div><div style="height:110px;border-radius:3px;background:#86868d;border:1px solid var(--line);"></div><div style="font-family:'Archivo Expanded',sans-serif;font-weight:600;font-size:14px;margin-top:12px;">Muted 2 / Labels</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:3px;">#86868d · tertiary</div></div>
+      <div><div style="height:110px;border-radius:3px;background:#f4f4f6;border:1px solid var(--line);"></div><div style="font-family:'Archivo Expanded',sans-serif;font-weight:600;font-size:14px;margin-top:12px;">Surface</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:3px;">#f4f4f6 · footer, cards</div></div>
+      <div><div style="height:110px;border-radius:3px;background:#fbfbfc;border:1px solid var(--line);"></div><div style="font-family:'Archivo Expanded',sans-serif;font-weight:600;font-size:14px;margin-top:12px;">Paper</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:3px;">#fbfbfc · page bg</div></div>
+      <div><div style="height:110px;border-radius:3px;background:#fbfbfc;border:1px solid rgba(20,20,22,.13);"><div style="height:100%;border-bottom:1px solid rgba(20,20,22,.13);"></div></div><div style="font-family:'Archivo Expanded',sans-serif;font-weight:600;font-size:14px;margin-top:12px;">Border</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:3px;">rgba(20,20,22,.13)</div></div>
+      <div><div style="height:110px;border-radius:3px;background:#bcdafc;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;"><span style="width:3px;height:34px;background:#1b7af7;"></span></div><div style="font-family:'Archivo Expanded',sans-serif;font-weight:600;font-size:14px;margin-top:12px;">Selection</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:3px;">#bcdafc / #1b7af7</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;">
+      <div><div style="height:64px;border-radius:3px;background:#2f6b4f;"></div><div style="font-family:'Work Sans',sans-serif;font-size:13px;margin-top:10px;color:var(--ink);">Success</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);">#2f6b4f</div></div>
+      <div><div style="height:64px;border-radius:3px;background:#8a6d2f;"></div><div style="font-family:'Work Sans',sans-serif;font-size:13px;margin-top:10px;color:var(--ink);">Warning</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);">#8a6d2f</div></div>
+      <div><div style="height:64px;border-radius:3px;background:#8a3a3a;"></div><div style="font-family:'Work Sans',sans-serif;font-size:13px;margin-top:10px;color:var(--ink);">Error</div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);">#8a3a3a</div></div>
+    </div>
+    <p style="font-family:'Work Sans',sans-serif;font-size:13px;line-height:1.7;color:var(--muted);margin:26px 0 0;max-width:70ch;">Hover uses Ink for links and labels. Selection blue mimics native iOS text selection and is the only chromatic color in the product — reserved for the About "Quote of the day" moment. Status colors are desaturated to sit inside the monochrome palette and used sparingly.</p>
+  </section>
+
+  <!-- ======================= 04 SPACING ======================= -->
+  <section id="space" style="max-width:1100px;margin:0 auto;padding:clamp(48px,7vw,88px) clamp(24px,6vw,64px);border-top:1px solid var(--line-strong);">
+    <div style="display:flex;align-items:baseline;gap:16px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:26px;"><span>04</span><span style="color:var(--muted-2);">Spacing — 8px base</span></div>
+    <div style="display:flex;flex-direction:column;gap:14px;max-width:640px;">
+      <div style="display:flex;align-items:center;gap:20px;"><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted-2);width:96px;flex:0 0 auto;">space-1 · 4</span><div style="height:16px;width:4px;background:var(--ink);"></div></div>
+      <div style="display:flex;align-items:center;gap:20px;"><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted-2);width:96px;flex:0 0 auto;">space-2 · 8</span><div style="height:16px;width:8px;background:var(--ink);"></div></div>
+      <div style="display:flex;align-items:center;gap:20px;"><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted-2);width:96px;flex:0 0 auto;">space-3 · 12</span><div style="height:16px;width:12px;background:var(--ink);"></div></div>
+      <div style="display:flex;align-items:center;gap:20px;"><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted-2);width:96px;flex:0 0 auto;">space-4 · 16</span><div style="height:16px;width:16px;background:var(--ink);"></div></div>
+      <div style="display:flex;align-items:center;gap:20px;"><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted-2);width:96px;flex:0 0 auto;">space-6 · 24</span><div style="height:16px;width:24px;background:var(--ink);"></div></div>
+      <div style="display:flex;align-items:center;gap:20px;"><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted-2);width:96px;flex:0 0 auto;">space-8 · 32</span><div style="height:16px;width:32px;background:var(--ink);"></div></div>
+      <div style="display:flex;align-items:center;gap:20px;"><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted-2);width:96px;flex:0 0 auto;">space-10 · 40</span><div style="height:16px;width:40px;background:var(--ink);"></div></div>
+      <div style="display:flex;align-items:center;gap:20px;"><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted-2);width:96px;flex:0 0 auto;">space-12 · 48</span><div style="height:16px;width:48px;background:var(--ink);"></div></div>
+      <div style="display:flex;align-items:center;gap:20px;"><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted-2);width:96px;flex:0 0 auto;">space-16 · 64</span><div style="height:16px;width:64px;background:var(--ink);"></div></div>
+      <div style="display:flex;align-items:center;gap:20px;"><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted-2);width:96px;flex:0 0 auto;">space-20 · 80</span><div style="height:16px;width:80px;background:var(--ink);"></div></div>
+      <div style="display:flex;align-items:center;gap:20px;"><span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--muted-2);width:96px;flex:0 0 auto;">space-30 · 120</span><div style="height:16px;width:120px;background:var(--ink);"></div></div>
+    </div>
+    <p style="font-family:'Work Sans',sans-serif;font-size:13px;line-height:1.7;color:var(--muted);margin:26px 0 0;max-width:70ch;">All padding, gaps, and margins are multiples of 8 (with 4 as the single half-step). Section rhythm uses the large end of the scale via <span style="font-family:'Space Mono',monospace;font-size:12px;">clamp(48px, 8vw, 104px)</span>.</p>
+  </section>
+
+  <!-- ======================= 05 GRID ======================= -->
+  <section id="grid" style="max-width:1100px;margin:0 auto;padding:clamp(48px,7vw,88px) clamp(24px,6vw,64px);border-top:1px solid var(--line-strong);">
+    <div style="display:flex;align-items:baseline;gap:16px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:26px;"><span>05</span><span style="color:var(--muted-2);">Grid &amp; layout</span></div>
+    <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:10px;margin-bottom:28px;">
+      <div style="grid-column:span 12;height:8px;"></div>
+      <div style="grid-column:span 1;height:80px;background:var(--surface-2);"></div><div style="grid-column:span 1;height:80px;background:var(--surface-2);"></div><div style="grid-column:span 1;height:80px;background:var(--surface-2);"></div><div style="grid-column:span 1;height:80px;background:var(--surface-2);"></div><div style="grid-column:span 1;height:80px;background:var(--surface-2);"></div><div style="grid-column:span 1;height:80px;background:var(--surface-2);"></div><div style="grid-column:span 1;height:80px;background:var(--surface-2);"></div><div style="grid-column:span 1;height:80px;background:var(--surface-2);"></div><div style="grid-column:span 1;height:80px;background:var(--surface-2);"></div><div style="grid-column:span 1;height:80px;background:var(--surface-2);"></div><div style="grid-column:span 1;height:80px;background:var(--surface-2);"></div><div style="grid-column:span 1;height:80px;background:var(--surface-2);"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);">
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Desktop</div><div style="font-size:14px;color:var(--ink);">12 columns · gutter 24–80px</div></div>
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Tablet ≤ 960</div><div style="font-size:14px;color:var(--ink);">8 columns · stacks to 1-col rows</div></div>
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Mobile ≤ 620</div><div style="font-size:14px;color:var(--ink);">4 columns · full-width single column</div></div>
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Max width</div><div style="font-size:14px;color:var(--ink);">1340 index · 1180 reading · 1000 about</div></div>
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Gutters</div><div style="font-size:14px;color:var(--ink);">clamp(24px, 6vw, 80px)</div></div>
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Vertical rhythm</div><div style="font-size:14px;color:var(--ink);">section clamp(48px, 8vw, 104px)</div></div>
+    </div>
+  </section>
+
+  <!-- ======================= 06 COMPONENTS ======================= -->
+  <section id="components" style="max-width:1100px;margin:0 auto;padding:clamp(48px,7vw,88px) clamp(24px,6vw,64px);border-top:1px solid var(--line-strong);">
+    <div style="display:flex;align-items:baseline;gap:16px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:40px;"><span>06</span><span style="color:var(--muted-2);">Components</span></div>
+
+    <!-- Navigation -->
+    <div style="margin-bottom:clamp(40px,5vw,60px);">
+      <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px;">Navigation</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border:1px solid var(--line);border-radius:4px;background:var(--paper);">
+        <span style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:22px;">Jess Li</span>
+        <div style="display:flex;gap:28px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);"><span style="color:var(--ink);">Work</span><span>About</span><span>Contact</span></div>
+      </div>
+    </div>
+
+    <!-- Buttons + Links -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:clamp(28px,4vw,44px);margin-bottom:clamp(40px,5vw,60px);">
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px;">Buttons</div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
+          <button style="font-family:'Work Sans',sans-serif;font-size:14px;color:var(--paper);background:var(--ink);border:none;border-radius:999px;padding:12px 24px;cursor:pointer;transition:transform .2s cubic-bezier(.2,.7,.2,1);" style-hover="transform:translateY(-1px)">Primary</button>
+          <button style="font-family:'Work Sans',sans-serif;font-size:14px;color:var(--ink);background:none;border:1px solid rgba(20,20,22,.3);border-radius:999px;padding:12px 24px;cursor:pointer;transition:border-color .25s ease,color .25s ease;" style-hover="border-color:var(--ink);color:var(--accent)">Secondary</button>
+          <button style="font-family:'Work Sans',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);background:none;border:none;border-bottom:1px solid var(--ink);padding:0 0 5px;cursor:pointer;" style-hover="color:var(--accent);border-color:var(--accent)">Text link →</button>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px;">Links &amp; Tags</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+          <a href="#components" style="font-family:'Work Sans',sans-serif;font-size:15px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;" style-hover="color:var(--accent)">Inline link</a>
+          <span style="border:1px solid rgba(20,20,22,.2);border-radius:40px;padding:8px 16px;font-family:'Work Sans',sans-serif;font-size:13px;color:var(--muted);">Figma</span>
+          <span style="border:1px solid rgba(20,20,22,.2);border-radius:40px;padding:8px 16px;font-family:'Work Sans',sans-serif;font-size:13px;color:var(--muted);">Research</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section header + Pull quote -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(28px,4vw,44px);margin-bottom:clamp(40px,5vw,60px);">
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px;">Section header</div>
+        <div style="border-top:1px solid var(--ink);padding-top:24px;">
+          <div style="display:flex;align-items:baseline;gap:16px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;"><span>02</span><span style="color:var(--muted-2);">Research</span></div>
+          <div style="font-family:'Space Mono',monospace;font-weight:100;font-size:45px;line-height:1.02;letter-spacing:-.018em;">The observations</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px;">Pull quote</div>
+        <blockquote style="margin:0;font-family:'Work Sans',sans-serif;font-weight:500;font-size:clamp(20px,2.2vw,26px);line-height:1.4;color:var(--ink);border-left:2px solid var(--ink);padding-left:20px;">Good design disappears. You only notice when it's missing.</blockquote>
+      </div>
+    </div>
+
+    <!-- Project card row -->
+    <div style="margin-bottom:clamp(40px,5vw,60px);">
+      <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px;">Project index row</div>
+      <div style="border-top:1px solid var(--line);">
+        <div style="display:flex;align-items:baseline;gap:26px;padding:20px 4px;border-bottom:1px solid var(--line);">
+          <span style="font-family:'Archivo Expanded',sans-serif;font-size:clamp(22px,3vw,32px);letter-spacing:-.01em;">Copperhill</span>
+          <span style="flex:1;"></span>
+          <span style="font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);">Done</span>
+          <span style="font-family:'Space Mono',monospace;font-size:22px;color:var(--accent);">P.03</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image + caption -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(28px,4vw,44px);margin-bottom:clamp(40px,5vw,60px);">
+      <figure style="margin:0;">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px;">Image + caption</div>
+        <div style="width:100%;aspect-ratio:16/9;background:var(--surface-2);border-radius:2px;"></div>
+        <figcaption style="display:flex;justify-content:space-between;font-family:'Work Sans',sans-serif;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-top:11px;padding-top:9px;border-top:1px solid var(--line);"><span>Fig. 01 — In context</span><span>Cover plate</span></figcaption>
+      </figure>
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px;">Form field</div>
+        <label style="display:block;font-family:'Work Sans',sans-serif;font-size:12px;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;">Email</label>
+        <input type="email" placeholder="you@studio.com" style="width:100%;font-family:'Work Sans',sans-serif;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px;" />
+        <div style="font-family:'Work Sans',sans-serif;font-size:12px;color:var(--muted-2);margin-top:8px;">Label above, helper below, focus ring in Ink.</div>
+      </div>
+    </div>
+
+    <!-- Sticky TOC + Footer -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(28px,4vw,44px);">
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px;">Sticky TOC</div>
+        <div style="display:flex;gap:14px;">
+          <div style="width:2px;background:var(--line);border-radius:2px;position:relative;"><div style="position:absolute;top:0;left:0;width:100%;height:46%;background:var(--accent);"></div></div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:baseline;gap:10px;font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);"><span style="width:7px;height:7px;border-radius:50%;background:var(--accent);"></span><span>01</span><span style="letter-spacing:.06em;text-transform:uppercase;">Research</span></div>
+            <div style="display:flex;align-items:baseline;gap:10px;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);"><span style="width:7px;height:7px;border-radius:50%;border:1px solid var(--line);"></span><span>02</span><span style="letter-spacing:.06em;text-transform:uppercase;">Ideation</span></div>
+            <div style="display:flex;align-items:baseline;gap:10px;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);"><span style="width:7px;height:7px;border-radius:50%;border:1px solid var(--line);"></span><span>03</span><span style="letter-spacing:.06em;text-transform:uppercase;">Impact</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px;">Footer</div>
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:26px;">
+          <div style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:22px;letter-spacing:-.01em;margin-bottom:14px;">Let's make something.</div>
+          <a href="#components" style="font-family:'Work Sans',sans-serif;font-size:14px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;" style-hover="color:var(--accent)">jxl@umich.edu</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= 07 MOTION ======================= -->
+  <section id="motion" style="max-width:1100px;margin:0 auto;padding:clamp(48px,7vw,88px) clamp(24px,6vw,64px);border-top:1px solid var(--line-strong);">
+    <div style="display:flex;align-items:baseline;gap:16px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:26px;"><span>07</span><span style="color:var(--muted-2);">Motion</span></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:clamp(32px,4vw,44px);">
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Fast</div><div style="font-family:'Space Mono',monospace;font-size:14px;color:var(--ink);">200ms</div><div style="font-size:13px;color:var(--muted);margin-top:4px;">hover, taps</div></div>
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Base</div><div style="font-family:'Space Mono',monospace;font-size:14px;color:var(--ink);">300ms</div><div style="font-size:13px;color:var(--muted);margin-top:4px;">state changes</div></div>
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Slow</div><div style="font-family:'Space Mono',monospace;font-size:14px;color:var(--ink);">600ms</div><div style="font-size:13px;color:var(--muted);margin-top:4px;">scroll reveals</div></div>
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Reveal</div><div style="font-family:'Space Mono',monospace;font-size:14px;color:var(--ink);">1050ms</div><div style="font-size:13px;color:var(--muted);margin-top:4px;">hero box grow</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:clamp(24px,3vw,40px);">
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:12px;">Easing</div>
+        <div style="font-family:'Space Mono',monospace;font-size:12.5px;line-height:2;color:var(--muted);">standard · cubic-bezier(.2,.7,.2,1)<br>in-out · cubic-bezier(.62,0,.24,1)<br>out · cubic-bezier(.16,1,.3,1)</div>
+      </div>
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:12px;">Behaviors</div>
+        <ul style="margin:0;padding-left:18px;font-family:'Work Sans',sans-serif;font-size:14px;line-height:1.7;color:var(--muted);"><li>Hover: color to Ink, or lift 1px</li><li>Scroll reveal: fade + rise, once</li><li>Image: blur-up focus pull</li><li>Page: shared-element cover veil</li></ul>
+      </div>
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-bottom:12px;">Loading &amp; reduced-motion</div>
+        <p style="font-family:'Work Sans',sans-serif;font-size:14px;line-height:1.7;color:var(--muted);margin:0;">Loading uses skeleton fades, never spinners. Everything above 300ms collapses to instant under <span style="font-family:'Space Mono',monospace;font-size:12px;">prefers-reduced-motion</span>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= 08 IMAGERY ======================= -->
+  <section id="imagery" style="max-width:1100px;margin:0 auto;padding:clamp(48px,7vw,88px) clamp(24px,6vw,64px) clamp(80px,10vw,120px);border-top:1px solid var(--line-strong);">
+    <div style="display:flex;align-items:baseline;gap:16px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:26px;"><span>08</span><span style="color:var(--muted-2);">Imagery</span></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;margin-bottom:clamp(32px,4vw,44px);">
+      <div><div style="width:100%;aspect-ratio:16/9;background:var(--surface-2);border-radius:12px;"></div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:10px;">16:9 · covers</div></div>
+      <div><div style="width:100%;aspect-ratio:4/3;background:var(--surface-2);border-radius:12px;"></div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:10px;">4:3 · index cards</div></div>
+      <div><div style="width:100%;aspect-ratio:3/2;background:var(--surface-2);border-radius:12px;"></div><div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-2);margin-top:10px;">3:2 · portrait</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);">
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Radius</div><div style="font-size:14px;color:var(--ink);">12px images · 999px pills</div></div>
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Shadow</div><div style="font-size:14px;color:var(--ink);">None by default · elevated 0 24 60 / 14%</div></div>
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Cropping</div><div style="font-size:14px;color:var(--ink);">object-fit cover · centered focal</div></div>
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Captions</div><div style="font-size:14px;color:var(--ink);">Above a hairline · uppercase · muted</div></div>
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Galleries</div><div style="font-size:14px;color:var(--ink);">auto-fit minmax grid · equal gutters</div></div>
+      <div style="background:var(--paper);padding:20px 22px;"><div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px;">Compare</div><div style="font-size:14px;color:var(--ink);">Sketch to final drag slider</div></div>
+    </div>
+    <div style="margin-top:clamp(56px,7vw,88px);border-top:1px solid var(--ink);padding-top:26px;display:flex;flex-wrap:wrap;gap:12px 40px;justify-content:space-between;align-items:baseline;">
+      <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);">Jess Li — Design System v1.0</span>
+      <span style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);">Set in Archivo &amp; Archivo Expanded</span>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

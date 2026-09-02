@@ -1,0 +1,15 @@
+{
+  "name": "jess-li-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Jess Li portfolio — static HTML prototype handed off from Claude Design to Claude Code.",
+  "scripts": {
+    "dev": "npx --yes serve . -l 5173",
+    "start": "npm run dev",
+    "vendor": "node scripts/vendor.mjs",
+    "build": "node scripts/build.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
