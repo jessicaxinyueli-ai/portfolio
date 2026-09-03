@@ -1507,6 +1507,7 @@ class Component extends DCLogic {
     const wrap = e.currentTarget;
     const blur = wrap.querySelector('[data-kickerblur]');
     if (!blur) return;
+    clearTimeout(wrap._kickerLeaveT);
     const r = wrap.getBoundingClientRect();
     this._kTx = e.clientX - r.left;
     this._kTy = e.clientY - r.top;
@@ -1528,10 +1529,20 @@ class Component extends DCLogic {
     this._kRaf = requestAnimationFrame(loop);
   }
   kickerLeave(e){
-    const blur = e.currentTarget.querySelector('[data-kickerblur]');
-    const sharp = e.currentTarget.querySelector('[data-herokicker]');
+    const wrap = e.currentTarget;
+    const blur = wrap.querySelector('[data-kickerblur]');
+    const sharp = wrap.querySelector('[data-herokicker]');
     if (blur) blur.style.opacity = '0';
-    if (sharp){ sharp.style.webkitMaskImage = 'none'; sharp.style.maskImage = 'none'; }
+    // The blur fades out over .45s (see [data-kickerblur]'s opacity
+    // transition), but clearing the sharp text's mask immediately used to
+    // snap it back to fully visible right away — for that .45s window the
+    // still-fading blur then sat on top of the now-crisp text, showing as
+    // a lightened ghost trace right where the cursor left. Keep the hole
+    // in place until the blur underneath has actually finished fading.
+    clearTimeout(wrap._kickerLeaveT);
+    wrap._kickerLeaveT = setTimeout(() => {
+      if (sharp){ sharp.style.webkitMaskImage = 'none'; sharp.style.maskImage = 'none'; }
+    }, 460);
     this._kx = null; this._ky = null;
   }
   tapChip(e){
