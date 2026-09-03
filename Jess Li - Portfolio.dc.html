@@ -228,10 +228,14 @@
   /* Registration-loupe cursor — reads intent, springs after the pointer */
   @media (hover:hover) and (pointer:fine){
     html.eink, html.eink *{cursor:none !important;}
-    .eink-dot{position:fixed;top:0;left:0;width:5px;height:5px;border-radius:50%;background:var(--color-ink);z-index:2147482600;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform;transition:width .28s ease,height .28s ease,opacity .25s ease;}
-    .eink-ring{position:fixed;top:0;left:0;width:30px;height:30px;border:1px solid rgba(20,20,22,.42);border-radius:50%;z-index:2147482550;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform,width,height;transition:width .32s cubic-bezier(.2,.7,.2,1),height .32s cubic-bezier(.2,.7,.2,1),border-color .3s ease,background .3s ease;}
-    .eink-ring.link{width:46px;height:46px;border-color:var(--color-ink);}
-    .eink-ring.view{width:78px;height:78px;background:var(--color-ink);border-color:transparent;}
+    .eink-dot{position:fixed;top:0;left:0;width:5px;height:5px;border-radius:50%;background:var(--color-ink);z-index:2147482600;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform;transition:opacity .25s ease;}
+    /* Fixed at its largest (78px) footprint; state changes scale an inner
+       circle via transform instead of resizing width/height, so growing the
+       ring is a compositor-only operation, not a layout+paint one. */
+    .eink-ring{position:fixed;top:0;left:0;width:78px;height:78px;border-radius:50%;z-index:2147482550;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform;}
+    .eink-ring-inner{position:absolute;inset:0;border:1px solid rgba(20,20,22,.42);border-radius:50%;transform:scale(.3846);transition:transform .32s cubic-bezier(.2,.7,.2,1),border-color .3s ease,background .3s ease;will-change:transform;}
+    .eink-ring.link .eink-ring-inner{transform:scale(.5897);border-color:var(--color-ink);}
+    .eink-ring.view .eink-ring-inner{transform:scale(1);background:var(--color-ink);border-color:transparent;}
     .eink-dot.view{opacity:0;}
     .eink-label{position:fixed;top:0;left:0;z-index:2147482650;pointer-events:none;transform:translate3d(-50%,-50%,0);font-family:var(--font-sans);font-size:8.5px;letter-spacing:.04em;color:#fbfbfc;opacity:0;transition:opacity .25s ease,font-size .25s ease;}
     .eink-label.on{font-size:13px;letter-spacing:.02em;}
@@ -355,9 +359,9 @@
   [data-ambient="night"] .cube-face i,[data-ambient="night"] .cube-face span{color:var(--paper) !important;}
   [data-ambient="night"] .googly-eye{background:var(--paper);}
   body[data-ambient="night"] .eink-dot{background:#eef0f5;}
-  body[data-ambient="night"] .eink-ring{border-color:rgba(238,240,245,.42);}
-  body[data-ambient="night"] .eink-ring.link{border-color:#eef0f5;}
-  body[data-ambient="night"] .eink-ring.view{background:#eef0f5;}
+  body[data-ambient="night"] .eink-ring-inner{border-color:rgba(238,240,245,.42);}
+  body[data-ambient="night"] .eink-ring.link .eink-ring-inner{border-color:#eef0f5;}
+  body[data-ambient="night"] .eink-ring.view .eink-ring-inner{background:#eef0f5;}
   body[data-ambient="night"] .eink-label{color:#12151b;}
   [data-ambient="night"]{--color-ink:#eef0f5;--color-ink-2:#d6dae2;--color-muted:#b3b9c4;--color-muted-2:#a0a7b4;--color-paper:#12151b;--color-surface:#171b22;--color-surface-2:#1d222b;--color-line:rgba(255,255,255,.13);--color-line-strong:#eef0f5;--color-accent:#eef0f5;--accent:#eef0f5 !important;}
   [data-ambient="plain"]{--glow-c1:rgba(20,20,22,.055);--glow-c2:rgba(20,20,22,0);}
@@ -3225,6 +3229,7 @@ class Component extends DCLogic {
     if (this._curInit || !this.finePointer() || this.prefersReduced()) return;
     this._curInit = true;
     const ring = document.createElement('div'); ring.className = 'eink-ring';
+    const ringInner = document.createElement('div'); ringInner.className = 'eink-ring-inner'; ring.appendChild(ringInner);
     const dot  = document.createElement('div'); dot.className = 'eink-dot';
     const lab  = document.createElement('div'); lab.className = 'eink-label'; lab.textContent = 'View';
     [ring, dot, lab].forEach(n => document.body.appendChild(n));
@@ -3240,6 +3245,15 @@ class Component extends DCLogic {
     const TAU_RING = 0.12;     // ~120ms visual lag for the glow/ring
     const TAU_DOT  = 0.055;    // dot leads slightly, still eased
     let last = 0;
+    // The ambient glow is a large, soft, slow-fading background effect (full
+    // viewport, 24vmax radial gradient) — updating its position via a
+    // background-image forces a repaint of that whole box, unlike the
+    // ring/dot's transform-only moves. It doesn't need frame-rate precision,
+    // so it's throttled to its own much slower clock, independent of the
+    // ring/dot tracking the pointer at full speed.
+    let lastGlowAt = 0;
+    const GLOW_INTERVAL = 70; // ~14fps — imperceptible for something this large and diffuse
+    let lastTarget = null;
     const frame = (now) => {
       if (!last) last = now;
       const dt = Math.min((now - last) / 1000, 0.05); last = now;
@@ -3257,15 +3271,19 @@ class Component extends DCLogic {
       ring.style.transform = 'translate3d(' + cx.toFixed(2) + 'px,' + cy.toFixed(2) + 'px,0) translate(-50%,-50%)';
       dot.style.transform  = 'translate3d(' + cdx.toFixed(2) + 'px,' + cdy.toFixed(2) + 'px,0) translate(-50%,-50%)';
       lab.style.transform  = 'translate3d(' + cdx.toFixed(2) + 'px,' + cdy.toFixed(2) + 'px,0) translate(-50%,-50%)';
-      if (glow) { glow.style.setProperty('--gx', cx.toFixed(2) + 'px'); glow.style.setProperty('--gy', cy.toFixed(2) + 'px'); }
-      { const r = this.rootRef && this.rootRef.current; if (r) { r.style.setProperty('--gx', cx.toFixed(2) + 'px'); r.style.setProperty('--gy', cy.toFixed(2) + 'px'); } }
+      if (now - lastGlowAt >= GLOW_INTERVAL) {
+        lastGlowAt = now;
+        if (glow) { glow.style.setProperty('--gx', cx.toFixed(2) + 'px'); glow.style.setProperty('--gy', cy.toFixed(2) + 'px'); }
+        { const r = this.rootRef && this.rootRef.current; if (r) { r.style.setProperty('--gx', cx.toFixed(2) + 'px'); r.style.setProperty('--gy', cy.toFixed(2) + 'px'); } }
+      }
+      if (lastTarget) this.readCursorIntent(lastTarget);
       const still = Math.abs(tx - rx) < 0.2 && Math.abs(ty - ry) < 0.2 && Math.abs(tx - dx) < 0.2 && Math.abs(ty - dy) < 0.2;
       if (still) { this._curRaf = 0; last = 0; } else { this._curRaf = requestAnimationFrame(frame); }
     };
     this._curMove = (e) => {
       tx = e.clientX; ty = e.clientY;
+      lastTarget = e.target;
       if (glow && !glow.classList.contains('on')) glow.classList.add('on');
-      this.readCursorIntent(e.target);
       if (!this._curRaf) { last = 0; this._curRaf = requestAnimationFrame(frame); }
     };
     this._curDown = () => { if (this._curDot && !this._editMode) this._curDot.style.transform += ' scale(2.2)'; };
@@ -3279,6 +3297,16 @@ class Component extends DCLogic {
     const greet = t.closest && t.closest('[data-herotitle]');
     const connect = t.closest && t.closest('[data-connect]');
     const link  = t.closest && t.closest('a,button,[data-focusrow],[data-tocitem],[role="slider"],.note-marker,.sticky,input,textarea');
+    // Skip the class churn entirely when the hovered category hasn't
+    // changed since last frame — this now runs once per rAF tick rather
+    // than once per raw pointermove, but a still cursor over one element
+    // for many frames shouldn't keep re-triggering style recalculation.
+    let key = 'none';
+    if (greet) key = 'greet'; else if (connect) key = 'connect';
+    else if (cover) key = 'cover:' + (cover.getAttribute('data-cover-label') || 'View');
+    else if (link) key = 'link';
+    if (key === this._lastIntentKey) return;
+    this._lastIntentKey = key;
     ring.classList.remove('link','view'); dot.classList.remove('view'); lab.classList.remove('on');
     if (greet) { lab.textContent = 'Hello!'; ring.classList.add('view'); dot.classList.add('view'); lab.classList.add('on'); }
     else if (connect) { lab.textContent = 'Hi!'; ring.classList.add('view'); dot.classList.add('view'); lab.classList.add('on'); }
