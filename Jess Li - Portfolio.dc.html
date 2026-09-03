@@ -425,9 +425,9 @@
   <nav data-nav="" style="position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:16px clamp(20px,5vw,64px);">
     <button onClick="{{ goHome }}" aria-label="Home — Jess Li" style="background:none;border:none;cursor:pointer;padding:0;line-height:0;display:flex;align-items:center;"><img class="logo-mark" src="assets/yue-logo.png" alt="悦" style="height:30px;width:auto;display:block;"></button>
     <div class="navset" style="display:flex;gap:clamp(18px,3vw,38px);align-items:center;font-family:var(--font-sans);font-size:16px;letter-spacing:.01em;color:#74747b;">
-      <button data-navlink="" data-navwork="" class="mag" data-mag=".14" onClick="{{ goWork }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:0;" >Work</button>
-      <button data-navlink="" class="mag" data-mag=".14" onClick="{{ openAbout }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:0;" >About</button>
-      <a data-navlink="" class="mag" data-mag=".14" href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;text-transform:none;letter-spacing:.01em;font-size:16px;" >Resume</a>
+      <button data-navlink="" data-navwork="" onClick="{{ goWork }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:0;" >Work</button>
+      <button data-navlink="" onClick="{{ openAbout }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:0;" >About</button>
+      <a data-navlink="" href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;text-transform:none;letter-spacing:.01em;font-size:16px;" >Resume</a>
     </div>
   </nav>
 
