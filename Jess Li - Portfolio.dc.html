@@ -55,6 +55,8 @@
   a{color:inherit;}
   button{font:inherit;}
   @keyframes viewIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+  @keyframes lightboxFade{from{opacity:0;}to{opacity:1;}}
+  @media (prefers-reduced-motion:reduce){.lightbox-backdrop,.lightbox-panel{animation:none!important;}}
 
   /* ===== Hero: dot -> isometric box reveal ===== */
   @keyframes boxGrow{
@@ -135,6 +137,9 @@
     .scrolly-caption [data-scrolly-cap]{position:static!important;opacity:1!important;margin-bottom:6px;}
     [data-scrolly-track]{transform:none!important;flex-wrap:wrap!important;width:100%!important;}
     [data-scrolly-track] > div{flex:1 1 100%!important;width:100%!important;margin-bottom:16px;}
+    /* every step is shown at once in the stacked fallback above, so the tab/dot
+       selectors and prev/next arrows have nothing left to switch between */
+    .scrolly-controls, [aria-label="Previous version"], [aria-label="Next version"]{display:none!important;}
     .shotrow{flex-direction:column!important;}
     .shotrow .shotimg{width:100%!important;max-width:420px;}
     .shotrow .shotcol{position:static!important;min-height:0!important;}
@@ -1027,7 +1032,7 @@
             <sc-if value="{{ block.isScrolly }}">
               <div class="scrolly" data-scrolly="" style="position:relative;margin:clamp(24px,3vw,44px) 0 clamp(30px,4vw,56px);">
                 <div class="scrolly-pin" style="padding-top:2px;">
-                  <div style="display:flex;align-items:center;gap:8px;font-family:var(--font-sans);font-size:10.5px;letter-spacing:.03em;color:var(--muted-2);border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:20px;flex-wrap:wrap;">
+                  <div class="scrolly-controls" style="display:flex;align-items:center;gap:8px;font-family:var(--font-sans);font-size:10.5px;letter-spacing:.03em;color:var(--muted-2);border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:20px;flex-wrap:wrap;">
                     <sc-for list="{{ block.steps }}" as="step" hint-placeholder-count="3">
                       <button type="button" data-scrolly-tab="" onClick="{{ step.select }}" style="{{ step.tabStyle }}">{{ step.v }}</button>
                     </sc-for>
@@ -1060,7 +1065,7 @@
                     <button type="button" onClick="{{ block.scrollyPrev }}" aria-label="Previous version" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:none;background:rgba(250,249,246,.9);box-shadow:0 4px 16px rgba(20,20,22,.18);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--ink);z-index:3;" style-hover="background:var(--paper)">←</button>
                     <button type="button" onClick="{{ block.scrollyNext }}" aria-label="Next version" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:none;background:rgba(250,249,246,.9);box-shadow:0 4px 16px rgba(20,20,22,.18);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--ink);z-index:3;" style-hover="background:var(--paper)">→</button>
                   </div>
-                  <div style="display:flex;justify-content:center;gap:8px;margin-top:16px;">
+                  <div class="scrolly-controls" style="display:flex;justify-content:center;gap:8px;margin-top:16px;">
                     <sc-for list="{{ block.dots }}" as="dot" hint-placeholder-count="3">
                       <button type="button" onClick="{{ dot.select }}" aria-label="Go to version" style="{{ dot.dotStyle }}"></button>
                     </sc-for>
@@ -1081,8 +1086,8 @@
         </sc-for>
       </div>
       <sc-if value="{{ hasLightbox }}" hint-placeholder-val="{{ false }}">
-        <div onClick="{{ closeLightbox }}" style="position:fixed;inset:0;z-index:98;display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:clamp(20px,4vw,52px);background:rgba(20,20,22,.86);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);">
-          <div style="position:relative;width:fit-content;max-width:100%;margin:auto;">
+        <div class="lightbox-backdrop" onClick="{{ closeLightbox }}" style="position:fixed;inset:0;z-index:98;display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:clamp(20px,4vw,52px);background:rgba(20,20,22,.86);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:lightboxFade .3s ease;">
+          <div class="lightbox-panel" style="position:relative;width:fit-content;max-width:100%;margin:auto;animation:viewIn .35s cubic-bezier(.2,.7,.2,1);">
             {{ lightboxImgEl }}
             <div style="display:flex;gap:12px;align-items:baseline;margin-top:14px;font-family:var(--font-sans);color:#faf9f6;">
               <span style="font-family:var(--font-sans);font-size:12px;letter-spacing:.12em;color:#c9c9cf;">{{ lightboxLabel }}</span>
@@ -1489,6 +1494,7 @@ class Component extends DCLogic {
   }
 
   kickerMove(e){
+    if (this.prefersReduced()) return;
     const wrap = e.currentTarget;
     const blur = wrap.querySelector('[data-kickerblur]');
     if (!blur) return;
