@@ -425,9 +425,9 @@
   <nav data-nav="" style="position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:16px clamp(20px,5vw,64px);">
     <button onClick="{{ goHome }}" aria-label="Home — Jess Li" style="background:none;border:none;cursor:pointer;padding:0;line-height:0;display:flex;align-items:center;"><img class="logo-mark" src="assets/yue-logo.png" alt="悦" style="height:30px;width:auto;display:block;"></button>
     <div class="navset" style="display:flex;gap:clamp(18px,3vw,38px);align-items:center;font-family:var(--font-sans);font-size:16px;letter-spacing:.01em;color:#74747b;">
-      <button data-navlink="" data-navwork="" class="mag" data-mag=".3" onClick="{{ goWork }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:0;" >Work</button>
-      <button data-navlink="" class="mag" data-mag=".3" onClick="{{ openAbout }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:0;" >About</button>
-      <a data-navlink="" class="mag" data-mag=".3" href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;text-transform:none;letter-spacing:.01em;font-size:16px;" >Resume</a>
+      <button data-navlink="" data-navwork="" class="mag" data-mag=".14" onClick="{{ goWork }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:0;" >Work</button>
+      <button data-navlink="" class="mag" data-mag=".14" onClick="{{ openAbout }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:0;" >About</button>
+      <a data-navlink="" class="mag" data-mag=".14" href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;text-transform:none;letter-spacing:.01em;font-size:16px;" >Resume</a>
     </div>
   </nav>
 
@@ -2324,8 +2324,8 @@ class Component extends DCLogic {
   applyVelo(v){
     const root = this.rootRef.current; if (!root) return;
     const gain = (typeof this.props.scrollMotion === 'number') ? this.props.scrollMotion : 1;
-    const off = Math.max(-13, Math.min(13, v * 20)) * gain;    // px
-    const sk  = Math.max(-1.3, Math.min(1.3, v * 2.2)) * gain; // deg (images only)
+    const off = Math.max(-7, Math.min(7, v * 11)) * gain;      // px
+    const sk  = Math.max(-0.7, Math.min(0.7, v * 1.2)) * gain; // deg (images only)
     root.querySelectorAll('[data-velo]').forEach(el => {
       if (!el.dataset.veloInit) { el.dataset.veloInit = '1'; el.style.transition = 'transform .3s cubic-bezier(.2,.7,.2,1)'; el.style.willChange = 'transform'; }
       const f = parseFloat(el.dataset.velo) || 1;
