@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/Jess Li - Portfolio.dc.html" },
+    { "source": "/about", "destination": "/Jess Li - Portfolio.dc.html" },
+    { "source": "/sailpoint", "destination": "/Jess Li - Portfolio.dc.html" },
+    { "source": "/seedlibrary", "destination": "/Jess Li - Portfolio.dc.html" },
+    { "source": "/copperhill", "destination": "/Jess Li - Portfolio.dc.html" },
+    { "source": "/umgpt", "destination": "/Jess Li - Portfolio.dc.html" }
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/", "destination": "/Jess%20Li%20-%20Portfolio.dc.html" },
     { "source": "/about", "destination": "/Jess%20Li%20-%20Portfolio.dc.html" },
     { "source": "/sailpoint", "destination": "/Jess%20Li%20-%20Portfolio.dc.html" },
     { "source": "/seedlibrary", "destination": "/Jess%20Li%20-%20Portfolio.dc.html" },
