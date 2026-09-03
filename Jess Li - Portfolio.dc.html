@@ -3230,7 +3230,7 @@ class Component extends DCLogic {
     const link  = t.closest && t.closest('a,button,[data-focusrow],[data-tocitem],[role="slider"],.note-marker,.sticky,input,textarea');
     ring.classList.remove('link','view'); dot.classList.remove('view'); lab.classList.remove('on');
     if (greet) { lab.textContent = 'Hello!'; ring.classList.add('view'); dot.classList.add('view'); lab.classList.add('on'); }
-    else if (connect) { lab.textContent = "Let's Connect!"; ring.classList.add('view'); dot.classList.add('view'); lab.classList.add('on'); }
+    else if (connect) { lab.textContent = 'Hi!'; ring.classList.add('view'); dot.classList.add('view'); lab.classList.add('on'); }
     else if (cover) { lab.textContent = cover.getAttribute('data-cover-label') || 'View'; ring.classList.add('view'); dot.classList.add('view'); lab.classList.add('on'); }
     else if (link) { ring.classList.add('link'); }
   }
