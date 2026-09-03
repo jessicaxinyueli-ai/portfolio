@@ -1257,6 +1257,10 @@ class Component extends DCLogic {
       {slug:'copperhill', date:'Jun 2025', title:'Copperhill', category:'B2B SaaS', role:'Product Design Intern', timeline:'Jun — Aug 2025', team:'Solo designer · 4 engineers', status:'Completed', overview:'Optimizing enterprise data workflows and reducing Excel dependency — redesigning core filtering logic and establishing Design System 2.0 to cut external data exports by 40%.'},
       {slug:'umgpt', date:'Sep 2025', caseCover:'assets/umgpt-case-cover.png', title:'UM GPT', category:'AI · EdTech · Independent Extension', role:'Product Designer', timeline:'Sep — Dec 2025 (course), continued independently after', team:'Solo · Figma, Lovable, Figma Make, Claude', status:'Completed', overview:'Two Gaps I Refused to Leave Alone — task traceability and instructor insight, fixed on my own initiative after the assignment shipped.'}
     ];
+    // Real, shareable URLs for each view. Case-study paths drop the hyphen
+    // (seed-library -> /seedlibrary) to match the short slugs people expect.
+    this.SLUG_PATH = { sailpoint:'sailpoint', 'seed-library':'seedlibrary', copperhill:'copperhill', umgpt:'umgpt' };
+    this.PATH_SLUG = { sailpoint:'sailpoint', seedlibrary:'seed-library', copperhill:'copperhill', umgpt:'umgpt' };
     this.SKIM = {
       'sailpoint': {
         body:`Identity administrators are paid to distrust automated access changes, and SailPoint needed them to trust an AI-generated source configuration enough to act on it. I rebuilt the wizard on the current design system, cut the competing icons that were quietly undermining trust in the AI, took it through rounds of enterprise customer feedback and internal review, then designed the recovery paths for when the AI got it wrong.`,
@@ -1479,7 +1483,8 @@ class Component extends DCLogic {
       { t:`Carpe diem. Seize the day.`, a:`Dead Poets Society, 1989`, note:`It's fine to feel lost sometimes. I do, often. What I know for sure is that I want to enjoy the day, even when the day's best offer is a new sweet treat.` },
       { t:`Happiness can be found even in the darkest of times.`, a:`Harry Potter and the Prisoner of Azkaban, 2004`, note:`Stress has knocked me flat before. What helped was stopping, breathing, and naming one thing I was grateful for. Usually family, friends, or food. A small light, but enough to work by.` }
     ];
-    this.state = { view:'home', slug:null, leaf:0, bookScale: this.computeScale(), quoteIdx:0, typed:'', typing:false, opened:false, unlocked:{}, passError:false, bgMode:'plain' };
+    const initRoute = this.resolveRoute(window.location.pathname);
+    this.state = { view:initRoute.view, slug:initRoute.slug, leaf:0, bookScale: this.computeScale(), quoteIdx:0, typed:'', typing:false, opened:false, unlocked:{}, passError:false, bgMode:'plain' };
     // Case studies under NDA require a passphrase before the account opens.
     this.PASSWORDS = { sailpoint: 'sailu2026' };
     this.BLANK_IMG = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
@@ -1949,6 +1954,27 @@ class Component extends DCLogic {
     }
   }
   setView(v){ this.setState({ view:v }); }
+  /* ===== Routing: real paths (/about, /sailpoint, ...) over the hand-rolled view/slug state ===== */
+  resolveRoute(pathname){
+    const p = pathname.replace(/^\/+|\/+$/g, '');
+    if (p === '') return { view:'home', slug:null };
+    if (p === 'about') return { view:'about', slug:null };
+    const slug = this.PATH_SLUG[p];
+    if (slug) {
+      const proj = this.PROJECTS.find(pr => pr.slug === slug);
+      if (proj && proj.status === 'Completed') return { view:'work', slug };
+    }
+    return { view:'home', slug:null };
+  }
+  routeToPath(view, slug){
+    if (view === 'about') return '/about';
+    if (view === 'work' && slug && this.SLUG_PATH[slug]) return '/' + this.SLUG_PATH[slug];
+    return '/';
+  }
+  syncUrl(){
+    const path = this.routeToPath(this.state.view, this.state.slug);
+    if (window.location.pathname !== path) history.pushState({ view:this.state.view, slug:this.state.slug }, '', path);
+  }
   metricIcon(key){
     const paths = {
       expand: 'M8 3H3v5 M3 3l6 6 M16 21h5v-5 M21 21l-6-6',
@@ -2149,6 +2175,16 @@ class Component extends DCLogic {
     if (this.state.view === 'work') this.bindSketchSlider();
     this._prevView = this.state.view;
     this._prevSlug = this.state.slug;
+    // Correct the address bar in place (no history entry) if the URL we booted
+    // from didn't resolve exactly as typed — e.g. a blocked/unknown deep link.
+    { const path = this.routeToPath(this.state.view, this.state.slug); if (window.location.pathname !== path) history.replaceState(null, '', path); }
+    this._pop = () => {
+      const r = this.resolveRoute(window.location.pathname);
+      this.setState({ view:r.view, slug:r.slug });
+      const path = this.routeToPath(r.view, r.slug);
+      if (window.location.pathname !== path) history.replaceState(null, '', path);
+    };
+    window.addEventListener('popstate', this._pop);
     this.loadOverrides();
     requestAnimationFrame(() => this.applyOverrides());
     requestAnimationFrame(() => this.checkVideoPlayback());
@@ -2164,6 +2200,7 @@ class Component extends DCLogic {
     this._prevView = this.state.view;
     this._prevSlug = this.state.slug;
     if (prev.view !== this.state.view || prev.slug !== this.state.slug) {
+      this.syncUrl();
       window.scrollTo(0, 0);
       this._lastY = -1;
       this._vy = null; this._vel = 0;
