@@ -233,15 +233,18 @@
        circle via transform instead of resizing width/height, so growing the
        ring is a compositor-only operation, not a layout+paint one. */
     .eink-ring{position:fixed;top:0;left:0;width:78px;height:78px;border-radius:50%;z-index:2147482550;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform;}
-    .eink-ring-inner{position:absolute;inset:0;border:1px solid rgba(20,20,22,.42);border-radius:50%;transform:scale(.3846);transition:transform .32s cubic-bezier(.2,.7,.2,1),border-color .3s ease,background .3s ease;will-change:transform;}
+    .eink-ring-inner{position:absolute;inset:0;border:1px solid rgba(20,20,22,.42);border-radius:50%;transform:scale(.3846);transition:transform .32s cubic-bezier(.2,.7,.2,1),border-color .3s ease,background .3s ease,filter .4s ease;will-change:transform;}
     .eink-ring.link .eink-ring-inner{transform:scale(.5897);border-color:var(--color-ink);}
     .eink-ring.view .eink-ring-inner{transform:scale(1);background:var(--color-ink);border-color:transparent;}
+    /* A plain photo (Home/About only) softens the ring into a small blurred
+       halo — the site's existing blur-follow language (see the kicker
+       headline effect), not a new motif — instead of a hard-edged link ring. */
+    .eink-ring.peek .eink-ring-inner{transform:scale(.718);border-color:var(--color-ink);filter:blur(1.75px);}
     .eink-dot.view{opacity:0;}
     .eink-label{position:fixed;top:0;left:0;z-index:2147482650;pointer-events:none;transform:translate3d(-50%,-50%,0);font-family:var(--font-sans);font-size:8.5px;letter-spacing:.04em;color:#fbfbfc;opacity:0;transition:opacity .25s ease,font-size .25s ease;}
     .eink-label.on{font-size:13px;letter-spacing:.02em;}
     .eink-label.on{opacity:1;}
   }
-  .mag{will-change:transform;}
 
   /* Ink-rule draws L→R under the hovered Contents row (line-drawing, not a fade) */
   [data-focusrow]{position:relative;}
@@ -362,6 +365,7 @@
   body[data-ambient="night"] .eink-ring-inner{border-color:rgba(238,240,245,.42);}
   body[data-ambient="night"] .eink-ring.link .eink-ring-inner{border-color:#eef0f5;}
   body[data-ambient="night"] .eink-ring.view .eink-ring-inner{background:#eef0f5;}
+  body[data-ambient="night"] .eink-ring.peek .eink-ring-inner{border-color:#eef0f5;}
   body[data-ambient="night"] .eink-label{color:#12151b;}
   [data-ambient="night"]{--color-ink:#eef0f5;--color-ink-2:#d6dae2;--color-muted:#b3b9c4;--color-muted-2:#a0a7b4;--color-paper:#12151b;--color-surface:#171b22;--color-surface-2:#1d222b;--color-line:rgba(255,255,255,.13);--color-line-strong:#eef0f5;--color-accent:#eef0f5;--accent:#eef0f5 !important;}
   [data-ambient="plain"]{--glow-c1:rgba(20,20,22,.055);--glow-c2:rgba(20,20,22,0);}
@@ -536,7 +540,7 @@
 
     <footer class="reveal-footer" style="border-top:1px solid var(--line);background:var(--surface-2);">
       <div data-rf-inner="" style="max-width:1340px;margin:0 auto;padding:clamp(70px,9vw,130px) clamp(24px,6vw,80px);">
-        <div style="font-family:var(--font-sans);font-size:16px;letter-spacing:.02em;color:var(--accent);margin-bottom:26px;">You reached the footer</div>
+        <div style="font-family:var(--font-sans);font-size:16px;letter-spacing:.02em;color:var(--accent);margin-bottom:26px;">Hi there!</div>
         <div style="display:flex;flex-wrap:wrap;gap:44px 64px;justify-content:space-between;align-items:flex-start;">
           <div style="max-width:30ch;">
             <div data-kickerwrap="" onMouseMove="{{ kickerMove }}" onMouseLeave="{{ kickerLeave }}" style="position:relative;display:inline-block;margin:0 0 clamp(20px,2.6vw,30px);">
@@ -544,22 +548,28 @@
               <div data-kickerblur="" aria-hidden="true" style="position:absolute;inset:-100px;font-family:var(--font-serif);font-weight:400;font-size:45px;line-height:1.0;letter-spacing:-.022em;color:var(--ink);white-space:nowrap;filter:blur(5px);opacity:0;transition:opacity .45s ease;pointer-events:none;-webkit-mask-image:radial-gradient(circle 90px at -200px 50%,#000 0%,rgba(0,0,0,.6) 45%,transparent 75%);mask-image:radial-gradient(circle 90px at -200px 50%,#000 0%,rgba(0,0,0,.6) 45%,transparent 75%);">Let's make something.</div>
             </div>
             <p style="font-family:var(--font-sans);font-size:16px;line-height:1.7;color:var(--ink-2);margin:0 0 22px;max-width:34ch;text-wrap:pretty;">I'm always up for a good problem, or just a good conversation. Tell me what you're working on.</p>
-            <a class="foot-cta mag" data-mag=".18" href="mailto:jxl@umich.edu" style="font-family:var(--font-sans);font-size:16px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">jxl@umich.edu</a>
+            <a class="foot-cta" href="mailto:jxl@umich.edu" style="font-family:var(--font-sans);font-size:16px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">jxl@umich.edu</a>
             <div style="font-family:var(--font-sans);font-size:16px;color:var(--muted-2);margin-top:16px;letter-spacing:.01em;">
-              <a class="mag" data-mag=".14" href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="color:var(--ink-2);text-decoration:none;">Resume ↗</a> · <a class="mag" data-mag=".14" href="https://www.linkedin.com/in/jessica-li-1219yue" target="_blank" rel="noopener" style="color:var(--ink-2);text-decoration:none;">LinkedIn ↗</a>
+              <a href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="color:var(--ink-2);text-decoration:none;">Resume ↗</a> · <a href="https://www.linkedin.com/in/jessica-li-1219yue" target="_blank" rel="noopener" style="color:var(--ink-2);text-decoration:none;">LinkedIn ↗</a>
             </div>
           </div>
-          <div data-connect="" style="display:grid;grid-template-columns:auto auto;gap:9px 18px;align-items:baseline;font-family:var(--font-sans);font-size:16px;color:var(--ink);">
-            <span style="color:var(--muted-2);">@</span><a class="foot-cta mag" data-mag=".18" href="mailto:jxl@umich.edu" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">jxl@umich.edu</a>
-            <span style="color:var(--muted-2);">in</span><a class="foot-cta mag" data-mag=".18" href="https://www.linkedin.com/in/jessica-li-1219yue" target="_blank" rel="noopener" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">LinkedIn</a>
-            <span style="color:var(--muted-2);">cv</span><a class="foot-cta mag" data-mag=".18" href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">Résumé (PDF)</a>
-            <span style="color:var(--muted-2);">ds</span><a class="foot-cta mag" data-mag=".18" href="Jess Li - Design System.dc.html" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">Design System</a>
+          <div>
+            <div style="font-family:var(--font-sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);margin-bottom:14px;">Connect</div>
+            <div data-connect="" style="display:grid;grid-template-columns:auto auto;gap:9px 18px;align-items:baseline;font-family:var(--font-sans);font-size:16px;color:var(--ink);">
+              <span style="color:var(--muted-2);">@</span><a class="foot-cta" href="mailto:jxl@umich.edu" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">jxl@umich.edu</a>
+              <span style="color:var(--muted-2);">in</span><a class="foot-cta" href="https://www.linkedin.com/in/jessica-li-1219yue" target="_blank" rel="noopener" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">LinkedIn</a>
+              <span style="color:var(--muted-2);">cv</span><a class="foot-cta" href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">Résumé (PDF)</a>
+              <span style="color:var(--muted-2);">ds</span><a class="foot-cta" href="Jess Li - Design System.dc.html" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">Design System</a>
+            </div>
           </div>
         </div>
         <div style="text-align:center;color:var(--muted-2);font-family:var(--font-serif);font-size:22px;line-height:1;margin:clamp(48px,7vw,80px) 0 clamp(24px,3.4vw,40px);">⸻</div>
         <div style="display:flex;flex-wrap:wrap;gap:12px 40px;justify-content:space-between;align-items:baseline;font-family:var(--font-sans);font-size:16px;letter-spacing:.01em;color:#66666d;">
           <span style="font-style:italic;">Good work comes from a good mood. Still betting on it.</span>
-          <span style="letter-spacing:.06em;">Made in Ann Arbor · 2026,</span>
+          <span style="display:flex;align-items:baseline;gap:20px;">
+            <span style="letter-spacing:.06em;">Built with Figma, Next.js &amp; Claude Code · © 2026 Jessica</span>
+            <button onClick="{{ scrollTop }}" style="background:none;border:none;cursor:pointer;padding:0;color:inherit;font:inherit;letter-spacing:.06em;" style-hover="color:var(--accent)">Back to top ↑</button>
+          </span>
         </div>
       </div>
     </footer>
@@ -577,7 +587,7 @@
           <span>Case Study No. {{ curNum }}</span>
           <span>{{ cur.category }}</span>
         </div>
-        <div style="font-family:var(--font-sans);font-size:calc(12px * var(--sc-sub,1));letter-spacing:.04em;color:var(--accent);margin-bottom:18px;">AI-Powered Source Configuration Wizard</div>
+        <div style="font-family:var(--font-sans);font-size:calc(12px * var(--sc-sub,1));letter-spacing:.04em;color:var(--accent);margin-bottom:18px;">Internship Overview</div>
         <h1 style="font-family:var(--font-serif);font-weight:400;font-size:calc(45px * var(--sc-header,1));line-height:.98;letter-spacing:-.026em;margin:0 0 16px;">{{ cur.title }}</h1>
         <p style="font-family:var(--font-sans);font-size:16px;letter-spacing:.01em;color:var(--muted-2);margin:0 0 clamp(36px,5vw,54px);">{{ cur.role }} · {{ cur.timeline }}</p>
         <div style="display:flex;flex-direction:column;gap:20px;margin-bottom:clamp(40px,5vw,56px);">
@@ -585,20 +595,31 @@
             <p style="font-family:var(--font-sans);font-size:18px;line-height:1.7;color:var(--ink-2);margin:0;">{{ para }}</p>
           </sc-for>
         </div>
-        <figure style="margin:0 0 clamp(48px,6vw,68px);max-width:480px;">
-          <image-slot id="{{ cur.publicImg }}" style="width:100%;height:auto;aspect-ratio:16/10;display:block;" shape="rect" placeholder="The legacy wizard — before screenshot"></image-slot>
+        <figure style="margin:0 0 clamp(48px,6vw,68px);max-width:560px;">
+          <image-slot id="publicimg-{{ cur.slug }}" src="{{ cur.publicImg }}" style="width:100%;height:auto;aspect-ratio:1.25;display:block;border:1px solid var(--line);border-radius:4px;" shape="rect" fit="contain"></image-slot>
           <figcaption style="font-family:var(--font-sans);font-style:italic;font-size:12px;color:var(--muted-2);margin-top:10px;">{{ cur.publicImgCaption }}</figcaption>
         </figure>
-        <div style="border-top:1px solid var(--ink);padding-top:clamp(36px,5vw,50px);padding-bottom:clamp(70px,9vw,110px);">
+        <div style="margin-bottom:clamp(48px,6vw,68px);">
+          <div style="font-family:var(--font-sans);font-size:12px;letter-spacing:.04em;color:var(--accent);margin-bottom:22px;">Key Takeaways</div>
+          <div style="display:flex;flex-direction:column;gap:22px;">
+            <sc-for list="{{ cur.takeaways }}" as="tk" hint-placeholder-count="3">
+              <div style="display:flex;gap:16px;align-items:baseline;">
+                <span style="font-family:var(--font-serif);font-size:20px;color:var(--muted-2);flex:0 0 auto;line-height:1.5;">{{ tk.num }}.</span>
+                <p style="font-family:var(--font-sans);font-size:16px;line-height:1.7;color:var(--ink-2);margin:0;"><strong style="color:var(--ink);font-weight:600;">{{ tk.label }}.</strong> {{ tk.text }}</p>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="border:1px solid var(--line);border-radius:14px;padding:clamp(28px,3.4vw,38px);margin-bottom:clamp(70px,9vw,110px);background:var(--surface);">
           <div style="font-family:var(--font-sans);font-size:12px;letter-spacing:.04em;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:10px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-            Protected account
+            Full case study, password protected
           </div>
-          <p style="font-family:var(--font-sans);font-size:16px;line-height:1.75;color:var(--ink-2);margin:0 0 clamp(28px,4vw,38px);max-width:52ch;">Full case study, including research findings and design decisions, is password protected at SailPoint's request. Enter the passphrase to read the full account - or reach out and I'll gladly share it.</p>
+          <p style="font-family:var(--font-sans);font-size:16px;line-height:1.75;color:var(--ink-2);margin:0 0 clamp(28px,4vw,38px);max-width:52ch;">The full account, including research findings and design decisions, needs a password to open. Enter the passphrase below, or reach out and I'll gladly share it.</p>
           <form onSubmit="{{ submitPass }}" style="display:flex;flex-direction:column;gap:16px;">
             <div style="display:flex;flex-wrap:wrap;gap:12px;">
               <input ref="{{ passRef }}" type="password" aria-label="Passphrase" placeholder="Passphrase" autocomplete="off" style="flex:1 1 220px;min-width:0;font-family:var(--font-sans);font-size:14px;color:var(--ink);background:transparent;border:none;border-bottom:1px solid var(--ink);padding:12px 2px;outline:none;">
-              <button type="submit" class="mag" data-mag=".14" style="flex:0 0 auto;font-family:var(--font-sans);font-size:12px;letter-spacing:.03em;color:var(--paper);background:var(--ink);border:none;border-radius:999px;padding:14px 28px;cursor:pointer;" style-hover="background:var(--accent)">Unlock →</button>
+              <button type="submit" style="flex:0 0 auto;font-family:var(--font-sans);font-size:12px;letter-spacing:.03em;color:var(--paper);background:var(--ink);border:none;border-radius:999px;padding:14px 28px;cursor:pointer;" style-hover="background:var(--accent)">Unlock →</button>
             </div>
             <sc-if value="{{ passError }}" hint-placeholder-val="{{ false }}">
               <div style="font-family:var(--font-sans);font-size:12px;letter-spacing:.02em;color:var(--accent);">That passphrase didn't match. Try again, or <a href="mailto:jxl@umich.edu" style="color:inherit;text-decoration:underline;">email me</a>.</div>
@@ -1120,7 +1141,7 @@
       <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px;padding-top:26px;border-top:1px solid var(--ink);">
         <div>
           <div style="font-family:var(--font-sans);font-size:11px;letter-spacing:.04em;color:var(--muted-2);margin-bottom:14px;">Turn to next →</div>
-          <button class="mag" data-mag=".16" onClick="{{ next.open }}" style="background:none;border:none;cursor:pointer;font-family:var(--font-serif);font-weight:400;font-size:45px;line-height:.94;letter-spacing:-.022em;color:var(--ink);padding:0;text-align:left;" style-hover="color:var(--accent)">{{ next.title }}</button>
+          <button onClick="{{ next.open }}" style="background:none;border:none;cursor:pointer;font-family:var(--font-serif);font-weight:400;font-size:45px;line-height:.94;letter-spacing:-.022em;color:var(--ink);padding:0;text-align:left;" style-hover="color:var(--accent)">{{ next.title }}</button>
         </div>
         <button onClick="{{ goHome }}" style="background:none;border:none;cursor:pointer;font-family:var(--font-sans);font-size:11px;letter-spacing:.03em;color:var(--muted-2);padding:0;" style-hover="color:var(--accent)">↩ Index</button>
       </div>
@@ -1138,7 +1159,7 @@
           <div style="font-family:var(--font-sans);font-size:11px;letter-spacing:.04em;color:var(--accent);margin-bottom:8px;">About</div>
           <h1 style="font-family:var(--font-serif);font-weight:400;font-size:45px;line-height:.98;letter-spacing:-.026em;margin:0;">Hi, I'm Jess</h1>
           <div style="font-family:var(--font-sans);font-size:16px;line-height:1.5;color:var(--ink-2);display:flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d3453b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg> Ann Arbor, MI · {{ localTime }}</div>
-          <p style="font-family:var(--font-sans);font-size:18px;line-height:1.7;color:var(--ink-2);margin:6px 0 4px;max-width:52ch;text-wrap:pretty;">I'm a product design student at Michigan, graduating December 2026, and most of my job is subtraction. I design enterprise tools and AI products: identity software, trade compliance, and one civic seed library that won an award. The work I like best starts as a mess and ends looking obvious.</p>
+          <p style="font-family:var(--font-sans);font-size:18px;line-height:1.7;color:var(--ink-2);margin:6px 0 4px;text-wrap:pretty;">I'm a product design student at Michigan, graduating December 2026, and most of my job is subtraction. I design enterprise tools and AI products: identity software, trade compliance, and one civic seed library that won an award. The work I like best starts as a mess and ends looking obvious.</p>
           <div style="font-family:var(--font-sans);font-size:16px;line-height:1.5;color:var(--ink);display:flex;align-items:center;gap:8px;">
             <a href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px;" style-hover="color:var(--accent)">Resume <span style="font-size:.85em;">&#8599;</span></a>
             <span style="color:var(--muted-2);">·</span>
@@ -1209,7 +1230,7 @@
       <!-- Close -->
       <div class="static-footer" style="border-top:1px solid var(--line);margin:clamp(60px,8vw,110px) calc(50% - 50vw) 0;padding:clamp(70px,9vw,130px) clamp(24px,6vw,80px);">
       <div style="max-width:1340px;margin:0 auto;">
-        <div style="font-family:var(--font-sans);font-size:16px;letter-spacing:.02em;color:var(--accent);margin-bottom:26px;">You reached the footer</div>
+        <div style="font-family:var(--font-sans);font-size:16px;letter-spacing:.02em;color:var(--accent);margin-bottom:26px;">Hi there!</div>
         <div style="display:flex;flex-wrap:wrap;gap:44px 64px;justify-content:space-between;align-items:flex-start;">
           <div style="max-width:30ch;">
             <div data-kickerwrap="" onMouseMove="{{ kickerMove }}" onMouseLeave="{{ kickerLeave }}" style="position:relative;display:inline-block;margin:0 0 clamp(20px,2.6vw,30px);">
@@ -1217,22 +1238,28 @@
               <div data-kickerblur="" aria-hidden="true" style="position:absolute;inset:-100px;font-family:var(--font-serif);font-weight:400;font-size:45px;line-height:1.0;letter-spacing:-.022em;color:var(--ink);white-space:nowrap;filter:blur(5px);opacity:0;transition:opacity .45s ease;pointer-events:none;-webkit-mask-image:radial-gradient(circle 90px at -200px 50%,#000 0%,rgba(0,0,0,.6) 45%,transparent 75%);mask-image:radial-gradient(circle 90px at -200px 50%,#000 0%,rgba(0,0,0,.6) 45%,transparent 75%);">Let's make something.</div>
             </div>
             <p style="font-family:var(--font-sans);font-size:16px;line-height:1.7;color:var(--ink-2);margin:0 0 22px;max-width:34ch;text-wrap:pretty;">I'm always up for a good problem, or just a good conversation. Tell me what you're working on.</p>
-            <a class="foot-cta mag" data-mag=".18" href="mailto:jxl@umich.edu" style="font-family:var(--font-sans);font-size:16px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">jxl@umich.edu</a>
+            <a class="foot-cta" href="mailto:jxl@umich.edu" style="font-family:var(--font-sans);font-size:16px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">jxl@umich.edu</a>
             <div style="font-family:var(--font-sans);font-size:16px;color:var(--muted-2);margin-top:16px;letter-spacing:.01em;">
-              <a class="mag" data-mag=".14" href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="color:var(--ink-2);text-decoration:none;">Resume ↗</a> · <a class="mag" data-mag=".14" href="https://www.linkedin.com/in/jessica-li-1219yue" target="_blank" rel="noopener" style="color:var(--ink-2);text-decoration:none;">LinkedIn ↗</a>
+              <a href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="color:var(--ink-2);text-decoration:none;">Resume ↗</a> · <a href="https://www.linkedin.com/in/jessica-li-1219yue" target="_blank" rel="noopener" style="color:var(--ink-2);text-decoration:none;">LinkedIn ↗</a>
             </div>
           </div>
-          <div data-connect="" style="display:grid;grid-template-columns:auto auto;gap:9px 18px;align-items:baseline;font-family:var(--font-sans);font-size:16px;color:var(--ink);">
-            <span style="color:var(--muted-2);">@</span><a class="foot-cta mag" data-mag=".18" href="mailto:jxl@umich.edu" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">jxl@umich.edu</a>
-            <span style="color:var(--muted-2);">in</span><a class="foot-cta mag" data-mag=".18" href="https://www.linkedin.com/in/jessica-li-1219yue" target="_blank" rel="noopener" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">LinkedIn</a>
-            <span style="color:var(--muted-2);">cv</span><a class="foot-cta mag" data-mag=".18" href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">Résumé (PDF)</a>
-            <span style="color:var(--muted-2);">ds</span><a class="foot-cta mag" data-mag=".18" href="Jess Li - Design System.dc.html" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">Design System</a>
+          <div>
+            <div style="font-family:var(--font-sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);margin-bottom:14px;">Connect</div>
+            <div data-connect="" style="display:grid;grid-template-columns:auto auto;gap:9px 18px;align-items:baseline;font-family:var(--font-sans);font-size:16px;color:var(--ink);">
+              <span style="color:var(--muted-2);">@</span><a class="foot-cta" href="mailto:jxl@umich.edu" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">jxl@umich.edu</a>
+              <span style="color:var(--muted-2);">in</span><a class="foot-cta" href="https://www.linkedin.com/in/jessica-li-1219yue" target="_blank" rel="noopener" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">LinkedIn</a>
+              <span style="color:var(--muted-2);">cv</span><a class="foot-cta" href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">Résumé (PDF)</a>
+              <span style="color:var(--muted-2);">ds</span><a class="foot-cta" href="Jess Li - Design System.dc.html" style="text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;">Design System</a>
+            </div>
           </div>
         </div>
         <div style="text-align:center;color:var(--muted-2);font-family:var(--font-serif);font-size:22px;line-height:1;margin:clamp(48px,7vw,80px) 0 clamp(24px,3.4vw,40px);">⸻</div>
         <div style="display:flex;flex-wrap:wrap;gap:12px 40px;justify-content:space-between;align-items:baseline;font-family:var(--font-sans);font-size:16px;letter-spacing:.01em;color:#66666d;">
           <span style="font-style:italic;">Good work comes from a good mood. Still betting on it.</span>
-          <span style="letter-spacing:.06em;">Made in Ann Arbor · 2026,</span>
+          <span style="display:flex;align-items:baseline;gap:20px;">
+            <span style="letter-spacing:.06em;">Built with Figma, Next.js &amp; Claude Code · © 2026 Jessica</span>
+            <button onClick="{{ scrollTop }}" style="background:none;border:none;cursor:pointer;padding:0;color:inherit;font:inherit;letter-spacing:.06em;" style-hover="color:var(--accent)">Back to top ↑</button>
+          </span>
         </div>
       </div>
       </div>
@@ -1256,10 +1283,10 @@ class Component extends DCLogic {
     this.rootRef = React.createRef();
     this.glowRef = React.createRef();
     this.PROJECTS = [
-      {slug:'sailpoint', date:'May 2026', caseCover:'assets/sailpoint-case-cover.png', title:'SailPoint', category:'Enterprise · Identity Security', role:'UX Design & Research Intern', timeline:'Summer 2026', team:'Solo · Figma, Claude', status:'In progress', locked:true, overview:'Designing trust into an AI-generated source configuration wizard for identity administrators — a group whose job is to be skeptical of automated access changes.', publicIntro:[`Identity security platforms only work if every application a company uses can be connected and governed. Building a custom connector for each one isn't feasible, so SailPoint was piloting an AI-assisted wizard that could generate connection logic for unfamiliar applications on the fly.`, `The open design question: how do you get identity administrators — a group whose job is to be skeptical of automated access changes — to trust an AI-generated configuration enough to act on it?`, `I led the UX work on this wizard: rebuilding the interface on SailPoint's current design system, solving a visual clutter problem that was actively undermining trust in the AI, and designing the recovery paths for when the AI got it wrong.`], publicImg:'sailpoint-legacy', publicImgCaption:`The legacy wizard, before the redesign.`},
-      {slug:'seed-library', date:'Sep 2025', caseCover:'assets/seed-case-cover.png', title:'UM Seed Library', category:'Phygital · Civic', role:'Product Designer', timeline:'Aug 2025 — Mar 2026', team:'4-person team · designers, PM, instructor', status:'Completed', overview:'A phygital seed-lending system connecting a physical dispenser to a digital catalog — closing an 85% awareness gap and winning UMSI\u2019s 2026 UX Design award.'},
-      {slug:'copperhill', date:'Jun 2025', title:'Copperhill', category:'B2B SaaS', role:'Product Design Intern', timeline:'Jun — Aug 2025', team:'Solo designer · 4 engineers', status:'Completed', overview:'Optimizing enterprise data workflows and reducing Excel dependency — redesigning core filtering logic and establishing Design System 2.0 to cut external data exports by 40%.'},
-      {slug:'umgpt', date:'Sep 2025', caseCover:'assets/umgpt-case-cover.png', title:'UM GPT', category:'AI · EdTech · Independent Extension', role:'Product Designer', timeline:'Sep — Dec 2025 (course), continued independently after', team:'Solo · Figma, Lovable, Figma Make, Claude', status:'Completed', overview:'Two Gaps I Refused to Leave Alone — task traceability and instructor insight, fixed on my own initiative after the assignment shipped.'}
+      {slug:'sailpoint', date:'May 2026', caseCover:'assets/sailpoint-case-cover.png', title:'SailPoint', category:'Enterprise · Identity Security', role:'UX Design & Research Intern', timeline:'Summer 2026', team:'Solo · Figma, Claude', status:'In progress', locked:true, overview:'Designing trust into an AI-generated source configuration wizard for identity administrators, a group whose job is to be skeptical of automated access changes.', publicIntro:[`This summer I worked as the sole UX design intern on SailPoint's identity security team, designing for enterprise administrators who manage access across thousands of applications.`, `My main project was an AI-assisted configuration wizard, and I owned the UX through two full rounds of redesign, from an early conversational prototype through the trust and recovery patterns that shipped. A few smaller design efforts ran alongside it, each with its own stakeholders and timeline.`, `Working at this scale taught me as much about people as it did about interfaces: how to read a room of stakeholders, how to hold a design opinion under pressure, and how to let real customer feedback change my mind.`], publicImg:'assets/sailpoint-onboarding-welcome.jpg', publicImgCaption:`The AI-assisted onboarding flow I designed the trust and interaction model for.`, takeaways:[{num:'1', label:'Designing for skepticism, not delight', text:`Admins are trained to question anything automated. Building trust here meant designing for scrutiny first, adoption followed once people felt in control.`}, {num:'2', label:'Customer feedback reshapes the brief', text:`Real usage across release rounds pushed the design further than internal review ever could, and changed decisions I thought were already settled.`}, {num:'3', label:'Advocacy has to be earned, not assumed', text:`Turning stakeholders into champions meant genuinely listening to their concerns while still being clear about why certain calls mattered.`}]},
+      {slug:'seed-library', date:'Sep 2025', caseCover:'assets/seed-case-cover.png', title:'UM Seed Library', category:'Phygital · Civic', role:'Product Designer', timeline:'Aug 2025 — Mar 2026', team:'4-person team · designers, PM, instructor', status:'Completed', overview:'A phygital seed-lending system connecting a physical dispenser to a digital catalog, closing an 85% awareness gap and winning UMSI\u2019s 2026 UX Design award.'},
+      {slug:'copperhill', date:'Jun 2025', title:'Copperhill', category:'B2B SaaS', role:'Product Design Intern', timeline:'Jun — Aug 2025', team:'Solo designer · 4 engineers', status:'Completed', overview:'Optimizing enterprise data workflows and reducing Excel dependency, redesigning core filtering logic and establishing Design System 2.0 to cut external data exports by 40%.'},
+      {slug:'umgpt', date:'Sep 2025', caseCover:'assets/umgpt-case-cover.png', title:'UM GPT', category:'AI · EdTech · Independent Extension', role:'Product Designer', timeline:'Sep — Dec 2025 (course), continued independently after', team:'Solo · Figma, Lovable, Figma Make, Claude', status:'Completed', overview:'Two Gaps I Refused to Leave Alone: task traceability and instructor insight, fixed on my own initiative after the assignment shipped.'}
     ];
     // Real, shareable URLs for each view. Case-study paths drop the hyphen
     // (seed-library -> /seedlibrary) to match the short slugs people expect.
@@ -1270,7 +1297,7 @@ class Component extends DCLogic {
         body:`Identity administrators are paid to distrust automated access changes, and SailPoint needed them to trust an AI-generated source configuration enough to act on it. I rebuilt the wizard on the current design system, cut the competing icons that were quietly undermining trust in the AI, took it through rounds of enterprise customer feedback and internal review, then designed the recovery paths for when the AI got it wrong.`,
         metrics:[
           {dir:'up', value:`10%`, label:`of new source configurations this feature carries`},
-          {dir:'flat', value:`NDA`, label:`full outcome numbers on request`},
+          {dir:'flat', value:`Private`, label:`full outcome numbers on request`},
         ],
       },
       'seed-library': {
@@ -1307,55 +1334,109 @@ class Component extends DCLogic {
     ];
     this.CASE = {
       sailpoint: [
-        {type:'lede', text:`10% of new source configurations. That was the volume this feature needed to carry once it shipped, replacing a process that previously required a hand-built connector or an admin technical enough to read raw API documentation directly.`},
+        {type:'lede', text:`10% of new source configurations. That's the volume this feature needed to carry, replacing a hand-built connector or an admin who could read raw API docs directly.`},
         {type:'section', eyebrow:'Context', heading:`Trust, not accuracy, was the real problem`},
-        {type:'para', text:`SailPoint's platform governs user access by connecting to the external applications a company runs. Every connection needs a schema: what endpoints exist, what data they return, how provisioning should work. Building a custom connector for every application on the market isn't sustainable, so the team was testing whether an LLM could generate that schema for unfamiliar apps automatically.`},
-        {type:'para', text:`That single capability created a design problem underneath it. The people using this tool are identity administrators. Their job is to be suspicious of anything that touches access control. An AI that fills in API endpoints and provisioning rules without explaining itself is not a tool this audience will trust, no matter how accurate it is.`},
-        {type:'para', text:`I owned the UX response: migrating the interface to SailPoint's current design system, designing how the AI's reasoning should surface, and designing what happens when the AI is wrong.`},
-        {type:'image', slot:'cs-sailpoint-legacy', caption:`The wizard's legacy state, shown for scale of the rebuild.`},
+        {type:'para', text:`SailPoint governs access by connecting to whatever applications a company runs, and every connection needs a schema: endpoints, data, provisioning rules. Building a custom connector for every app isn't sustainable, so the team was testing whether an LLM could generate that schema automatically.`},
+        {type:'para', text:`That's where the real design problem started. The admins using this can't code, won't touch a dev tool, and their whole job is distrusting anything that touches access control. I knew early on that accuracy alone wouldn't earn their trust. An AI that fills in endpoints without explaining itself was never going to land here, no matter how right it was.`},
+        {type:'para', text:`I owned the UX response across two redesigns: first replacing a scripted chat prototype, then fixing the clutter that still undermined trust in what replaced it. The recovery paths for when the AI got it wrong came later, and mattered just as much as either.`},
+        {type:'image', videoSrc:'assets/sailpoint-full-flow.mp4', ratio:'1.333', videoMaxW:'640px', caption:`Where it starts: discovered applications, the AI-powered connector picker, and into source setup with the account object already detected.`},
+        {type:'section', eyebrow:'The First Version', heading:`A conversation that couldn't converse`},
+        {type:'para', text:`V1 put AI onboarding behind a guided chat panel: a narrow column beside a mostly empty canvas, walking the admin through one scripted question at a time. No free typing, every step was a fixed prompt with a fixed next step.`},
+        {type:'para', text:`It failed for reasons I could point to in the interface, not just a hunch. The panel narrated buttons the admin could already see, its own copy told them to "select Save and Continue," describing a button sitting right there. It even ran a second Continue button alongside the form's own, because the two had been built without knowing about each other. Explaining why a single field mattered took close to forty words; that became one sentence of static text in the redesign.`},
+        {type:'para', text:`The diagnosis I landed on: a chatbot with no free typing gets you the cost of a conversation, linear and impossible to skim, without the benefit of one, since you can't actually ask it anything back. It behaves like dialogue but functions like a form. Once I saw it that way, most of the redesign followed from fixing that mismatch.`},
+        {type:'para', text:`Worth being honest here: the reaction wasn't a clean mandate. One participant preferred V1's chat-style guidance and still called the redesign "also good." I didn't need everyone to hate V1 to know the defects above were real.`},
+        {type:'compare', beforeLabel:'V1: chat panel', afterLabel:'Current: inline wizard', beforeImg:'assets/sailpoint-start-before.jpg', afterImg:'assets/sailpoint-start-after.jpg', beforeRatio:'1.594', afterRatio:'1.25', beforeCaption:`Two ways to move forward at once: a Continue inside the assist panel, a Save and Continue at the bottom, built without knowing about each other.`, afterCaption:`The same first step today: one field, one sentence of static help text.`, caption:`How the wizard starts, before and after.`},
+        {type:'section', eyebrow:'The Pivot', heading:`Moving AI into the fields themselves`},
+        {type:'para', text:`So I moved AI out of the side panel and onto the fields it actually concerned: recommendations and reasoning surfaced inline or on hover instead of narrated in a transcript. Most of what this wizard asks already has a bounded, correct answer that maps to a field. Conversation just adds a translation step.`},
+        {type:'para', text:`It also changed what the assistant was for. Instead of narrating controls the admin could already see, it started narrating state they couldn't otherwise see at a glance: a connection test just succeeded, no child endpoints were found.`},
+        {type:'para', text:`That didn't mean cutting chat out entirely, though. Harbor Pilot, SailPoint's own AI agent, still sits one tab away for whatever a structured field can't anticipate. A bounded question lives inline, where it can be scanned at a glance; something genuinely open-ended, like why did you recommend this, still has somewhere to go. I wanted the wizard to stay scannable without also making it a help desk.`},
+        {type:'image', slot:'cs-sailpoint-inlinegood', ratio:'1.3', caption:`The same assistant, moved inline: narrating what just happened, not describing a button already on screen.`},
+        {type:'para', text:`This is where I ran into a real tension, not just a minor tradeoff. My instinct was to simplify by showing less of the AI's mechanics, since a cleaner surface always looks like a win. But these admins needed the opposite: one wanted connector capabilities shown upfront so he wouldn't have to dig through documentation, another said he'd verify every recommendation against the real API docs no matter what I gave him. I kept the confidence scores and reasoning visible instead of tucking them away. Simplicity and trust pulled in different directions, and I chose trust.`},
         {type:'section', eyebrow:'Where It Broke', heading:`Four indicators on one field reads as noise, not help`},
-        {type:'para', text:`My first pass surfaced AI involvement through four indicators stacked on the same field: an info icon, a confidence tag, an "AI-generated" tag, and a success tag once a field validated. In testing, this backfired immediately. A field with four icons on it doesn't read as helpful, it reads as noise, and it prompted the same hesitation every time: what does each of these tell me, and which one do I actually need to look at. The interface was asking the admin to learn its own iconography before they could learn anything about the source they were connecting.`},
-        {type:'para', text:`The fix wasn't more explanation. It was fewer decisions. I consolidated every AI-touched field down to one affordance: a wand icon that only appears on hover. Nothing is visible until the user shows intent to look, and there's exactly one thing to interact with when they do.`},
-        {type:'para', text:`That decision solved two problems at once. It removed the clutter of four competing icons, so a field with AI involvement looks identical to any other field until the user reaches for it. And it moved control of information density entirely to the user. A power user who trusts the AI never hovers, and the field stays clean. An admin who wants to verify something hovers, sees the wand, and goes deeper from there.`},
-        {type:'compare', beforeLabel:'Before', afterLabel:'After', beforeSlot:'cs-sailpoint-before', afterSlot:'cs-sailpoint-after', beforeCaption:`A single field carrying four stacked indicators — info icon, confidence tag, "AI-generated" tag, success tag.`, afterCaption:`The same field, clean — a wand icon appears only on hover.`, beforeNotes:[{text:`Info icon`, ax:20, ay:22, lx:6, ly:6, w:'10ch'},{text:`Confidence tag`, ax:46, ay:22, lx:46, ly:6, w:'12ch'},{text:`"AI-generated" tag`, ax:70, ay:22, lx:78, ly:6, w:'13ch'},{text:`Success tag`, ax:88, ay:52, lx:88, ly:78, w:'10ch'}], caption:`Same field, four indicators versus one. Nothing appears until the user asks.`},
-        {type:'section', eyebrow:'The Decision', heading:`A wand that opens into sources, not a tooltip that caps them`},
-        {type:'para', text:`The wand is the entry point. What it opens is where the second decision lives: a side drawer, not a tooltip. A tooltip solves the clutter problem, but it caps how much you can say. Endpoint schemas, provisioning logic, and a link to source documentation don't fit in a hover-triggered sentence, and truncating them just relocates the trust problem instead of solving it.`},
-        {type:'para', text:`The drawer holds three things: the AI's documentation source for that field, a link out to the original external API reference, and a plain-language explanation of why the AI chose that value. A single ambiguous icon says trust me. A wand that opens into sources says check my work. For an identity admin, being able to verify a claim against the actual API doc is the difference between a recommendation they can act on and one they have to escalate to someone else to confirm manually.`},
-        {type:'shotnotes', img:'', slot:'cs-sailpoint-drawer', caption:`The drawer's three zones: source, link, and rationale.`, notes:[{text:`1 · Documentation source for this field`, topPct:16},{text:`2 · Link out to the original external API reference`, topPct:44},{text:`3 · Plain-language rationale for the AI's choice`, topPct:72}]},
+        {type:'para', text:`Even after moving inline, my first draft still tried to say too much at once: four stacked indicators on a single field, an info icon, a confidence tag, an "AI-generated" tag, a success tag. In testing, it read as noise, not help. Admins had to learn the interface's own iconography before they could learn anything about their actual source.`},
+        {type:'para', text:`The fix wasn't more explanation, it was fewer decisions: one affordance per field, a wand icon that only appears on hover. Nothing shows until the admin shows intent to look.`},
+        {type:'para', text:`Three passes, watched side by side, make the arc easier to see than any single before/after: the scripted chat panel, the cluttered inline draft, and the wand-and-drawer version that shipped.`},
+        {type:'carousel', ratio:'1.5', slides:[
+          {label:'V1', title:'A full-screen overlay', text:`A modal covering half the screen. Thorough, but heavy enough to read as an interruption.`, img:'assets/sailpoint-reasoning-v1.jpg'},
+          {label:'V2', title:'Inline, but always on', text:`Embedded directly in the schema table. No longer blocking, but always on whether the admin wanted it or not.`, img:'assets/sailpoint-reasoning-v2.jpg'},
+          {label:'V3', title:'A popover, plus somewhere to ask more', text:`A small confidence badge that opens a focused popover on request, with Harbor Pilot one tab away for anything it doesn't cover.`, video:'assets/sailpoint-v3-reasoning.mp4'}
+        ]},
+        {type:'section', eyebrow:'What Drove V3', heading:`Customer feedback, before the wand and drawer existed`},
+        {type:'para', text:`Three things came up often enough across client calls, before V3 existed, that they stopped reading as preferences and started reading as requirements.`},
+        {type:'para', text:`First: don't hide the reasoning, and don't oversimplify it either. One admin wanted connector capabilities shown upfront so he wouldn't have to leave for documentation; another said he'd verify every recommendation against the real API docs regardless of what I gave him. I took that as a mandate for full reasoning available on request, not a summary standing in for it.`},
+        {type:'para', text:`Second: handle it when the AI is wrong, not just when it's right. Neither earlier version had a real answer for this. V1 offered nothing but starting over; V2 just flagged the field. Admins asked some version of "okay, but what if it's wrong" often enough that it stopped feeling like an edge case and started feeling like a requirement.`},
+        {type:'para', text:`Third: match what people actually expect AI to be good for. One admin running IAM alone across 1,200+ applications called the tool "highly valuable," and he clearly meant valuable for saving real time at that scale, not for being flawless. Another, missing a target of 50+ apps a quarter by a wide margin, was blunter: "exactly what we're looking for." Trust wasn't the only bar these admins held the tool to. Being useful at their actual scale mattered just as much.`},
+        {type:'section', eyebrow:'The Decision', heading:`Why V3 won`},
+        {type:'para', text:`It solved two problems at once. It removed the clutter of four competing icons, so a field with AI involvement looks identical to any other until someone reaches for it, and it put control of information density entirely in the admin's hands: trust the AI and never hover, or want to check something and hover to go deeper.`},
+        {type:'para', text:`The wand is the entry point. What it opens is where the second decision lives: a side drawer, not a tooltip. A tooltip would have solved the clutter problem too, but it caps how much you can actually say. Schemas, provisioning logic, and source links don't fit in a hover-triggered sentence.`},
+        {type:'para', text:`The drawer holds three tabs, each doing a different job instead of one tab trying to do all three: Overview for the plain-language summary, Deep Dive for the actual reasoning and its sources, Ask Harbor Pilot for anything the first two don't cover. I wanted an admin to check my work, not just take my word for it, and a single ambiguous icon was never going to let them do that.`},
+        {type:'shotnotes', img:'assets/sailpoint-decision-overview.png', ratio:'2.562', caption:`Overview: the plain-language summary, with a confidence score attached before the admin clicks anything further.`, notes:[{text:`Confidence, shown up front, not buried a click deep`, topPct:14}]},
+        {type:'shotnotes', img:'assets/sailpoint-decision-deepdive.png', ratio:'1.533', caption:`Deep Dive: the reasoning, as a checked list, plus the real sources behind it.`, notes:[{text:`Why this was suggested, and what it's sourced from`, topPct:38}]},
+        {type:'shotnotes', img:'assets/sailpoint-decision-askpilot.png', ratio:'2.543', caption:`Ask Harbor Pilot: a direct hand-off for anything the first two tabs don't cover.`, notes:[{text:`One click into Harbor Pilot, scoped to this exact field`, topPct:38}]},
+        {type:'para', text:`Clarity wasn't the only reason V3 won, though. It's the first version that actually treats being wrong as something to design for, not an afterthought. The recovery paths below are why.`},
+        {type:'section', eyebrow:'Calibrating Trust', heading:`Defaults set by the cost of being wrong`},
+        {type:'para', text:`I calibrated how much authority the AI gets to how expensive a mistake would be, not evenly across the wizard. Most decisions here are cheap to reverse, a wrong account-object guess just costs a redo, so the wizard defaults to the AI's answer and lets the admin catch it: child endpoints arrive pre-selected, ready to uncheck. Provisioning is the opposite case. A wrong rule there can silently grant real access, sometimes invisibly until an audit, so nothing activates until the admin approves it.`},
+        {type:'compare', beforeLabel:'Wizard: opt-out', afterLabel:'Provisioning: opt-in', beforeSlot:'cs-sailpoint-optout', afterSlot:'cs-sailpoint-optin', beforeCaption:`AI-recommended child endpoints arrive pre-checked. Cheap to reverse, so the default does the work.`, afterCaption:`Nothing enabled until the admin actively chooses.`, caption:`Same platform, two postures, set by how expensive a wrong answer would be.`},
+        {type:'para', text:`This wasn't a preference I designed in isolation, either. It's a validated requirement. Asked directly whether provisioning should activate automatically once the wizard finished, participants said no. They wanted it deliberate.`},
         {type:'section', eyebrow:'Designing for Failure', heading:`What happens when the AI is wrong`},
-        {type:'para', text:`The AI isn't reliable for every application, particularly ones with little public documentation. I designed a manual "Standard Setup" toggle that lets an admin drop out of the AI wizard without losing context or data already entered, plus a custom upload state for obscure applications where an admin can hand the AI documentation directly.`},
-        {type:'para', text:`I also built visual alerts for a specific downstream failure: the AI correctly generating a schema but missing a mandatory provisioning field, which wouldn't otherwise surface until much later in the process. Catching that at the point of failure was a deliberate call. The cost of a silent miss here isn't a bad UI moment, it's a broken access policy in production.`},
+        {type:'para', text:`The AI isn't reliable for every application, especially undocumented ones, so I designed a manual "Standard Setup" exit that preserves context and data, plus an upload state for admins to hand the AI documentation directly.`},
+        {type:'image', slot:'cs-sailpoint-standardsetup', ratio:'1.3', caption:`The exit ramp: dropping to Standard Setup mid-wizard, with a confirmation rather than a silent switch.`},
+        {type:'para', text:`This one I caught and fixed myself, worth being honest about rather than glossing over. The AI populates the Base URL field directly, and an early version of that error message blamed the admin instead of the recommendation that had actually failed. I rewrote it to state ownership plainly: "Harbor Pilot got a 404 Not Found from the base URL you entered." Then I gave four ways out instead of one dead end: try the AI's suggested fix, retry, edit manually, or ask Harbor Pilot directly. In a product whose entire job is earning trust in an AI, blaming the user for that AI's own mistake was exactly the wrong place to get it wrong.`},
+        {type:'image', videoSrc:'assets/sailpoint-error-case.mp4', ratio:'1.333', videoMaxW:'640px', caption:`The recovery ladder in action: a failed connection test, attributed correctly, resolved in four ways instead of one.`},
+        {type:'para', text:`I also built alerts for a specific downstream failure: a correct schema still missing a mandatory provisioning field, which wouldn't otherwise surface until much later. I wanted to catch that at the point of failure on purpose. A silent miss here isn't just a bad UI moment, it's a broken access policy in production.`},
         {type:'diagram', fromLabel:'AI Wizard', toLabel:'Standard Setup', branchLabel:'context and mapped data preserved', caption:`Dropping out of the AI wizard never costs the user their progress.`},
+        {type:'para', text:`One constraint I designed around rather than invented: renaming the target system re-runs schema analysis, which costs real compute at scale, so I capped edits to that field. What I haven't fully solved is how to communicate a limit the admin can't see the reasoning for. Counting down from a fixed number states the ceiling without the reason, which reads as arbitrary. Surfacing the count only near the limit, paired with the reason, is the direction I'd push next.`},
+        {type:'section', eyebrow:'The Full Flow', heading:`Start to finish`},
+        {type:'para', text:`Each of these decisions is easier to defend on its own than it is to actually feel. Watched start to finish, the wizard reads less like a checklist and more like a single conversation the interface is having with the admin, one that just happens to be held without words.`},
+        {type:'image', slot:'cs-sailpoint-fullflow', ratio:'1.6', caption:`The complete flow: connector picker through source setup, recommendation, and review.`},
+        {type:'section', eyebrow:'Bonus', heading:`Surfacing provisioning rules`},
+        {type:'para', text:`Outside the core scope of this project, I extended the same wand-and-drawer language to a second surface: the provisioning rules that decide what the AI is actually allowed to create, update, or delete once a source goes live. Nobody asked for this. But the same trust problem lives there, so it felt worth prototyping rather than leaving as a gap.`},
+        {type:'image', slot:'cs-sailpoint-provisioningrules', ratio:'1.6', caption:`Provisioning rules, surfaced with the same reasoning-on-request pattern as the wizard.`},
         {type:'section', eyebrow:'Validation', heading:`Testing for the low-confidence moment, not the happy path`},
         {type:'para', text:`I built the research plan around one hypothesis: happy-path testing wouldn't tell us anything useful, because the real failure mode was what admins did when the AI's confidence was low. We ran demos across ten enterprise customers over several weeks.`},
-        {type:'para', text:`Feedback on the AI-driven discovery was broadly positive, with one integration type seeing 50% positive feedback across four customers. Customers named the cleaner setup and faster time-to-connection as wins, and called out support for disconnected apps as a standout. More notably, they independently requested the exact fallback behaviors already in the design: document upload, template support, and the ability to resume a setup rather than restart it.`},
+        {type:'para', text:`Feedback was broadly positive: cleaner setup, faster time-to-connection, disconnected-app support called out as a standout. What struck me more was that customers independently asked for the exact fallback behaviors already sitting in the design: document upload, template support, resuming a setup instead of restarting it.`},
+        {type:'metrics', metrics:[
+          {icon:'user', dir:'flat', eyebrow:'Validation', value:'10 customers', desc:`Live demos run across several weeks, targeting the low-confidence moment rather than the happy path.`},
+          {icon:'check', dir:'up', eyebrow:'Reception', value:'50% positive', desc:`On the AI-driven discovery flow for one integration type, across 4 of those customers.`},
+          {icon:'target', dir:'up', eyebrow:'Target', value:'10% of new configs', desc:`The AI wizard's share of new source configurations, first release.`}
+        ]},
         {type:'quote', label:'Direct customer request', text:`Disable it by default.`},
-        {type:'para', text:`That was one enterprise customer's direct request: AI-generated provisioning should require explicit opt-in before it could write changes, not just read them. It became a hard requirement in the design, not a suggestion. It's also the clearest evidence that the trust problem I'd been designing around from the start was real, not assumed.`},
+        {type:'para', text:`That was one enterprise customer's direct request: AI-generated provisioning should require explicit opt-in before it could write changes, not just read them. It became a hard requirement, not a suggestion, and honestly the clearest evidence I had that the trust problem I'd been designing around was real.`},
+        {type:'section', eyebrow:'Feedback', heading:`How it actually landed, after V3 shipped`},
+        {type:'para', text:`Reaction built up across rounds of client calls, not from one test with a single verdict: the same admins reacting to the chat panel, then the cluttered draft, then the wand-and-drawer version. V1 versus the redesign was split roughly evenly, not a clean win for either, and I'd rather keep that in the record than smooth it over. One participant preferred V1's guidance and still found the redesign "also good." The requirements it was judged against, though, came from the feedback earlier in this case study, from before V3 existed.`},
+        {type:'statrow', stats:[
+          {icon:'user', label:'Customer orgs in this round', value:'8'},
+          {icon:'message', label:'Independently asked for private API upload', value:'5 of 8'},
+          {icon:'lock', label:'Confirmed provisioning should stay manual', value:'2 named leads'}
+        ]},
+        {type:'para', text:`Not every reaction was unqualified, and I'd rather keep that here than edit it out. One customer named disconnected applications, mostly government portals, as their actual biggest pain point, and was upfront that the AI connector "solves a small problem" next to the 70-plus disconnected systems still waiting on a fix. It's the same instinct behind Scope below. A tool doesn't have to solve everything to be worth shipping, but the case study for it should say so.`},
+        {type:'section', eyebrow:'Scope', heading:`What this doesn't solve yet`},
+        {type:'para', text:`The most frequently repeated request across these sessions was support for uploading private API documentation, for homegrown applications with no public docs to point the AI at. That's out of scope for what's built today, and I'd rather say so plainly than let this case study imply full coverage: this wizard earns trust for the class of systems it targets, well-documented public SaaS APIs, and it doesn't solve that yet for internal tooling.`},
         {type:'section', eyebrow:'Impact', heading:`From validated design to reference pattern`},
-        {type:'para', text:`The validated design moved the feature toward general availability, targeted for August 2026, carrying a goal of routing 10% of all new source configurations through the AI wizard in its first release. The wand-and-drawer pattern also became the reference model the broader team adopted for surfacing AI reasoning elsewhere in the platform: don't stack indicators on the interface, give the user one door in, and let them choose how far to walk through it.`}
+        {type:'para', text:`The validated design moved toward general availability, targeting August 2026 and a goal of routing 10% of new source configurations through the AI wizard in its first release. The wand-and-drawer pattern also became the reference model the broader team adopted for surfacing AI reasoning elsewhere in the platform: one door in, and let the person on the other side decide how far to walk through it.`}
       ],
       'seed-library': [
-        {type:'lede', text:`A student finds a gumball machine dispensing free seeds in her campus library, with no idea there's an entire community behind it. 85% of surveyed users had never heard of the Seed Library at all — one number describing two broken front doors that never acknowledged each other, physical and digital.`},
+        {type:'lede', text:`A student finds a gumball machine dispensing free seeds in her campus library, with no idea there's an entire community behind it. 85% of surveyed users had never heard of the Seed Library at all, one number describing two broken front doors that never acknowledged each other, physical and digital.`},
         {type:'para', text:`Our four-person team took this on after the client named the failure themselves. I led design: the system underneath everything, plus the homepage and events experience specifically. My teammates led the physical redesign and plant identification. What follows is both halves, in the order we actually worked through them: map the intended experience, find where it broke, fix it, and prove the fix worked.`},
         {type:'para', text:`The client named the failure first and asked for one thing: reach. A free, funded campus resource was invisible to the 85% it existed for, and every decision downstream was measured against that, not against how the screens looked.`},
         {type:'imagepair', ratio:'0.6483', sharedCaption:`The gumball machine and frog receptacle, now clear, beside the physical step diagram that guides users through the experience.`, images:[
           {img:'assets/seed-machine-frog.png'},
           {img:'assets/seed-physical-steps.png'}
         ]},
-        {type:'section', eyebrow:'Research', heading:`Initial research`},
+        {type:'section', eyebrow:'Research', heading:`Every method we ran said the same thing`},
         {type:'para', text:`We ran four research methods in parallel: a field study logging 185 real observations, a 53-response survey, usability testing with 7 early participants, and Google Analytics across 110 site visitors. The findings agreed with each other.`},
         {type:'list', items:[`85% of surveyed users had never heard of the Seed Library.`,`96% of the flows we observed never reached completion.`]},
         {type:'statrow', stats:[{icon:'eye', label:'Field study', value:'185 observations'},{icon:'message', label:'Survey', value:'53 responses'},{icon:'user', label:'Usability testing', value:'7 participants'},{icon:'chart', label:'Analytics', value:'110 site visitors'}]},
         {type:'metrics', metrics:[{icon:'target', dir:'down', eyebrow:'Awareness', value:'85% unfamiliar', desc:`Never heard of the Seed Library before this study.`},{icon:'nav', dir:'down', eyebrow:'Completion', value:'96% incomplete', desc:`Observed flows that never reached the end.`}]},
         {type:'para', text:`So the brief stopped being fix the machine or fix the site. It became: make each one hand you to the other.`},
         {type:'para', text:`Then we watched real people try it. A field study logged 185 observations of that exact flow in the wild, and nearly every step had something hanging off it that wasn't supposed to be there: users skipping the envelope dispenser entirely, capsules hitting the floor, seeds identified only through facilitator intervention, users unsure whether the machine cost money at all.`},
-        {type:'zoomimage', img:'assets/seed-userflow-full.jpg', ratio:'2.695', caption:`The full phygital user-flow map — physical flow (left) meeting digital flow (right), with every off-script branch a real tester took. Click to expand.`},
+        {type:'zoomimage', img:'assets/seed-userflow-full.jpg', ratio:'2.695', caption:`The full phygital user-flow map: physical flow (left) meeting digital flow (right), with every off-script branch a real tester took. Click to expand.`},
         {type:'image', img:'assets/seed-dropoff-chart.png', ratio:'1.485', caption:`Field-study drop-off: of 147 users who discovered the Seed Library, only 8 (4.32%) made it out with seeds in hand.`},
-        {type:'section', eyebrow:'Flow', heading:`The Revised Flow`},
+        {type:'section', eyebrow:'Flow', heading:`Two steps caused nearly all of it`},
         {type:'para', text:`We mapped what the flow was supposed to look like: discover, hand off, land online, identify, return, all connecting at one clean point. Then we watched it fail. People skipped the envelope dispenser without a second thought. Capsules hit the floor. More than once, a seed only got identified because someone on our team stepped in and told them what it was. Two steps caused nearly all of it, an envelope dispenser nobody needed and a manual seed transfer nobody wanted, so we cut them. Six steps became four.`},
-        {type:'image', videoSrcs:['assets/seed-before-after-journey.mp4'], ratio:'2.306', videoMaxW:'100%', caption:`The revised flow, before and after — the two greyed-out steps (envelope dispenser, capsule-to-envelope transfer) removed, leaving a cleaner loop.`},
+        {type:'image', videoSrcs:['assets/seed-before-after-journey.mp4'], ratio:'2.306', videoMaxW:'100%', caption:`The revised flow, before and after: the two greyed-out steps (envelope dispenser, capsule-to-envelope transfer) removed, leaving a cleaner loop.`},
         {type:'para', text:`The field study explained behavior. Three other methods explained scale and sentiment. A 53-response survey. Google Analytics across 110 site visitors. Usability testing with early participants. Together: 85% had never heard of the program. 96% of observed flows never completed. Four independent methods, one unanimous verdict.`},
-        {type:'section', eyebrow:'Ideation', heading:`From Data to Divergence`},
+        {type:'section', eyebrow:'Ideation', heading:`Identification and community became the spine`},
         {type:'para', text:`Numbers told us where things broke. They didn't tell us what to build instead. The team ran a Crazy 8s round, eight rapid concepts each, forcing volume before commitment, and built two personas with full storyboards to keep a real person's motivation in view while sketching solutions for a percentage.`},
         {type:'carousel', ratio:'1.7', slides:[
           {label:'Personas', title:'Personas', text:`Two personas built to bracket the range we actually saw in research, not just two individuals. Together they covered the bulk of who showed up to the machine: someone optimizing for speed, someone optimizing for connection, which meant the redesign had to hold both instead of picking one.`, images:[
@@ -1366,68 +1447,68 @@ class Component extends DCLogic {
           {label:'Crazy 8s', title:'Crazy 8s', text:`Eight rapid concepts each, physical and digital, forced volume before judgment before a single final screen existed. One sketch cut the envelope dispenser outright instead of trying to clarify it, and that's the idea that survived into the shipped redesign.`, img:'assets/seed-crazy8s.png'},
           {label:'Ideation', title:'Ideation', text:`Every research finding got turned into a How Might We before anyone reached for a solution. Identification and community kept surfacing as the two problems no concept was allowed to skip, which is why they became the redesign's actual spine.`, img:'assets/seed-ideation-board.png'}
         ]},
-        {type:'section', eyebrow:'Iterations', heading:`Design Iterations: Before, After, Why`},
+        {type:'section', eyebrow:'Iterations', heading:`Four screens changed. None of it was general polish`},
         {type:'para', text:`Four screens changed shape because of specific findings, not general polish.`},
         {type:'para', text:`The Grow / Plant Landing page. Usability testing showed capsule color meant nothing once someone was looking at a screen instead of holding the object. The redesign mirrors capsule color directly against an interactive map.`},
-        {type:'image', img:(window.__resources&&window.__resources.seedPlantListing)||'assets/seed-plant-listing-prototype.png', ratio:'1.833', caption:`The step-by-step "Grow your own seeds" guide, plus mobile and tablet listing views for a capsule match — Cilantro, Champion Raddish, Wild Yarrow.`},
+        {type:'image', img:(window.__resources&&window.__resources.seedPlantListing)||'assets/seed-plant-listing-prototype.png', ratio:'1.833', caption:`The step-by-step "Grow your own seeds" guide, plus mobile and tablet listing views for a capsule match: Cilantro, Champion Raddish, Wild Yarrow.`},
         {type:'para', text:`Plant Detail. Every participant who reached a plant page got lost in undifferentiated care information. The fix: numbered, scannable steps with visual difficulty ratings, so a beginner gets one action at a time.`},
-        {type:'compare', beforeLabel:'Before', afterLabel:'After', beforeImg:'assets/seed-pdp-before.png', beforeRatio:'0.742', afterImg:'assets/seed-pdp-after.png', afterRatio:'0.742', caption:`Plant Detail — a small cropped photo and care steps mis-numbered with two labelled 5, replaced by a full-width photo and correct numbering.`},
-        {type:'image', img:(window.__resources&&window.__resources.seedPlantDetail)||'assets/seed-plant-detail-prototype.png', ratio:'1.992', caption:`Plant Detail on mobile and desktop — a Grow / About / Conditions / Community tab bar and a Plant / Seed toggle under the hero photo.`},
+        {type:'compare', beforeLabel:'Before', afterLabel:'After', beforeImg:'assets/seed-pdp-before.png', beforeRatio:'0.742', afterImg:'assets/seed-pdp-after.png', afterRatio:'0.742', caption:`Plant Detail: a small cropped photo and care steps mis-numbered with two labelled 5, replaced by a full-width photo and correct numbering.`},
+        {type:'image', img:(window.__resources&&window.__resources.seedPlantDetail)||'assets/seed-plant-detail-prototype.png', ratio:'1.992', caption:`Plant Detail on mobile and desktop: a Grow / About / Conditions / Community tab bar and a Plant / Seed toggle under the hero photo.`},
         {type:'para', text:`Homepage. The one page with no physical counterpart, meant for the 85% who'd never touched a machine. An early two-CTA version caused hesitation in testing; it became one line: Grow your plant!`},
-        {type:'compare', beforeLabel:'Before', afterLabel:'After', beforeImg:'assets/seed-home-before.jpg', beforeRatio:'0.6806', afterImg:'assets/seed-home-after.jpg', afterRatio:'0.6806', caption:`Homepage — a dark hero card with Sign Up For Event Alerts as the only action, replaced by a light hero with one action, Grow your plant!`},
-        {type:'image', img:(window.__resources&&window.__resources.seedHome)||'assets/seed-home-prototype.png', ratio:'1.983', caption:`The shipped homepage as a responsive pair — the desktop hero sets its flower cutout beside the copy; the mobile one stacks it below.`},
+        {type:'compare', beforeLabel:'Before', afterLabel:'After', beforeImg:'assets/seed-home-before.jpg', beforeRatio:'0.6806', afterImg:'assets/seed-home-after.jpg', afterRatio:'0.6806', caption:`Homepage: a dark hero card with Sign Up For Event Alerts as the only action, replaced by a light hero with one action, Grow your plant!`},
+        {type:'image', img:(window.__resources&&window.__resources.seedHome)||'assets/seed-home-prototype.png', ratio:'1.983', caption:`The shipped homepage as a responsive pair. The desktop hero sets its flower cutout beside the copy; the mobile one stacks it below.`},
         {type:'para', text:`Events. 60% wanted community programming; almost none found it. The fix moved event surfacing off a single page and into the homepage and plant pages directly, backed by attendance indicators pairing social proof with urgency.`},
-        {type:'image', img:(window.__resources&&window.__resources.seedEvents)||'assets/seed-events-prototype.png', ratio:'1.939', caption:`The Events page — attendance indicators like "34 attending, 8 seats left" doing quiet, compounding work.`},
-        {type:'section', eyebrow:'Validation', heading:`Evaluation`},
-        {type:'para', text:`We ran three phases of usability testing with 14 users total: six sessions on paper prototypes and eight against live design revisions, each round's failures writing the next round's brief. Every session measured the same three things — task completion, error rate, and single-ease-question (SEQ) confidence, where each task scored 4 or higher out of 5.`},
+        {type:'image', img:(window.__resources&&window.__resources.seedEvents)||'assets/seed-events-prototype.png', ratio:'1.939', caption:`The Events page: attendance indicators like "34 attending, 8 seats left" doing quiet, compounding work.`},
+        {type:'section', eyebrow:'Validation', heading:`Testers stopped guessing and started finishing`},
+        {type:'para', text:`We ran three phases of usability testing with 14 users total: six sessions on paper prototypes and eight against live design revisions, each round's failures writing the next round's brief. Every session measured the same three things: task completion, error rate, and single-ease-question (SEQ) confidence, where each task scored 4 or higher out of 5.`},
         {type:'list', items:[`Increased user confidence throughout the experience, turning frustration into clarity.`,`Eliminated the physical-to-digital disconnection entirely, creating one seamless flow.`]},
         {type:'metrics', metrics:[{icon:'target', dir:'up', eyebrow:'Seed Identification', value:'4% \u2192 83% accuracy', desc:`Testers went from guessing to naming the right seed almost every time, across every task we measured.`},{icon:'check', dir:'up', eyebrow:'Task Completion', value:'0% \u2192 95% finished', desc:`Flows that used to stall now run end to end, from capsule to confirmed plant.`},{icon:'growth', dir:'up', eyebrow:'Confidence', value:'4+ / 5 rated', desc:`Every task scored 4 or higher for how sure people felt about what they had just done.`}]},
-        {type:'section', eyebrow:'Prototype', heading:`Final Screens & Prototype`},
-        {type:'image', videoSrcs:['assets/seed-plant-listing-detail-a.mp4','assets/seed-plant-listing-detail-b.mp4'], noVidControls:true, ratio:'1.333', videoMaxW:'100%', caption:`Live walkthrough of the revised plant detail and grow flows — the screens users navigated in the final testing round.`},
-        {type:'section', eyebrow:'Recognition', heading:`Recognition`},
-        {type:'para', text:`User Experience Design category winner, 2026 UMSI Student Project Exposition — judged by a panel including representatives from Netflix, Apple, Adobe, and CitiGroup.`},
-        {type:'image', img:'assets/seed-expo-award.jpg', ratio:'1.406', caption:`The team with the $500 UMSI Expo check — confirmation after the argument's already been made, not a second argument.`}
+        {type:'section', eyebrow:'Prototype', heading:`What testers actually navigated`},
+        {type:'image', videoSrcs:['assets/seed-plant-listing-detail-a.mp4','assets/seed-plant-listing-detail-b.mp4'], noVidControls:true, ratio:'1.333', videoMaxW:'100%', caption:`Live walkthrough of the revised plant detail and grow flows: the screens users navigated in the final testing round.`},
+        {type:'section', eyebrow:'Recognition', heading:`Judged against Netflix, Apple, Adobe, and CitiGroup`},
+        {type:'para', text:`User Experience Design category winner, 2026 UMSI Student Project Exposition, judged by a panel including representatives from Netflix, Apple, Adobe, and CitiGroup.`},
+        {type:'image', img:'assets/seed-expo-award.jpg', ratio:'1.406', caption:`The team with the $500 UMSI Expo check. Confirmation after the argument's already been made, not a second argument.`}
       ],
       copperhill: [
         {type:'section', eyebrow:'The Problem', heading:`They could find the problem. They just could not do anything about it.`},
-        {type:'para', text:`Copperhill runs trade compliance for global shipments, which means analysts spend the day inside data tables looking for parts that need attention. When they found one, the workflow left the building. Asking a supplier a question meant switching to Outlook and tracking the reply in an email thread the platform had no memory of. No record tied to the part. No way to see which items had open questions. No way to prep for a supplier call except re-reading an inbox.`, note:`Rejected idea: a notifications inbox to ping analysts about updates. Shadowing showed the real gap wasn't awareness — it was that the platform couldn't hold a conversation at all.`},
-        {type:'para', text:`I saw this before it was scoped. Shadowing the Ops team, I watched analysts leave the platform to do the core of their job \u2014 the broken Outlook loop was something I observed firsthand, not something handed to me. I translated those sessions into the workflows that defined the project: compose questions, send now or queue for a bulk send, view open questions per client, and reuse common questions by part type. A second persona, the Technical Contact, needed a clean way to respond. I wrote the requirements, then worked with my PM to confirm the direction and narrow the space to a few things worth building.`},
+        {type:'para', text:`Copperhill runs trade compliance for global shipments, which means analysts spend the day inside data tables looking for parts that need attention. When they found one, the workflow left the building. Asking a supplier a question meant switching to Outlook and tracking the reply in an email thread the platform had no memory of. No record tied to the part. No way to see which items had open questions. No way to prep for a supplier call except re-reading an inbox.`, note:`Rejected idea: a notifications inbox to ping analysts about updates. Shadowing showed the real gap wasn't awareness. It was that the platform couldn't hold a conversation at all.`},
+        {type:'para', text:`I saw this before it was scoped. Shadowing the Ops team, I watched analysts leave the platform to do the core of their job. The broken Outlook loop was something I observed firsthand, not something handed to me. I translated those sessions into the workflows that defined the project: compose questions, send now or queue for a bulk send, view open questions per client, and reuse common questions by part type. A second persona, the Technical Contact, needed a clean way to respond. I wrote the requirements, then worked with my PM to confirm the direction and narrow the space to a few things worth building.`},
         {type:'para', text:`The problems I'd watched pointed to three questions that anchored the rest of the work:`},
         {type:'hmwcards', cards:[
           {observed:`Asking a supplier meant leaving for Outlook, and the thread was lost.`, hmw:`ask and resolve supplier questions without leaving the platform?`},
           {observed:`No way to see which parts had open questions without opening every row.`, hmw:`surface a part's open questions at a glance?`},
           {observed:`Analysts retyped the same question part after part, saving no time.`, hmw:`cut the effort of asking a common question?`}
         ]},
-        {type:'para', text:`That focus mattered, because the brief was broad. I went deep on the two workflows carrying the most repeated friction: surfacing open questions inside a dense table without drowning it, and removing the retyping and one-by-one sending that made analysts avoid the feature. The rest of the surface area — per-client views, contact management, and the Technical Contact response side — shipped as part of the system but sits outside this study.`},
+        {type:'para', text:`That focus mattered, because the brief was broad. I went deep on the two workflows carrying the most repeated friction: surfacing open questions inside a dense table without drowning it, and removing the retyping and one-by-one sending that made analysts avoid the feature. The rest of the surface area, per-client views, contact management, and the Technical Contact response side, shipped as part of the system but sits outside this study.`},
         {type:'para', text:`Before touching the Q&A screen itself, I mapped Copperhill's primary navigation end to end. The platform's depth was the double edge: powerful, but the workflow I needed to fix sat several levels down a sprawling hierarchy, far from where analysts actually spent their day.`},
-        {type:'image', img:(window.__resources&&window.__resources.copperhillSitemap)||'assets/copperhill-sitemap.jpg', ratio:'1.403', caption:`Copperhill's primary navigation mapped in full — Q&A sits three levels down under HTS, with the Questions Bank nested below it.`},
+        {type:'image', img:(window.__resources&&window.__resources.copperhillSitemap)||'assets/copperhill-sitemap.jpg', ratio:'1.403', caption:`Copperhill's primary navigation mapped in full: Q&A sits three levels down under HTS, with the Questions Bank nested below it.`},
         {type:'section', eyebrow:'Iteration', heading:`Getting the interaction cost right took three tries.`},
-        {type:'para', text:`I set the interaction cost against one question — which parts need attention right now? — and let each version answer it. The first two failed for the same underlying reason; the third split the problem in two.`},
+        {type:'para', text:`I judged every version against one question: which parts need attention right now? Each one had to answer it. The first two failed for the same underlying reason; the third split the problem in two.`},
         {type:'para', text:`Two versions failed for the same reason before I could name it. I was treating "how many parts need attention" and "what exactly is wrong with them" as one problem. They are two. V1 hid the count. V2 destroyed the grouping. V3 split them: a live question count on every row so triage takes zero clicks, full detail on expand.`},
         {type:'scrolly', steps:[
-          {v:'V1', title:`Grouped under expandable parts`, ratio:'1.542', text:`My first instinct was to keep the table clean — questions nested under their parent part, collapsed by default. Then I tried to answer that one question and couldn't, without opening every single row. The table looked orderly, but it hid the one thing analysts needed to see first. My design manager agreed: the collapsed state was hiding urgency rather than organizing it.`, img:(window.__resources&&window.__resources.qaV1)||'assets/qa-v1.jpg', caption:`V1 — questions nested under each part and collapsed by default, so triage means opening every row.`, notes:[{text:`Grouping clustered questions — but urgency stays hidden until you expand every row`, ax:8, ay:22, qx:24, qy:38, lx:30, ly:66, w:'16ch'}]},
-          {v:'V2', title:`Flattened — one question per row`, ratio:'1.553', text:`I reacted by going to the opposite extreme: every question got its own row, nothing collapsed. A deliberate overcorrection, not a targeted fix. Visibility stopped being the problem — but related questions about the same part lost any connection. Three small questions on one part looked identical, at a glance, to three unrelated one-off issues.`, img:(window.__resources&&window.__resources.qaV2)||'assets/qa-v2.jpg', caption:`V2 — every question on its own row and fully visible, but structure and grouping are lost.`, notes:[{text:`Status landed mid-row and interrupted the left-to-right scan`, ax:36, ay:34, qx:32, qy:56, lx:41, ly:74, w:'18ch'}]},
-          {v:'V3', title:`Hybrid — count at a glance, detail on expand`, ratio:'1.575', text:`Both versions had failed for the same reason: I was treating "how many need attention" and "what exactly are they" as one problem instead of two. The fix was to split them. Each row shows a live question count, so triage needs no clicks; expanding reveals full detail, restoring the grouping V2 lost. I added batch-select across parts to schedule one supplier call at once.`, img:(window.__resources&&window.__resources.qaV3)||'assets/qa-v3.jpg', caption:`V3 — part grouping restored, with each question its own selectable row so triage can cross parts.`, notes:[{text:`Reorder by part number`, ax:27, ay:20, qx:10, qy:52, lx:6, ly:80, w:'12ch'},{text:`Per-question select — triage individual questions across parts`, ax:30.5, ay:36, qx:50, qy:62, lx:44, ly:82, w:'16ch'}]},
+          {v:'V1', title:`Grouped under expandable parts`, ratio:'1.542', text:`My first instinct was to keep the table clean, questions nested under their parent part, collapsed by default. Then I tried to answer that one question and couldn't, without opening every single row. The table looked orderly, but it hid the one thing analysts needed to see first. My design manager agreed: the collapsed state was hiding urgency rather than organizing it.`, img:(window.__resources&&window.__resources.qaV1)||'assets/qa-v1.jpg', caption:`V1: questions nested under each part and collapsed by default, so triage means opening every row.`, notes:[{text:`Grouping clustered questions, but urgency stays hidden until you expand every row`, ax:8, ay:22, qx:24, qy:38, lx:30, ly:66, w:'16ch'}]},
+          {v:'V2', title:`Flattened: one question per row`, ratio:'1.553', text:`I reacted by going to the opposite extreme: every question got its own row, nothing collapsed. A deliberate overcorrection, not a targeted fix. Visibility stopped being the problem, but related questions about the same part lost any connection. Three small questions on one part looked identical, at a glance, to three unrelated one-off issues.`, img:(window.__resources&&window.__resources.qaV2)||'assets/qa-v2.jpg', caption:`V2: every question on its own row and fully visible, but structure and grouping are lost.`, notes:[{text:`Status landed mid-row and interrupted the left-to-right scan`, ax:36, ay:34, qx:32, qy:56, lx:41, ly:74, w:'18ch'}]},
+          {v:'V3', title:`Hybrid: count at a glance, detail on expand`, ratio:'1.575', text:`Both versions had failed for the same reason: I was treating "how many need attention" and "what exactly are they" as one problem instead of two. The fix was to split them. Each row shows a live question count, so triage needs no clicks; expanding reveals full detail, restoring the grouping V2 lost. I added batch-select across parts to schedule one supplier call at once.`, img:(window.__resources&&window.__resources.qaV3)||'assets/qa-v3.jpg', caption:`V3: part grouping restored, with each question its own selectable row so triage can cross parts.`, notes:[{text:`Reorder by part number`, ax:27, ay:20, qx:10, qy:52, lx:6, ly:80, w:'12ch'},{text:`Per-question select, triage individual questions across parts`, ax:30.5, ay:36, qx:50, qy:62, lx:44, ly:82, w:'16ch'}]},
         ]},
-        {type:'para', text:`In sessions where I directly observed analysts using V3 against their prior workflow, review time for a typical batch of questions dropped from roughly 8 minutes to about 3. This wasn't an instrumented, platform-wide metric — it's what I watched happen across specific sessions, consistent enough that I trust it as a real signal rather than a fluke.`},
+        {type:'para', text:`In sessions where I directly observed analysts using V3 against their prior workflow, review time for a typical batch of questions dropped from roughly 8 minutes to about 3. This wasn't an instrumented, platform-wide metric. It's what I watched happen across specific sessions, consistent enough that I trust it as a real signal rather than a fluke.`},
         {type:'section', eyebrow:'Supporting the workflow', heading:`Does this actually give analysts their time back?`},
         {type:'para', text:`The table decided how questions are seen. The next problem was the repetitive labor of asking and sending, where the catalog and queue came in. These flows are the loop running end to end, and the clearest evidence the redesign removed manual work rather than relocating it.`},
         {type:'para', text:`My first instinct for killing the retyping was autocomplete: predict the rest of a question as the analyst typed. After talking it through with engineering, that was out of scope for the MVP, so I redesigned around the constraint and built a question bank instead: a library of vetted questions organized by category, from which an analyst pulls a common ask rather than rewriting it.`},
         {type:'para', text:`The constraint made the feature better, not worse. Autocomplete would have sped up typing for a question you already knew you wanted. The bank did that too, but it also let analysts browse what was commonly asked across categories, which surfaced questions a newer analyst wouldn't have thought to ask. The version I was forced into served a need the version I first wanted would have missed.`},
-        {type:'shotnotes', img:(window.__resources&&window.__resources.qaAddQuestions)||'assets/qa-add-questions-clean.jpg', ratio:'0.652', caption:`The Add Questions modal — pre-defined questions applied across several parts at once, with attachments.`, notes:[{text:`Pre-defined questions — pick a common ask instead of retyping it`, topPct:24},{text:`Add several questions at once, across multiple parts`, topPct:50}]},
-        {type:'image', videoSrcs:['assets/copperhill-add-task.mp4'], ratio:'1.575', videoMaxW:'100%', caption:`Adding a question — a recurring ask drops from a full retype to a pick from the bank, applied across multiple parts in one pass.`},
+        {type:'shotnotes', img:(window.__resources&&window.__resources.qaAddQuestions)||'assets/qa-add-questions-clean.jpg', ratio:'0.652', caption:`The Add Questions modal: pre-defined questions applied across several parts at once, with attachments.`, notes:[{text:`Pre-defined questions, pick a common ask instead of retyping it`, topPct:24},{text:`Add several questions at once, across multiple parts`, topPct:50}]},
+        {type:'image', videoSrcs:['assets/copperhill-add-task.mp4'], ratio:'1.575', videoMaxW:'100%', caption:`Adding a question: a recurring ask drops from a full retype to a pick from the bank, applied across multiple parts in one pass.`},
         {type:'section', eyebrow:'The loop', heading:`Adding and sending, end to end.`},
-        {type:'image', videoSrcs:['assets/copperhill-send-task.mp4'], ratio:'1.575', videoMaxW:'100%', caption:`Sending questions — analysts compose into a queue, select across parts, and batch-schedule a single supplier outreach without ever opening Outlook.`},
+        {type:'image', videoSrcs:['assets/copperhill-send-task.mp4'], ratio:'1.575', videoMaxW:'100%', caption:`Sending questions: analysts compose into a queue, select across parts, and batch-schedule a single supplier outreach without ever opening Outlook.`},
         {type:'para', text:`In sessions where I watched analysts run the finished workflow against their old one, review time for a typical batch dropped from roughly 8 minutes to about 3. This wasn't an instrumented, platform-wide metric. It's what I observed directly, consistent enough across sessions that I trust it as a real signal.`},
         {type:'section', eyebrow:'Results', heading:`What I can actually claim`},
         {type:'para', text:`The redesigned Q&A workflow shipped to beta and went live with real customers. In the sessions I ran, analysts moved through a batch of supplier questions in about 3 minutes, down from roughly 8, and the whole loop, asking, tracking, and sending, now happened inside the platform instead of scattered across Outlook.`},
         {type:'metrics', metrics:[{icon:'clock', dir:'up', eyebrow:'Time to Resolve', value:'~8 → 3 min', desc:`Observed review time per question batch dropped by more than half in sessions with the Ops team.`},{icon:'nav', dir:'up', eyebrow:'Shipped', value:'Live in beta', desc:`Rolled out to a limited set of real customers for testing, not left as a prototype.`},{icon:'layers', dir:'up', eyebrow:'Reusability', value:'1-click reuse', desc:`Recurring questions now pull from a template library instead of being retyped part by part.`}]},
-        {type:'section', eyebrow:'Reflection', heading:`What I learned — and what I'd do differently`},
+        {type:'section', eyebrow:'Reflection', heading:`Feasibility is a creative constraint, not just a blocker`},
         {type:'list', items:[`Feasibility is a creative constraint, not just a blocker. Twice this project got better because I couldn't build the obvious thing. Autocomplete was out of scope, so I built a question bank, and the bank turned out to do something autocomplete never could: let analysts see what was worth asking, not just type faster. The V3 table came the same way, from treating "how many" and "what exactly" as two problems once I stopped trying to solve both in one view.`, `Watching hesitation told me more than asking did. Analysts never said "I need urgency signaling." They paused, scrolled back up, reopened rows they'd already checked. Reading that hesitation across three iterations is what pointed me to the right design, and it's the research habit I trust most.`, `Instrument the impact, not just the interface. My strongest evidence here is what I watched happen in the room, and that carried the design to beta. Next time I'd pair it with lightweight event tracking from day one, timestamps from question-open to resolved, so the story is backed by both the observation and the numbers behind it.`]},
         {type:'para', text:`Also shipped at Copperhill: density-preset table filtering, entity-specific global search, client-override rules engine, Design System 2.0 migrated to Zeroheight.`}
       ],
       umgpt: [
-        {type:'lede', text:`UM GPT is the University of Michigan's AI platform for student group work — free, private, and already in wide use. This started as an SI 307 assignment. After earning top marks, I kept going, using Claude, Lovable, and Figma Make as active design partners rather than just faster tools. What I found surprised me: none of the three features I built got a usable first draft. Every one needed a correction that only became visible once I checked the output against what students had actually told me. That correction, not the features themselves, is the real subject of this case study.`},
+        {type:'lede', text:`UM GPT is the University of Michigan's AI platform for student group work, free, private, and already in wide use. This started as an SI 307 assignment. After earning top marks, I kept going, using Claude, Lovable, and Figma Make as active design partners rather than just faster tools. What I found surprised me: none of the three features I built got a usable first draft. Every one needed a correction that only became visible once I checked the output against what students had actually told me. That correction, not the features themselves, is the real subject of this case study.`},
         {type:'section', eyebrow:'The premise', heading:`Why I used AI, and where it kept stopping short`},
         {type:'para', text:`This started as an SI 307 assignment. After it shipped, I kept going, deliberately using Claude, Lovable, and Figma Make as design partners to see how far they'd take real product work.`},
         {type:'para', text:`The answer was consistent: far enough to be useful, not far enough to be done.`},
@@ -1435,20 +1516,20 @@ class Component extends DCLogic {
         {type:'para', text:`But every feature hit the same ceiling, and the Summarize Chat shortcut is where I first really saw it. A shortcut should hand you a summary in one step. Asked to build it, AI produced a four-screen guided workflow instead: a summary card leading to "Proceed to Analysis," then a deep-dive screen, then a fact-check screen, then a full-screen "milestone reached" celebration. Every screen worked. So I asked myself what the tool had actually misunderstood, and the answer was simple: it optimized for thorough when the entire job of a shortcut is fast. A user who wants depth can just keep chatting. AI couldn't tell those two intentions apart, and defaulted to the more elaborate one every time.`},
         {type:'para', text:`That was the pattern under all three challenges: functional, structurally fine, and wrong about what the user actually needed. Overcoming it came down to three kinds of judgment, information hierarchy, interaction flow, and keeping people in context.`},
         {type:'image', videoSrcs:['assets/umgpt-slides-start.mp4'], ratio:'1.33', videoMaxW:'100%', caption:`Walkthrough of the extended UM GPT prototype.`},
-        {type:'section', eyebrow:'The Setup', heading:`Identifying the gaps I needed to bridge`},
+        {type:'section', eyebrow:'The Setup', heading:`An architecture problem, not a feature problem`},
         {type:'metrics', metrics:[{icon:'layers', dir:'down', eyebrow:'Behavior', value:'4 tools, 3 copy-pastes', desc:`Every student ran the same shuffle: brainstorm in ChatGPT, migrate to Docs, lose formatting, ask Slack, lose the thread, finalize in Notion.`},{icon:'target', dir:'down', eyebrow:'Need', value:'Sharpest pain point in every interview', desc:`Task assignment. Instructors independently raised trust and visibility.`},{icon:'lock', dir:'down', eyebrow:'Barrier', value:'Zero tools connected the loop', desc:`No tool moved you from AI output to task assignment to shared history in one flow.`}]},
         {type:'para', text:`Four tools, three copy-pastes, one student bouncing between all of them. Brainstorm in ChatGPT, migrate to Docs, lose formatting, ask Slack for feedback, lose the thread, finalize in Notion. Every workflow I watched repeated the same shuffle.`},
         {type:'para', text:`ChatGPT Teams had the shared workspace and no task management. Notion AI had strong docs and kept AI solo. Google Docs plus Gemini assisted the writing and hid the prompts. Slack coordinated everything and integrated nothing. Each solved a piece. None connected them. That is an architecture problem, not a feature problem.`},
         {type:'para', text:`I used Claude to score ten feature ideas on pain severity, feasibility and impact, not to decide for me but to force the trade-offs into the open. Three rose: task assignment, activity log, AI shortcuts. I deferred @-mentions and file attachments to v2 and committed to building three things deeply instead of ten shallowly.`},
-        {type:'section', eyebrow:'Solutions', heading:`A note on how these three challenges work`},
-        {type:'para', text:`Each of the next three sections follows the same pattern, and it's worth naming once, up front, so it doesn't need repeating. I'd give Lovable or Figma Make a clear brief. The tool would generate something structurally sound and confident-looking. I'd hold it against the actual evidence from my interviews. In every case, something didn't match — sometimes a missing field, sometimes a wrong default, sometimes an entire wrong shape of screen — and closing that gap was my job, not the tool's.`},
+        {type:'section', eyebrow:'Solutions', heading:`Confident-looking isn't the same as correct`},
+        {type:'para', text:`Each of the next three sections follows the same pattern, and it's worth naming once, up front, so it doesn't need repeating. I'd give Lovable or Figma Make a clear brief. The tool would generate something structurally sound and confident-looking. I'd hold it against the actual evidence from my interviews. In every case, something didn't match: sometimes a missing field, sometimes a wrong default, sometimes an entire wrong shape of screen. Closing that gap was my job, not the tool's.`},
         {type:'process', startPill:{badge:'Brief', title:'The brief', descA:`A clear, evidence-based ask`, descB:`to Lovable or Figma Make`}, steps:[
           {title:`Brief the tool`, descA:`A clear, evidence-based`, descB:`ask`},
           {title:`AI generates`, descA:`Confident-looking, fast`, descB:``},
           {title:`Check against evidence`, descA:`Held against what`, descB:`students told me`},
           {title:`Close the gap`, descA:`Fix the missing field`, descB:`or wrong screen`},
           {title:`Reiterate & refine`, descA:`Run it again until`, descB:`it fits`}
-        ], endPill:{badge:'Ship', title:'Shipped', descA:`Matched to the evidence,`, descB:`not just the draft`}, caption:`How each feature was built — the AI drafts fast, but the judgment that closes the gap between a confident draft and the real evidence stays mine, looping until it fits.`},
+        ], endPill:{badge:'Ship', title:'Shipped', descA:`Matched to the evidence,`, descB:`not just the draft`}, caption:`How each feature was built: the AI drafts fast, but the judgment that closes the gap between a confident draft and the real evidence stays mine, looping until it fits.`},
         {type:'section', eyebrow:'Challenge 1', heading:`Making task assignment feel effortless`},
         {type:'para', text:`If creating a task felt like extra work, students would just text each other. The fix had to live inside the conversation.`},
         {type:'para', text:`AI could produce a create-task form instantly; that was never the problem. What it couldn't do was make assigning feel like part of the conversation instead of a detour out of it. Its drafts treated task creation as a destination, a full form in its own space, a context switch. So I asked myself where the friction actually lived, and it wasn't in the fields, it was in the leaving.`},
@@ -1473,9 +1554,9 @@ class Component extends DCLogic {
           {label:'Research', title:'Research', text:`Sources surfaced in place.`, video:'assets/umgpt-research.mp4'},
           {label:'Agenda', title:'Agenda', text:`Generated inline in one step.`, video:'assets/umgpt-agenda.mp4'}
         ]},
-        {type:'section', eyebrow:'Impact', heading:`What the extension delivered`},
+        {type:'section', eyebrow:'Impact', heading:`Fast enough that students actually used it`},
         {type:'metrics', metrics:[{icon:'clock', dir:'up', eyebrow:'Task assignment', value:'48 sec', desc:`Creating and assigning a task from a chat message now takes 48 seconds on average, fast enough that students use it instead of defaulting to a side text.`},{icon:'check', dir:'up', eyebrow:'Shortcuts', value:'5 of 5 unaided', desc:`In testing, five of five users found and used the inline shortcuts without instruction, against three of five who got lost in the original full-screen design.`},{icon:'lock', dir:'up', eyebrow:'Instructor view', value:'Anxiety removed at source', desc:`The comparison pattern three of seven participants flagged as "judged" and "watched" was designed out before it could ship, while preserving the insight instructors said they needed.`}]},
-        {type:'section', eyebrow:'Takeaway', heading:`What I Learned`},
+        {type:'section', eyebrow:'Takeaway', heading:`The distance between functional and intuitive`},
         {type:'para', text:`AI moved fast and stayed structurally sound, and it stopped at the same place every time, functional but not intuitive. It could generate a task form, a metrics panel, a summary flow; it couldn't tell that the form needed to disappear into the conversation, that the panel needed to protect a student's dignity, or that a shortcut's whole value is doing less, not more. Those are judgments about interaction flow, keeping people in context, and information hierarchy, the last mile from working to usable, and every time, they came from watching a real person, not from a better prompt. AI is a genuine accelerator; it got me to a functional draft in a fraction of the time. But the distance between functional and intuitive is exactly the distance a designer is for, and closing it, three times, deliberately, was the actual work.`}
       ]
     };
@@ -1489,7 +1570,7 @@ class Component extends DCLogic {
     ];
     const initRoute = this.resolveRoute(window.location.pathname);
     this.state = { view:initRoute.view, slug:initRoute.slug, leaf:0, bookScale: this.computeScale(), quoteIdx:0, typed:'', typing:false, opened:false, unlocked:{}, passError:false, bgMode:'plain' };
-    // Case studies under NDA require a passphrase before the account opens.
+    // Case studies still in progress require a passphrase before the account opens.
     this.PASSWORDS = { sailpoint: 'sailu2026' };
     this.BLANK_IMG = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     // Auto-carousel phrases that finish the sentence "…a Product Designer —"
@@ -1977,7 +2058,7 @@ class Component extends DCLogic {
     const slug = this.PATH_SLUG[p];
     if (slug) {
       const proj = this.PROJECTS.find(pr => pr.slug === slug);
-      if (proj && proj.status === 'Completed') return { view:'work', slug };
+      if (proj && (proj.status === 'Completed' || proj.locked)) return { view:'work', slug };
     }
     return { view:'home', slug:null };
   }
@@ -2265,6 +2346,7 @@ class Component extends DCLogic {
     this.teardownEditor();
     if (this._curMove) window.removeEventListener('pointermove', this._curMove);
     if (this._curDown) window.removeEventListener('pointerdown', this._curDown);
+    if (this._curUp) window.removeEventListener('pointerup', this._curUp);
     if (this._curRaf) cancelAnimationFrame(this._curRaf);
     if (this._cubeRaf) cancelAnimationFrame(this._cubeRaf);
     if (this._cubeMove) window.removeEventListener('pointermove', this._cubeMove);
@@ -2476,7 +2558,6 @@ class Component extends DCLogic {
     this.bindPlayground();
     this.bindArchiveModal();
     this.bindWipes();
-    this.bindMagnetics();
     this.checkImgReveals();
   }
   // Draggable personality tags in the hero.
@@ -3272,13 +3353,23 @@ class Component extends DCLogic {
       const kD = 1 - Math.exp(-dt / TAU_DOT);
       rx += (tx - rx) * kR; ry += (ty - ry) * kR;
       dx += (tx - dx) * kD; dy += (ty - dy) * kD;
-      // Clamp the drawn position (not the eased state) so the largest ring
-      // state (78px) never gets visually cut off at a viewport edge.
+      // Clamp the drawn position (not the eased state) so the ring never gets
+      // visually cut off at a viewport edge. The ring's actual radius varies
+      // with hover state (~15px idle, ~23px over a link/button, ~39px over a
+      // labeled target) — clamping every state to the largest one's margin
+      // made the ring stall well short of small UI near an edge, like the
+      // top nav links.
       const M = 40;
-      const cx = Math.min(Math.max(rx, M), window.innerWidth - M);
-      const cy = Math.min(Math.max(ry, M), window.innerHeight - M);
-      const cdx = Math.min(Math.max(dx, M), window.innerWidth - M);
-      const cdy = Math.min(Math.max(dy, M), window.innerHeight - M);
+      const RING_M = { link: 25, peek: 29, view: M };
+      const ringM = RING_M[this._curMode] || 17;
+      // The dot is 5px — it only needs real room near an edge when the label
+      // (view mode) is showing text next to it; otherwise let it track the
+      // real pointer almost exactly, same reasoning as the ring above.
+      const dotM = this._curMode === 'view' ? M : 10;
+      const cx = Math.min(Math.max(rx, ringM), window.innerWidth - ringM);
+      const cy = Math.min(Math.max(ry, ringM), window.innerHeight - ringM);
+      const cdx = Math.min(Math.max(dx, dotM), window.innerWidth - dotM);
+      const cdy = Math.min(Math.max(dy, dotM), window.innerHeight - dotM);
       ring.style.transform = 'translate3d(' + cx.toFixed(2) + 'px,' + cy.toFixed(2) + 'px,0) translate(-50%,-50%)';
       dot.style.transform  = 'translate3d(' + cdx.toFixed(2) + 'px,' + cdy.toFixed(2) + 'px,0) translate(-50%,-50%)';
       lab.style.transform  = 'translate3d(' + cdx.toFixed(2) + 'px,' + cdy.toFixed(2) + 'px,0) translate(-50%,-50%)';
@@ -3297,9 +3388,16 @@ class Component extends DCLogic {
       if (glow && !glow.classList.contains('on')) glow.classList.add('on');
       if (!this._curRaf) { last = 0; this._curRaf = requestAnimationFrame(frame); }
     };
-    this._curDown = () => { if (this._curDot && !this._editMode) this._curDot.style.transform += ' scale(2.2)'; };
+    // Appends a one-time press scale on pointerdown; without the _dotPressed
+    // guard and the matching pointerup reset, holding down or clicking
+    // repeatedly while the cursor is still (no rAF running to overwrite the
+    // transform) kept re-appending 'scale(2.2)', compounding the dot's size
+    // with every extra click instead of just scaling once.
+    this._curDown = () => { if (this._curDot && !this._editMode && !this._dotPressed) { this._dotPressed = true; this._curDot.style.transform += ' scale(2.2)'; } };
+    this._curUp = () => { this._dotPressed = false; if (this._curDot) this._curDot.style.transform = this._curDot.style.transform.replace(' scale(2.2)', ''); };
     window.addEventListener('pointermove', this._curMove, { passive:true });
     window.addEventListener('pointerdown', this._curDown, { passive:true });
+    window.addEventListener('pointerup', this._curUp, { passive:true });
   }
   readCursorIntent(t){
     const ring = this._curRing, dot = this._curDot, lab = this._curLab;
@@ -3308,6 +3406,17 @@ class Component extends DCLogic {
     const greet = t.closest && t.closest('[data-herotitle]');
     const connect = t.closest && t.closest('[data-connect]');
     const link  = t.closest && t.closest('a,button,[data-focusrow],[data-tocitem],[role="slider"],.note-marker,.sticky,input,textarea');
+    // A plain, non-interactive photo outside the case-study reader gets a
+    // small "peek" wink on the cursor. Case-study figures render as
+    // <image-slot> (pointer-events:none) with their own scrolly/compare
+    // treatments, not raw <img>, so this never fires there — the view
+    // check is just belt-and-suspenders for the one plain <img> the work
+    // page does use (the cover plate).
+    const peek = !greet && !connect && !cover && !link && this.state.view !== 'work' && t.closest && t.closest('img');
+    // Drives the edge-clamp margin in frame() — recomputed every tick since
+    // it's cheap and needs to track the true hovered element, independent of
+    // the dedup below (which only guards the class/label DOM writes).
+    this._curMode = (greet || connect || cover) ? 'view' : (link ? 'link' : (peek ? 'peek' : 'none'));
     // Skip the class churn entirely when the hovered category hasn't
     // changed since last frame — this now runs once per rAF tick rather
     // than once per raw pointermove, but a still cursor over one element
@@ -3316,33 +3425,20 @@ class Component extends DCLogic {
     if (greet) key = 'greet'; else if (connect) key = 'connect';
     else if (cover) key = 'cover:' + (cover.getAttribute('data-cover-label') || 'View');
     else if (link) key = 'link';
+    else if (peek) key = 'peek';
     if (key === this._lastIntentKey) return;
     this._lastIntentKey = key;
-    ring.classList.remove('link','view'); dot.classList.remove('view'); lab.classList.remove('on');
+    ring.classList.remove('link','view','peek'); dot.classList.remove('view'); lab.classList.remove('on');
     if (greet) { lab.textContent = 'Hello!'; ring.classList.add('view'); dot.classList.add('view'); lab.classList.add('on'); }
     else if (connect) { lab.textContent = 'Hi!'; ring.classList.add('view'); dot.classList.add('view'); lab.classList.add('on'); }
     else if (cover) { lab.textContent = cover.getAttribute('data-cover-label') || 'View'; ring.classList.add('view'); dot.classList.add('view'); lab.classList.add('on'); }
     else if (link) { ring.classList.add('link'); }
+    else if (peek) { ring.classList.add('peek'); }
   }
   cursorVisible(on){
     if (!this._curInit) return;
     if (on) document.documentElement.classList.add('eink'); else document.documentElement.classList.remove('eink');
     [this._curDot, this._curRing, this._curLab].forEach(n => { if (n) n.style.display = on ? '' : 'none'; });
-  }
-  /* ===== Magnetic hover: elements lean toward the pointer, spring back on exit ===== */
-  bindMagnetics(){
-    const root = this.rootRef.current; if (!root || !this.finePointer() || this.prefersReduced()) return;
-    root.querySelectorAll('.mag').forEach(el => {
-      if (el.dataset.magBound) return; el.dataset.magBound = '1';
-      const str = parseFloat(el.dataset.mag) || 0.3;
-      el.style.transition = 'transform .5s cubic-bezier(.2,.7,.2,1)';
-      el.addEventListener('pointermove', (e) => {
-        const r = el.getBoundingClientRect();
-        const mx = e.clientX - (r.left + r.width/2), my = e.clientY - (r.top + r.height/2);
-        el.style.transform = 'translate(' + (mx*str).toFixed(1) + 'px,' + (my*str).toFixed(1) + 'px)';
-      });
-      el.addEventListener('pointerleave', () => { el.style.transform = 'translate(0,0)'; });
-    });
   }
   /* ===== Ink-wipe reveal: type sets left→right on entry ===== */
   // Ink-wipe reveal — driven by the rAF scroll poll (IntersectionObserver's viewport
@@ -3523,7 +3619,7 @@ class Component extends DCLogic {
       i0: i,
       coverRatio,
       isWip: p.status !== 'Completed',
-      coverLabel: p.status !== 'Completed' ? 'Building!' : 'View',
+      coverLabel: (p.status === 'Completed' || p.locked) ? 'View' : 'Building!',
       statusShort: p.status !== 'Completed' ? 'WIP' : 'Done',
       hasCase: !!this.CASE[p.slug],
       ctaLabel: this.CASE[p.slug] ? 'Read case study' : 'View progress',
@@ -3533,9 +3629,9 @@ class Component extends DCLogic {
       coverVideo: p.slug === 'copperhill' ? ((window.__resources&&window.__resources.copperhillHomeCover)||'assets/copperhill-home-cover.mp4') : '',
       fullImg: p.caseCover || '',
       noCoverVideo: p.slug !== 'copperhill' && p.slug !== 'sailpoint' && !p.caseCover,
-      coverCursor: p.status !== 'Completed' ? 'default' : 'pointer',
-      open: () => { if (p.status !== 'Completed') return; this.setState({ view:'work', slug:p.slug }); },
-      openImg: () => { if (p.status !== 'Completed') return; this.transitionToCase(p.slug); }
+      coverCursor: (p.status === 'Completed' || p.locked) ? 'pointer' : 'default',
+      open: () => { if (p.status !== 'Completed' && !p.locked) return; this.setState({ view:'work', slug:p.slug }); },
+      openImg: () => { if (p.status !== 'Completed' && !p.locked) return; this.transitionToCase(p.slug); }
     }));
     const cur = mapped.find(p => p.slug === slug) || null;
     const cs = cur ? this.CASE[cur.slug] : null;
@@ -3643,6 +3739,7 @@ class Component extends DCLogic {
       passRef: (el) => { this._passInput = el; },
       submitPass: (e) => { if (e && e.preventDefault) e.preventDefault(); this.tryUnlock(); },
       projects: mapped, cur, next, blocks, toc,
+      scrollTop: () => window.scrollTo({ top:0, behavior: this.prefersReduced() ? 'auto' : 'smooth' }),
       journey: this.JOURNEY.map((j, i) => ({ ...j, i0: i })),
       curNum: cur ? String(mapped.findIndex(p => p.slug === cur.slug) + 1).padStart(2,'0') : '00',
       hasCase: !!cs, noCase: !!cur && !cs,
