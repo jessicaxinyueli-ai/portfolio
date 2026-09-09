@@ -581,12 +581,13 @@
   <section data-screen-label="Case Study" style="">
     <!-- PASSWORD GATE -->
     <sc-if value="{{ locked }}" hint-placeholder-val="{{ false }}">
-      <div style="max-width:720px;margin:0 auto;padding:clamp(104px,13vw,150px) clamp(24px,6vw,64px) 0;">
+      <div style="max-width:1180px;margin:0 auto;padding:clamp(104px,13vw,150px) clamp(24px,6vw,64px) 0;">
         <div style="display:none;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--font-sans);font-size:11px;letter-spacing:.04em;color:var(--muted-2);border-bottom:1px solid var(--line);padding-bottom:13px;margin-bottom:clamp(40px,6vw,60px);">
           <button onClick="{{ goWork }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:0;letter-spacing:.04em;" style-hover="color:var(--accent)">← Index</button>
           <span>Case Study No. {{ curNum }}</span>
           <span>{{ cur.category }}</span>
         </div>
+        <div style="max-width:720px;">
         <div style="font-family:var(--font-sans);font-size:calc(12px * var(--sc-sub,1));letter-spacing:.04em;color:var(--accent);margin-bottom:18px;">Internship Overview</div>
         <h1 style="font-family:var(--font-serif);font-weight:400;font-size:calc(45px * var(--sc-header,1));line-height:.98;letter-spacing:-.026em;margin:0 0 16px;">{{ cur.title }}</h1>
         <p style="font-family:var(--font-sans);font-size:16px;letter-spacing:.01em;color:var(--muted-2);margin:0 0 clamp(36px,5vw,54px);">{{ cur.role }} · {{ cur.timeline }}</p>
@@ -625,6 +626,7 @@
               <div style="font-family:var(--font-sans);font-size:12px;letter-spacing:.02em;color:var(--accent);">That passphrase didn't match. Try again, or <a href="mailto:jxl@umich.edu" style="color:inherit;text-decoration:underline;">email me</a>.</div>
             </sc-if>
           </form>
+        </div>
         </div>
       </div>
     </sc-if>
