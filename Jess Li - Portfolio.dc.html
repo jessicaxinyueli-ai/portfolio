@@ -772,7 +772,7 @@
                 <sc-if value="{{ block.needsSlot }}">
                   <image-slot id="{{ block.slot }}" style="width:100%;height:auto;aspect-ratio:16/9;display:block;" shape="rect" placeholder="{{ block.caption }}"></image-slot>
                 </sc-if>
-                <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-size:calc(16px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:12px;"><span>{{ block.caption }}</span></figcaption>
+                <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-size:calc(13px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:12px;"><span>{{ block.caption }}</span></figcaption>
               </figure>
             </sc-if>
             <sc-if value="{{ block.isPair }}">
@@ -786,12 +786,12 @@
                       </sc-if>
                     </button>
                     <sc-if value="{{ pair.showCap }}" hint-placeholder-val="{{ true }}">
-                    <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-size:calc(16px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:12px;"><span>{{ pair.caption }}</span></figcaption>
+                    <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-size:calc(13px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:12px;"><span>{{ pair.caption }}</span></figcaption>
                     </sc-if>
                   </figure>
                 </sc-for>
                 <sc-if value="{{ block.hasShared }}">
-                  <figcaption style="grid-column:1/-1;display:flex;gap:14px;font-family:var(--font-sans);font-size:calc(16px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:2px;"><span>{{ block.sharedCaption }}</span></figcaption>
+                  <figcaption style="grid-column:1/-1;display:flex;gap:14px;font-family:var(--font-sans);font-size:calc(13px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:2px;"><span>{{ block.sharedCaption }}</span></figcaption>
                 </sc-if>
               </div>
             </sc-if>
@@ -800,7 +800,7 @@
                 <button type="button" onClick="{{ block.openZoom }}" aria-label="Expand diagram" style="display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:3px;background:var(--surface);cursor:zoom-in;overflow:hidden;">
                   <image-slot id="zoomimg-{{ cur.slug }}-{{ block.figNum }}" src="{{ block.img }}" style="width:100%;height:auto;aspect-ratio:{{ block.ratio }};display:block;pointer-events:none;" shape="rect" fit="contain" placeholder="{{ block.caption }}"></image-slot>
                 </button>
-                <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-size:calc(16px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:12px;"><span>{{ block.caption }}</span></figcaption>
+                <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-size:calc(13px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:12px;"><span>{{ block.caption }}</span></figcaption>
               </figure>
             </sc-if>
             <sc-if value="{{ block.isSplit }}">
@@ -918,7 +918,7 @@
                     </sc-for>
                   </div>
                 </div>
-                <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-size:calc(16px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:14px;"><span>{{ block.caption }}</span></figcaption>
+                <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-size:calc(13px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:14px;"><span>{{ block.caption }}</span></figcaption>
               </figure>
             </sc-if>
             <sc-if value="{{ block.isCompare }}">
@@ -959,7 +959,7 @@
                     </sc-if>
                   </div>
                 </div>
-                <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-style:italic;font-size:calc(16px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:16px;">{{ block.caption }}</figcaption>
+                <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-style:italic;font-size:calc(13px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:16px;">{{ block.caption }}</figcaption>
               </figure>
             </sc-if>
             <sc-if value="{{ block.isDiagram }}">
@@ -972,7 +972,7 @@
                   </div>
                   <div style="font-family:var(--font-sans);font-size:13px;letter-spacing:.04em;color:var(--ink);border:1px solid var(--ink);border-radius:3px;padding:16px 24px;text-align:center;">{{ block.toLabel }}</div>
                 </div>
-                <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-style:italic;font-size:calc(16px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:14px;">{{ block.caption }}</figcaption>
+                <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-style:italic;font-size:calc(13px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:14px;">{{ block.caption }}</figcaption>
               </figure>
             </sc-if>
             <sc-if value="{{ block.isProcess }}">
@@ -1020,7 +1020,7 @@
                     </div>
                   </div>
                 </div>
-                <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-style:italic;font-size:calc(16px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:14px;">{{ block.caption }}</figcaption>
+                <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-style:italic;font-size:calc(13px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:14px;">{{ block.caption }}</figcaption>
               </figure>
             </sc-if>
             <sc-if value="{{ block.isCarousel }}">
@@ -1053,7 +1053,7 @@
                 </div>
                 <div style="margin-top:clamp(18px,2.2vw,26px);max-width:70ch;">
                   <h4 style="font-family:var(--font-serif);font-weight:400;font-size:clamp(22px,2.2vw,30px);line-height:1.15;letter-spacing:-.012em;margin:0 0 10px;">{{ block.activeTitle }}</h4>
-                  <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-cap,1));line-height:1.7;color:var(--muted-2);margin:0;text-wrap:pretty;">{{ block.activeText }}</p>
+                  <p style="font-family:var(--font-sans);font-size:calc(13px * var(--sc-cap,1));line-height:1.7;color:var(--muted-2);margin:0;text-wrap:pretty;">{{ block.activeText }}</p>
                 </div>
                 <div style="display:flex;justify-content:center;gap:8px;margin-top:clamp(22px,2.6vw,32px);">
                   <sc-for list="{{ block.carDots }}" as="dot" hint-placeholder-count="4">
@@ -1106,7 +1106,7 @@
                   <div class="scrolly-caption" style="position:relative;margin-top:12px;">
                     <sc-for list="{{ block.steps }}" as="step" hint-placeholder-count="3">
                       <sc-if value="{{ step.active }}" hint-placeholder-val="{{ true }}">
-                        <div style="opacity:{{ step.panelOpacity }};transition:opacity .45s ease;display:flex;gap:12px;font-family:var(--font-sans);font-size:calc(16px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);">
+                        <div style="opacity:{{ step.panelOpacity }};transition:opacity .45s ease;display:flex;gap:12px;font-family:var(--font-sans);font-size:calc(13px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);">
                           <span style="color:var(--accent);letter-spacing:.12em;white-space:nowrap;">{{ step.v }}</span><span>{{ step.caption }}</span>
                         </div>
                       </sc-if>
