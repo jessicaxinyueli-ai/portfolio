@@ -2061,7 +2061,6 @@ class Component extends DCLogic {
   trackScroll(){
     const root = this.rootRef.current; if (!root) return;
     this.panFeatCovers(root);
-    this.scrollFade();
     this.checkWipes();
     this.checkReveals();
     this.checkImgReveals();
@@ -2472,12 +2471,13 @@ class Component extends DCLogic {
     };
     this._veloRaf = requestAnimationFrame(tick);
   }
-  // Case-study headings (H1 title, H2 section headers) fade based on scroll
-  // position instead of floating with scroll velocity. The opacity itself
-  // eases toward its target over time rather than snapping every frame, so
-  // the fade reads as trailing slightly behind the scroll instead of
-  // tracking it 1:1 — same exponential-smoothing shape as the cursor, just
-  // applied to opacity instead of position.
+  // Whole case-study page motion (H1 title, H2 section headers, and every
+  // reveal block in the article body) fades based on scroll position
+  // instead of floating or tilting with scroll velocity/page-turn transforms.
+  // The opacity eases toward its target over time rather than snapping every
+  // frame, so the fade reads as trailing slightly behind the scroll instead
+  // of tracking it 1:1 — same exponential-smoothing shape as the cursor,
+  // just applied to opacity instead of position.
   initHeaderFade(){
     const root = this.rootRef.current; if (!root) return;
     if (this._hfadeRaf) { cancelAnimationFrame(this._hfadeRaf); this._hfadeRaf = 0; }
@@ -2490,7 +2490,7 @@ class Component extends DCLogic {
       const dt = Math.min((t - last) / 1000, 0.05); last = t;
       const k = 1 - Math.exp(-dt / TAU);
       const h = window.innerHeight || 800;
-      const els = root.querySelectorAll('[data-hfade]');
+      const els = root.querySelectorAll('[data-hfade],[data-sfade]');
       let stillMoving = false;
       els.forEach(el => {
         const r = el.getBoundingClientRect();
@@ -2521,30 +2521,6 @@ class Component extends DCLogic {
       if (el.hasAttribute('data-veloskew')) tr += ' skewY(' + (sk*f).toFixed(2) + 'deg)';
       el.style.transform = tr;
     });
-  }
-  // Continuous scroll-fade for case study body: fades + drifts in on the way up, softly out at the top.
-  clamp01(v){ return v < 0 ? 0 : (v > 1 ? 1 : v); }
-  fadeCalc(el){
-    const r = el.getBoundingClientRect();
-    const h = window.innerHeight || 800;
-    let opIn = 1, opOut = 1, ty = 0, rot = 0;
-    // Book-page turn: hinge from the top edge. Enters swinging flat from below,
-    // folds away over the top edge as it leaves — like turning a page vertically.
-    if (r.top > h * 0.72) { opIn = (h * 0.98 - r.top) / (h * 0.26); const k = 1 - this.clamp01(opIn); ty = k * 24; rot = k * 7; }
-    if (r.bottom < h * 0.26) { opOut = (r.bottom - h * 0.03) / (h * 0.23); const k = 1 - this.clamp01(opOut); ty = -k * 16; rot = -k * 9; }
-    const op = this.clamp01(Math.min(opIn, opOut));
-    el.style.opacity = op.toFixed(3);
-    if (el.dataset.sfade === 'img') {
-      // images: keep the fade/drift/blur, but no tilt
-      el.style.transform = 'translateY(' + ty.toFixed(1) + 'px)';
-      el.style.filter = 'blur(' + ((1 - op) * 7).toFixed(2) + 'px)';
-    } else {
-      el.style.transform = 'perspective(1500px) rotateX(' + rot.toFixed(2) + 'deg) translateY(' + ty.toFixed(1) + 'px)';
-    }
-  }
-  scrollFade(){
-    const root = this.rootRef.current; if (!root) return;
-    root.querySelectorAll('[data-sfade]').forEach(el => this.fadeCalc(el));
   }
   /* ===== About: WOVE-style scroll-driven rotating wheel ===== */
   updateJourneyWheel(){
@@ -2616,12 +2592,10 @@ class Component extends DCLogic {
       if (el.dataset.revealInit) return;       // already processed - don't re-hide
       el.dataset.revealInit = '1';
       const img = el.tagName === 'FIGURE' || el.querySelector && el.querySelector('image-slot');
-      if ((workView && el.closest('[data-article]')) || (this.state.view === 'home' && el.tagName === 'ARTICLE')) {   // continuous scroll-fade
+      if ((workView && el.closest('[data-article]')) || (this.state.view === 'home' && el.tagName === 'ARTICLE')) {   // continuous scroll-fade, delayed opacity only (see initHeaderFade)
         el.dataset.sfade = img ? 'img' : '1';
         el.style.transition = 'none';
-        el.style.transformOrigin = '50% 0%';
-        el.style.willChange = 'opacity,transform,filter';
-        this.fadeCalc(el);
+        el.style.willChange = 'opacity';
         return;
       }
       if (el.hasAttribute('data-mask')) {              // masked wipe reveal (CSS-driven)
