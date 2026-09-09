@@ -1486,7 +1486,7 @@ class Component extends DCLogic {
           {label:'AI-Assisted Provisioning', text:`Designed AI recommendations for creating and editing provisioning rules while keeping higher-risk access changes under explicit admin control.`},
           {label:'Design System', text:`Applied and extended SailPoint's Horizon design system with reusable patterns for AI recommendations, affordances, reasoning, feedback, and recovery.`}
         ]},
-        {type:'section', eyebrow:'One Experience, Three Moments', heading:`Onboard, edit, provision`},
+        {type:'tension', label:`Onboard, edit, provision`, text:``},
         {type:'stepflow', items:[
           {num:'01', label:'Onboard', text:`AI generates a source configuration.`},
           {num:'02', label:'Edit', text:`AI reruns checks and recommends next steps.`},
@@ -1497,7 +1497,7 @@ class Component extends DCLogic {
         {type:'para', text:`The challenge was that these recommendations would influence access control. The target users understand their applications and SailPoint, but are not developers and do not use development tools. I saw early that the UX problem was bigger than making the AI accurate. The interface had to give admins enough visibility and control to decide when the AI deserved their trust.`},
         {type:'image', videoSrc:'assets/sailpoint-full-flow.mp4', ratio:'1.333', videoMaxW:'640px', caption:`Where it starts: discovered applications, the AI-powered connector picker, and into source setup with the account object already detected.`},
         {type:'quote', label:'The Design Question', text:`How might we make AI-generated recommendations useful enough to act on, while giving admins enough control to verify them?`},
-        {type:'section', eyebrow:'Starting Point', heading:`A chatbot that couldn't actually converse`},
+        {type:'section', eyebrow:'The First Iteration', heading:`A chatbot that couldn't actually converse`},
         {type:'para', text:`The first version placed AI onboarding inside a guided chat panel. The wizard walked admins through one scripted question at a time, with fixed prompts and next steps. It looked conversational, but there was no actual back-and-forth interaction.`},
         {type:'para', text:`I found that the interface was creating the cost of conversation without the benefit of it. The panel narrated buttons that were already visible, duplicated controls elsewhere in the form, and made simple configuration decisions unnecessarily difficult to scan. The problem was not that the interface needed more explanation. It needed a better relationship between the AI and the configuration itself.`},
         {type:'compare', beforeLabel:'V1: chat panel', afterLabel:'Current: inline wizard', beforeImg:'assets/sailpoint-start-before.jpg', afterImg:'assets/sailpoint-start-after.jpg', beforeRatio:'1.594', afterRatio:'1.25', beforeCaption:`Two ways to move forward at once: a Continue inside the assist panel, a Save and Continue at the bottom, built without knowing about each other.`, afterCaption:`The same first step today: one field, one sentence of static help text.`, caption:`How the wizard starts, before and after.`},
@@ -1507,7 +1507,7 @@ class Component extends DCLogic {
           {v:'V3', title:'Wand + drawer', text:`Progressive, controllable, explainable.`, split:'72%'}
         ]},
         {type:'image', slot:'cs-sailpoint-fullflow', ratio:'1.6', caption:`The complete flow: connector picker through source setup, recommendation, and review.`},
-        {type:'section', eyebrow:'The Pivot', heading:`Moving AI into the workflow`},
+        {type:'section', eyebrow:'Redesigning for Trust', heading:`Moving AI into the workflow`},
         {type:'para', text:`I moved AI out of the dedicated chat panel and into the fields it actually affected. Instead of narrating what the admin could already see, AI could surface recommendations, confidence, and reasoning directly within the configuration flow.`},
         {type:'image', slot:'cs-sailpoint-inlinegood', ratio:'1.3', caption:`The same assistant, moved inline: narrating what just happened, not describing a button already on screen.`},
         {type:'para', text:`This also changed what the AI was responsible for. The product requirements called for AI to recommend endpoints, validate outputs, provide context for recommendations, and support refreshed recommendations when APIs changed. I used those capabilities to make AI useful at the point where an admin was making a decision, while keeping Harbor Pilot available for questions that could not be answered by the structured workflow.`},
@@ -1517,7 +1517,6 @@ class Component extends DCLogic {
           {before:'Large chat panel', after:'AI attached to relevant fields'},
           {before:'Linear workflow', after:'Structured flow + Harbor Pilot'}
         ]},
-        {type:'section', eyebrow:'Customer Feedback', heading:`What admins needed before they would trust AI`},
         {type:'para', text:`Customer feedback made it clear that trust did not mean hiding the complexity of the AI. Admins wanted to inspect recommendations when they needed to. One customer said he would trust SailPoint's recommendations while still verifying them, particularly because the tool could save research time by quickly determining whether an application's APIs could support governance. Another described the feature as "100% helpful," while a different team called it "exactly what we are looking for" as they worked toward onboarding 50+ applications per quarter.`},
         {type:'para', text:`That changed how I approached the interface. Instead of trying to convince users that the AI was trustworthy, I designed for verification as part of the experience. The AI could make the recommendation, but the admin needed an easy way to understand why it was made and where the information came from.`},
         {type:'quotegrid', items:[
@@ -1525,7 +1524,6 @@ class Component extends DCLogic {
           {quote:`100% helpful.`, label:'The value is in reducing real workload'},
           {quote:`Exactly what we are looking for.`, label:'AI has to solve a meaningful scale problem'}
         ]},
-        {type:'section', eyebrow:'The Iteration', heading:`From visual noise to one clear entry point`},
         {type:'para', text:`My first inline version swung too far in the other direction. A single field could show an info icon, confidence indicator, AI-generated label, and success state simultaneously. Instead of communicating trust, the interface made users decode the UI before evaluating the recommendation.`},
         {type:'carousel', ratio:'1.5', slides:[
           {label:'V1', title:'A full-screen overlay', text:`A modal covering half the screen. Thorough, but heavy enough to read as an interruption.`, img:'assets/sailpoint-reasoning-v1.jpg'},
@@ -1542,7 +1540,6 @@ class Component extends DCLogic {
         {type:'shotnotes', img:'assets/sailpoint-decision-deepdive.png', ratio:'1.533', caption:`Deep Dive: the reasoning, as a checked list, plus the real sources behind it.`, notes:[{text:`Why this was suggested, and what it's sourced from`, topPct:38}]},
         {type:'shotnotes', img:'assets/sailpoint-decision-askpilot.png', ratio:'2.543', caption:`Ask Harbor Pilot: a direct hand-off for anything the first two tabs don't cover.`, notes:[{text:`One click into Harbor Pilot, scoped to this exact field`, topPct:38}]},
         {type:'para', text:`This gave admins control over information density. They could accept a recommendation without opening anything, or investigate further when they needed confidence.`},
-        {type:'section', eyebrow:'Designing Trust', heading:`Giving AI responsibility without giving up control`},
         {type:'para', text:`Not every AI decision carries the same consequences. I designed the wizard around the cost of being wrong, rather than giving every recommendation the same level of automation.`},
         {type:'para', text:`For lower-risk configuration decisions, AI could make a recommendation and let the admin correct it. Provisioning was different. Because provisioning can directly affect access, I designed it as explicitly opt-in, requiring the admin to review and approve the change before it could activate. Customer feedback reinforced this direction, with customers specifically asking for provisioning to remain under their control.`},
         {type:'cardgrid', items:[
@@ -1550,7 +1547,7 @@ class Component extends DCLogic {
           {label:'Higher Risk', text:`AI recommends\n→ Admin reviews\n→ Admin explicitly activates`}
         ]},
         {type:'compare', beforeLabel:'Wizard: opt-out', afterLabel:'Provisioning: opt-in', beforeMock:'endpointOptOut', afterSlot:'cs-sailpoint-optin', beforeCaption:`AI-recommended child endpoints arrive pre-checked. Cheap to reverse, so the default does the work.`, afterCaption:`Nothing enabled until the admin actively chooses.`, caption:`Same platform, two postures, set by how expensive a wrong answer would be.`},
-        {type:'section', eyebrow:'Beyond Onboarding', heading:`AI assistance beyond initial onboarding`},
+        {type:'section', eyebrow:'Extending AI Beyond Onboarding', heading:`AI assistance beyond initial onboarding`},
         {type:'para', text:`The initial configuration was only one moment in the source lifecycle. I designed a second flow for admins who return later to make changes. From the source dropdown, selecting Edit reopens the configuration. After a change, the LLM can quickly rerun its checks and surface updated recommendations based on the new configuration.`},
         {type:'para', text:`This extended the same trust model beyond initial generation. AI responds to what the admin changes, but does not silently modify the source. The admin can review the new recommendations and decide what to apply.`},
         {type:'stepflow', items:[
@@ -1560,7 +1557,6 @@ class Component extends DCLogic {
           {num:'04', label:'Review', text:`Admin evaluates the recommendation.`},
           {num:'05', label:'Apply', text:`Admin decides what to keep.`}
         ]},
-        {type:'section', eyebrow:'Provisioning', heading:`Recommending access changes with higher stakes`},
         {type:'para', text:`I extended the same interaction model into provisioning, where AI could recommend new provisioning rules or suggest edits to existing rules. The challenge was not simply showing what the AI wanted to change. Admins needed to understand the recommendation before allowing it to affect access.`},
         {type:'para', text:`I therefore kept the recommendation and decision separate. AI could identify the rule, explain the suggested change, and help the admin understand the result. The admin remained responsible for approving the final configuration.`},
         {type:'stepflow', items:[
@@ -1598,11 +1594,10 @@ class Component extends DCLogic {
           {icon:'message', label:'Independently asked for private API upload', value:'5 of 8'},
           {icon:'lock', label:'Confirmed provisioning should stay manual', value:'2 leads'}
         ]},
-        {type:'section', eyebrow:'What Came Next', heading:`Designing for the systems AI could not yet reach`},
+        {type:'section', eyebrow:'Impact', heading:`From one wizard to a reusable AI pattern`},
         {type:'para', text:`The strongest recurring request was support for private API documentation. Several customers work with homegrown applications that do not expose public documentation, making the current AI approach less useful for their environments. Five of eight customers independently raised API documentation upload as a need.`},
         {type:'para', text:`That became an important direction for future iterations while remaining outside the scope of the current release. The current wizard targets straightforward, well-documented SaaS systems, which is also how the product requirements define the initial capability.`},
         {type:'quote', label:'Customer Request · 5 of 8 customers', text:`Can I give the AI our private API documentation?`},
-        {type:'section', eyebrow:'Impact', heading:`From one wizard to a reusable AI pattern`},
         {type:'para', text:`The validated design moved toward beta with a goal of routing 10% of new source configurations through the AI wizard in its first release. Beyond the wizard itself, I extended the same interaction model across editing and provisioning, creating a consistent approach to how AI recommends, explains, and responds to change.`},
         {type:'para', text:`The bigger outcome was a reusable UX pattern for AI that recommends without taking away control: make the recommendation visible, make the reasoning accessible, calibrate automation to risk, and give people a clear way forward when the system gets something wrong.`},
         {type:'cardgrid', items:[
@@ -1997,7 +1992,7 @@ class Component extends DCLogic {
   tocOf(blocks){
     return blocks.filter(b => b.type==='section').map((b,i) => {
       const eb = b.eyebrow || '';
-      const label = eb.length > 26 && b.heading ? b.heading : eb;
+      const label = eb.length > 32 && b.heading ? b.heading : eb;
       return { n:String(i+1).padStart(2,'0'), label, id:'sec-'+(i+1) };
     });
   }
