@@ -725,6 +725,12 @@
             <sc-if value="{{ block.isPara }}">
               <p data-reveal="" class="{{ block.paraClass }}" style="font-family:var(--font-sans);font-weight:400;font-size:calc(16px * var(--sc-body,1));line-height:1.58;color:var(--ink-2);margin:0 0 clamp(20px,2.4vw,30px);text-align:left;">{{ block.text }}</p>
             </sc-if>
+            <sc-if value="{{ block.isTension }}">
+              <div data-reveal="" style="margin:0 0 clamp(20px,2.4vw,30px);">
+                <p style="font-family:var(--font-sans);font-weight:600;font-size:calc(17px * var(--sc-body,1));line-height:1.5;color:var(--ink);margin:0 0 8px;">{{ block.label }}</p>
+                <p style="font-family:var(--font-sans);font-weight:400;font-size:calc(16px * var(--sc-body,1));line-height:1.58;color:var(--ink-2);margin:0;">{{ block.text }}</p>
+              </div>
+            </sc-if>
             <sc-if value="{{ block.isQuote }}">
               <blockquote data-reveal="" style="margin:clamp(30px,4vw,52px) 0;padding:0;position:relative;">
                 <div style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-sub,1));letter-spacing:.04em;color:var(--accent);margin-bottom:16px;">{{ block.quoteLabel }}</div>
@@ -1461,6 +1467,7 @@ class Component extends DCLogic {
         {type:'image', img:(window.__resources&&window.__resources.seedHome)||'assets/seed-home-prototype.png', ratio:'1.983', caption:`The shipped homepage as a responsive pair. The desktop hero sets its flower cutout beside the copy; the mobile one stacks it below.`},
         {type:'para', text:`Events. 60% wanted community programming; almost none found it. The fix moved event surfacing off a single page and into the homepage and plant pages directly, backed by attendance indicators pairing social proof with urgency.`},
         {type:'image', img:(window.__resources&&window.__resources.seedEvents)||'assets/seed-events-prototype.png', ratio:'1.939', caption:`The Events page: attendance indicators like "34 attending, 8 seats left" doing quiet, compounding work.`},
+        {type:'tension', label:`Simplicity had to be balanced with completeness.`, text:`Cutting the homepage to one action, Grow your plant!, removed the hesitation the two-CTA version caused. But it also meant the other half of what the Seed Library offers, events and community, lost its obvious home. The fix wasn't a second button competing with the first; it was moving events onto pages people were already reading, so the simpler homepage didn't have to come at the cost of what it left out.`},
         {type:'section', eyebrow:'Validation', heading:`Testers stopped guessing and started finishing`},
         {type:'para', text:`We ran three phases of usability testing with 14 users total: six sessions on paper prototypes and eight against live design revisions, each round's failures writing the next round's brief. Every session measured the same three things: task completion, error rate, and single-ease-question (SEQ) confidence, where each task scored 4 or higher out of 5.`},
         {type:'list', items:[`Increased user confidence throughout the experience, turning frustration into clarity.`,`Eliminated the physical-to-digital disconnection entirely, creating one seamless flow.`]},
@@ -1696,7 +1703,7 @@ class Component extends DCLogic {
     let sec = 0, fig = 0, firstPara = true;
     return blocks.map((b, idx) => {
       const o = { ...b,
-        isSection:b.type==='section', isPara:b.type==='para', isLede:b.type==='lede',
+        isSection:b.type==='section', isPara:b.type==='para', isLede:b.type==='lede', isTension:b.type==='tension',
         isQuote:b.type==='quote', isImage:b.type==='image', isSplit:b.type==='split',
         isList:b.type==='list', isHmw:b.type==='hmwcards', isMetrics:b.type==='metrics', isProcess:b.type==='process', isBars:b.type==='bars', isStatrow:b.type==='statrow', isZoomImg:b.type==='zoomimage', isPair:b.type==='imagepair', isScrolly:b.type==='scrolly', isCarousel:b.type==='carousel', isShot:b.type==='shotnotes', isCompare:b.type==='compare', isDiagram:b.type==='diagram',
         quoteLabel: b.type==='quote' ? (b.label || 'Marginalia') : undefined,
