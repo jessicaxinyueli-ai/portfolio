@@ -1588,26 +1588,33 @@ class Component extends DCLogic {
     const wrap = e.currentTarget;
     const blur = wrap.querySelector('[data-kickerblur]');
     if (!blur) return;
+    // Animation state lives on the wrap element itself, not on `this` — the
+    // page has multiple data-kickerwrap elements (hero heading, footer CTA),
+    // and sharing this state across all of them let moving from one onto
+    // another overwrite the shared target mid-animation: the first
+    // element's loop kept running against its own DOM node but chasing the
+    // second element's local coordinates, leaving a stuck, mispositioned
+    // mask hole behind as a visible trace.
     clearTimeout(wrap._kickerLeaveT);
     const r = wrap.getBoundingClientRect();
-    this._kTx = e.clientX - r.left;
-    this._kTy = e.clientY - r.top;
-    if (this._kx == null){ this._kx = this._kTx; this._ky = this._kTy; }
+    wrap._kTx = e.clientX - r.left;
+    wrap._kTy = e.clientY - r.top;
+    if (wrap._kx == null){ wrap._kx = wrap._kTx; wrap._ky = wrap._kTy; }
     blur.style.opacity = '1';
-    if (this._kRaf) return;
+    if (wrap._kRaf) return;
     const BLEED = 100; // must match data-kickerblur's negative inset
     const loop = () => {
-      this._kx += (this._kTx - this._kx) * 0.12;
-      this._ky += (this._kTy - this._ky) * 0.12;
-      const m = `radial-gradient(circle 95px at ${this._kx + BLEED}px ${this._ky + BLEED}px,#000 0%,rgba(0,0,0,.55) 45%,transparent 78%)`;
+      wrap._kx += (wrap._kTx - wrap._kx) * 0.12;
+      wrap._ky += (wrap._kTy - wrap._ky) * 0.12;
+      const m = `radial-gradient(circle 95px at ${wrap._kx + BLEED}px ${wrap._ky + BLEED}px,#000 0%,rgba(0,0,0,.55) 45%,transparent 78%)`;
       blur.style.webkitMaskImage = m; blur.style.maskImage = m;
-      const inv = `radial-gradient(circle 95px at ${this._kx}px ${this._ky}px,transparent 0%,rgba(0,0,0,.45) 45%,#000 78%)`;
+      const inv = `radial-gradient(circle 95px at ${wrap._kx}px ${wrap._ky}px,transparent 0%,rgba(0,0,0,.45) 45%,#000 78%)`;
       const sharp = wrap.querySelector('[data-herokicker]');
       if (sharp){ sharp.style.webkitMaskImage = inv; sharp.style.maskImage = inv; }
-      const done = Math.abs(this._kTx - this._kx) < .4 && Math.abs(this._kTy - this._ky) < .4;
-      this._kRaf = done ? null : requestAnimationFrame(loop);
+      const done = Math.abs(wrap._kTx - wrap._kx) < .4 && Math.abs(wrap._kTy - wrap._ky) < .4;
+      wrap._kRaf = done ? null : requestAnimationFrame(loop);
     };
-    this._kRaf = requestAnimationFrame(loop);
+    wrap._kRaf = requestAnimationFrame(loop);
   }
   kickerLeave(e){
     const wrap = e.currentTarget;
@@ -1624,7 +1631,7 @@ class Component extends DCLogic {
     wrap._kickerLeaveT = setTimeout(() => {
       if (sharp){ sharp.style.webkitMaskImage = 'none'; sharp.style.maskImage = 'none'; }
     }, 460);
-    this._kx = null; this._ky = null;
+    wrap._kx = null; wrap._ky = null;
   }
   tapChip(e){
     const chip = e.currentTarget;
