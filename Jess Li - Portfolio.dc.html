@@ -737,6 +737,68 @@
                 <p style="font-family:var(--font-display);font-style:italic;font-weight:400;font-size:calc(clamp(30px,4.4vw,54px) * var(--sc-body,1));line-height:1.16;color:var(--ink);margin:0;letter-spacing:-.01em;max-width:20ch;">“{{ block.text }}”</p>
               </blockquote>
             </sc-if>
+            <sc-if value="{{ block.isCardGrid }}">
+              <div data-reveal="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:clamp(14px,1.8vw,22px);margin:clamp(24px,3vw,38px) 0;">
+                <sc-for list="{{ block.items }}" as="c" hint-placeholder-count="4">
+                  <div style="border:1px solid var(--line);border-radius:12px;padding:clamp(18px,2vw,24px);background:var(--surface);">
+                    <div style="font-family:var(--font-sans);font-weight:600;font-size:calc(14px * var(--sc-body,1));letter-spacing:.02em;color:var(--ink);margin:0 0 8px;">{{ c.label }}</div>
+                    <div style="font-family:var(--font-sans);font-weight:400;font-size:calc(14.5px * var(--sc-body,1));line-height:1.55;color:var(--ink-2);white-space:pre-line;">{{ c.text }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ block.isStepFlow }}">
+              <div data-reveal="" style="display:flex;flex-wrap:wrap;align-items:center;gap:clamp(8px,1.4vw,16px);margin:clamp(28px,3.6vw,44px) 0;">
+                <sc-for list="{{ block.items }}" as="s" hint-placeholder-count="3">
+                  <sc-if value="{{ s.needsArrow }}" hint-placeholder-val="{{ false }}">
+                    <div style="font-family:var(--font-sans);color:var(--muted-2);font-size:18px;padding:0 2px;">→</div>
+                  </sc-if>
+                  <div style="flex:1 1 160px;min-width:150px;border:1px solid var(--line);border-radius:12px;padding:clamp(16px,1.8vw,20px);background:var(--surface);align-self:stretch;">
+                    <div style="font-family:var(--font-sans);font-size:11px;letter-spacing:.06em;color:var(--accent);margin-bottom:6px;">{{ s.num }}</div>
+                    <div style="font-family:var(--font-sans);font-weight:600;font-size:14.5px;color:var(--ink);margin-bottom:4px;">{{ s.label }}</div>
+                    <div style="font-family:var(--font-sans);font-size:13.5px;line-height:1.5;color:var(--ink-2);">{{ s.text }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ block.isVersionCards }}">
+              <div data-reveal="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:clamp(16px,2vw,24px);margin:clamp(28px,3.6vw,44px) 0;">
+                <sc-for list="{{ block.items }}" as="v" hint-placeholder-count="3">
+                  <div style="border:1px solid var(--line);border-radius:12px;padding:clamp(16px,1.8vw,20px);background:var(--surface);">
+                    <div style="width:44px;height:32px;border:1px solid var(--line);border-radius:5px;overflow:hidden;display:flex;margin-bottom:14px;background:var(--paper);">
+                      <div style="height:100%;background:var(--ink);width:{{ v.split }};"></div>
+                    </div>
+                    <div style="font-family:var(--font-sans);font-size:11px;letter-spacing:.06em;color:var(--accent);margin-bottom:4px;">{{ v.v }}</div>
+                    <div style="font-family:var(--font-sans);font-weight:600;font-size:14.5px;color:var(--ink);margin-bottom:6px;">{{ v.title }}</div>
+                    <div style="font-family:var(--font-sans);font-size:13px;line-height:1.5;color:var(--muted-2);">{{ v.text }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ block.isQuoteGrid }}">
+              <div data-reveal="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,22px);margin:clamp(28px,3.6vw,44px) 0;">
+                <sc-for list="{{ block.items }}" as="q" hint-placeholder-count="3">
+                  <div style="border:1px solid var(--line);border-radius:12px;padding:clamp(20px,2.2vw,26px);background:var(--surface);">
+                    <p style="font-family:var(--font-display);font-style:italic;font-weight:400;font-size:calc(19px * var(--sc-body,1));line-height:1.4;color:var(--ink);margin:0 0 14px;">“{{ q.quote }}”</p>
+                    <div style="font-family:var(--font-sans);font-size:12.5px;letter-spacing:.02em;color:var(--muted-2);">{{ q.label }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ block.isCompareTable }}">
+              <div data-reveal="" style="border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:clamp(28px,3.6vw,44px) 0;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border-bottom:1px solid var(--line);">
+                  <div style="font-family:var(--font-sans);font-weight:600;font-size:13px;letter-spacing:.04em;color:var(--muted-2);padding:12px 18px;">{{ block.beforeLabel }}</div>
+                  <div style="font-family:var(--font-sans);font-weight:600;font-size:13px;letter-spacing:.04em;color:var(--muted-2);padding:12px 18px;border-left:1px solid var(--line);">{{ block.afterLabel }}</div>
+                </div>
+                <sc-for list="{{ block.rows }}" as="row" hint-placeholder-count="4">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line);">
+                    <div style="font-family:var(--font-sans);font-size:14px;line-height:1.5;color:var(--ink-2);padding:14px 18px;">{{ row.before }}</div>
+                    <div style="font-family:var(--font-sans);font-size:14px;line-height:1.5;color:var(--ink);padding:14px 18px;border-left:1px solid var(--line);">{{ row.after }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
             <sc-if value="{{ block.isImage }}">
               <figure data-reveal="" style="margin:clamp(30px,4vw,52px) auto;width:calc(100% * var(--sc-media,1));max-width:100%;">
                 <sc-if value="{{ block.isVideo }}">
@@ -1291,7 +1353,7 @@ class Component extends DCLogic {
     this.rootRef = React.createRef();
     this.glowRef = React.createRef();
     this.PROJECTS = [
-      {slug:'sailpoint', date:'May 2026', caseCover:'assets/sailpoint-case-cover.png', title:'SailPoint', category:'Enterprise · Identity Security', role:'UX Design & Research Intern', timeline:'Summer 2026', team:'Solo · Figma, Claude', status:'Beta Testing', locked:true, overview:'Designing trust into an AI-generated source configuration wizard for identity administrators, a group whose job is to be skeptical of automated access changes.', publicIntro:[`This summer I worked as the sole UX design intern on SailPoint's identity security team, designing for enterprise administrators who manage access across thousands of applications.`, `My main project was an AI-assisted configuration wizard, and I owned the UX through two full rounds of redesign, from an early conversational prototype through the trust and recovery patterns that shipped. A few smaller design efforts ran alongside it, each with its own stakeholders and timeline.`, `Working at this scale taught me as much about people as it did about interfaces: how to read a room of stakeholders, how to hold a design opinion under pressure, and how to let real customer feedback change my mind.`], publicImg:'assets/sailpoint-onboarding-welcome.jpg', publicImgCaption:`The AI-assisted onboarding flow I designed the trust and interaction model for.`, takeaways:[{num:'1', label:'Designing for skepticism, not delight', text:`Admins are trained to question anything automated. Building trust here meant designing for scrutiny first, adoption followed once people felt in control.`}, {num:'2', label:'Customer feedback reshapes the brief', text:`Real usage across release rounds pushed the design further than internal review ever could, and changed decisions I thought were already settled.`}, {num:'3', label:'Advocacy has to be earned, not assumed', text:`Turning stakeholders into champions meant genuinely listening to their concerns while still being clear about why certain calls mattered.`}]},
+      {slug:'sailpoint', date:'May 2026', caseCover:'assets/sailpoint-case-cover.png', title:'SailPoint', category:'Enterprise · Identity Security', role:'Product Design & Research Intern', timeline:'Summer 2026', team:'Solo UX ownership · Figma, Claude', status:'Beta Testing', locked:true, overview:'Designing trust into AI-assisted source configuration.', publicIntro:[`This summer I worked as the sole UX design intern on SailPoint's identity security team, designing for enterprise administrators who manage access across thousands of applications.`, `My main project was an AI-assisted configuration wizard, and I owned the UX through two full rounds of redesign, from an early conversational prototype through the trust and recovery patterns that shipped. A few smaller design efforts ran alongside it, each with its own stakeholders and timeline.`, `Working at this scale taught me as much about people as it did about interfaces: how to read a room of stakeholders, how to hold a design opinion under pressure, and how to let real customer feedback change my mind.`], publicImg:'assets/sailpoint-onboarding-welcome.jpg', publicImgCaption:`The AI-assisted onboarding flow I designed the trust and interaction model for.`, takeaways:[{num:'1', label:'Designing for skepticism, not delight', text:`Admins are trained to question anything automated. Building trust here meant designing for scrutiny first, adoption followed once people felt in control.`}, {num:'2', label:'Customer feedback reshapes the brief', text:`Real usage across release rounds pushed the design further than internal review ever could, and changed decisions I thought were already settled.`}, {num:'3', label:'Advocacy has to be earned, not assumed', text:`Turning stakeholders into champions meant genuinely listening to their concerns while still being clear about why certain calls mattered.`}]},
       {slug:'seed-library', date:'Sep 2025', caseCover:'assets/seed-case-cover.png', title:'UM Seed Library', category:'Phygital · Civic', role:'Product Designer', timeline:'Aug 2025 to Mar 2026', team:'4-person team, designers, PM, instructor', status:'Completed', overview:'A phygital seed-lending system connecting a physical dispenser to a digital catalog, closing an 85% awareness gap and winning UMSI\u2019s 2026 UX Design award.'},
       {slug:'copperhill', date:'Jun 2025', title:'Copperhill', category:'B2B SaaS', role:'Product Design Intern', timeline:'Jun — Aug 2025', team:'Solo designer · 4 engineers', status:'Completed', overview:'Optimizing enterprise data workflows and reducing Excel dependency, redesigning core filtering logic and establishing Design System 2.0 to cut external data exports by 40%.'},
       {slug:'umgpt', date:'Sep 2025', caseCover:'assets/umgpt-case-cover.png', title:'UM GPT', category:'AI · EdTech · Independent Extension', role:'Product Designer', timeline:'Sep — Dec 2025 (course), continued independently after', team:'Solo · Figma, Lovable, Figma Make, Claude', status:'Completed', overview:'Two Gaps I Refused to Leave Alone: task traceability and instructor insight, fixed on my own initiative after the assignment shipped.'}
@@ -1302,10 +1364,11 @@ class Component extends DCLogic {
     this.PATH_SLUG = { sailpoint:'sailpoint', seedlibrary:'seed-library', copperhill:'copperhill', umgpt:'umgpt' };
     this.SKIM = {
       'sailpoint': {
-        body:`Identity administrators are paid to distrust automated access changes, and SailPoint needed them to trust an AI-generated source configuration enough to act on it. I rebuilt the wizard on the current design system, cut the competing icons that were quietly undermining trust in the AI, took it through rounds of enterprise customer feedback and internal review, then designed the recovery paths for when the AI got it wrong.`,
+        body:`Identity administrators are paid to be skeptical of automated access changes. SailPoint was exploring whether an LLM could generate source configurations for applications without an out-of-the-box connector, but accuracy alone would not be enough to make admins trust the result. I redesigned the experience around a simple principle: AI can do the heavy lifting, but the admin stays responsible for the decision. I moved AI into the configuration workflow, made its reasoning available on demand, designed recovery paths for when it was wrong, and extended the same trust model into editing and provisioning.`,
         metrics:[
-          {dir:'up', value:`10%`, label:`of new source configurations this feature carries`},
-          {dir:'flat', value:`Private`, label:`full outcome numbers on request`},
+          {dir:'flat', value:`10%`, label:`target share of new source configurations using the AI wizard`},
+          {dir:'flat', value:`10`, label:`enterprise customers included in validation`},
+          {dir:'up', value:`+50%`, label:`positive reception on the AI-driven discovery flow across 4 customers`},
         ],
       },
       'seed-library': {
@@ -1342,86 +1405,137 @@ class Component extends DCLogic {
     ];
     this.CASE = {
       sailpoint: [
-        {type:'lede', text:`10% of new source configurations. That's the volume this feature needed to carry, replacing a hand-built connector or an admin who could read raw API docs directly.`},
-        {type:'section', eyebrow:'Context', heading:`Trust, not accuracy, was the real problem`},
-        {type:'para', text:`SailPoint governs access by connecting to whatever applications a company runs, and every connection needs a schema: endpoints, data, provisioning rules. Building a custom connector for every app isn't sustainable, so the team was testing whether an LLM could generate that schema automatically.`},
-        {type:'para', text:`That's where the real design problem started. The admins using this can't code, won't touch a dev tool, and their whole job is distrusting anything that touches access control. I knew early on that accuracy alone wouldn't earn their trust. An AI that fills in endpoints without explaining itself was never going to land here, no matter how right it was.`},
-        {type:'para', text:`I owned the UX response across two redesigns: first replacing a scripted chat prototype, then fixing the clutter that still undermined trust in what replaced it. The recovery paths for when the AI got it wrong came later, and mattered just as much as either.`},
+        {type:'lede', text:`Identity administrators are paid to be skeptical of automated access changes. SailPoint needed them to trust an AI-generated source configuration enough to act on it.`},
+        {type:'section', eyebrow:'What I Designed', heading:`An AI-assisted source configuration experience`},
+        {type:'para', text:`I designed an end-to-end AI-assisted experience helping identity administrators onboard, edit, and configure sources without an out-of-the-box connector. I redesigned the core onboarding wizard across three iterations, then extended the same interaction model into post-onboarding editing and AI-assisted provisioning.`},
+        {type:'cardgrid', items:[
+          {label:'AI-Assisted Onboarding', text:`Redesigned the source configuration wizard, moving AI from scripted conversation into the configuration workflow.`},
+          {label:'AI-Assisted Editing', text:`Designed a flow for revisiting an existing source, rerunning AI checks, and receiving recommendations based on configuration changes.`},
+          {label:'AI-Assisted Provisioning', text:`Designed AI recommendations for creating and editing provisioning rules while keeping higher-risk access changes under explicit admin control.`},
+          {label:'Design System', text:`Applied and extended SailPoint's Horizon design system with reusable patterns for AI recommendations, affordances, reasoning, feedback, and recovery.`}
+        ]},
+        {type:'section', eyebrow:'One Experience, Three Moments', heading:`Onboard, edit, provision`},
+        {type:'stepflow', items:[
+          {num:'01', label:'Onboard', text:`AI generates a source configuration.`},
+          {num:'02', label:'Edit', text:`AI reruns checks and recommends next steps.`},
+          {num:'03', label:'Provision', text:`AI recommends new or updated access rules.`}
+        ]},
+        {type:'section', eyebrow:'01 · The Problem', heading:`Trust, not accuracy, was the real design problem`},
+        {type:'para', text:`SailPoint connects applications to its identity platform, but many customer applications do not have an out-of-the-box connector. Traditionally, connecting these systems can require custom development or manually working through API documentation. The team was exploring whether an LLM could generate endpoint and source configuration recommendations automatically, creating a faster path for applications that would otherwise require more manual work.`},
+        {type:'para', text:`The challenge was that these recommendations would influence access control. The target users understand their applications and SailPoint, but are not developers and do not use development tools. I saw early that the UX problem was bigger than making the AI accurate. The interface had to give admins enough visibility and control to decide when the AI deserved their trust.`},
         {type:'image', videoSrc:'assets/sailpoint-full-flow.mp4', ratio:'1.333', videoMaxW:'640px', caption:`Where it starts: discovered applications, the AI-powered connector picker, and into source setup with the account object already detected.`},
-        {type:'section', eyebrow:'The First Version', heading:`A conversation that couldn't converse`},
-        {type:'para', text:`V1 put AI onboarding behind a guided chat panel: a narrow column beside a mostly empty canvas, walking the admin through one scripted question at a time. No free typing, every step was a fixed prompt with a fixed next step.`},
-        {type:'para', text:`It failed for reasons I could point to in the interface, not just a hunch. The panel narrated buttons the admin could already see, its own copy told them to "select Save and Continue," describing a button sitting right there. It even ran a second Continue button alongside the form's own, because the two had been built without knowing about each other. Explaining why a single field mattered took close to forty words; that became one sentence of static text in the redesign.`},
-        {type:'para', text:`The diagnosis I landed on: a chatbot with no free typing gets you the cost of a conversation, linear and impossible to skim, without the benefit of one, since you can't actually ask it anything back. It behaves like dialogue but functions like a form. Once I saw it that way, most of the redesign followed from fixing that mismatch.`},
-        {type:'para', text:`Worth being honest here: the reaction wasn't a clean mandate. One participant preferred V1's chat-style guidance and still called the redesign "also good." I didn't need everyone to hate V1 to know the defects above were real.`},
+        {type:'quote', label:'The Design Question', text:`How might we make AI-generated recommendations useful enough to act on, while giving admins enough control to verify them?`},
+        {type:'section', eyebrow:'02 · Starting Point', heading:`A chatbot that couldn't actually converse`},
+        {type:'para', text:`The first version placed AI onboarding inside a guided chat panel. The wizard walked admins through one scripted question at a time, with fixed prompts and next steps. It looked conversational, but there was no actual back-and-forth interaction.`},
+        {type:'para', text:`I found that the interface was creating the cost of conversation without the benefit of it. The panel narrated buttons that were already visible, duplicated controls elsewhere in the form, and made simple configuration decisions unnecessarily difficult to scan. The problem was not that the interface needed more explanation. It needed a better relationship between the AI and the configuration itself.`},
         {type:'compare', beforeLabel:'V1: chat panel', afterLabel:'Current: inline wizard', beforeImg:'assets/sailpoint-start-before.jpg', afterImg:'assets/sailpoint-start-after.jpg', beforeRatio:'1.594', afterRatio:'1.25', beforeCaption:`Two ways to move forward at once: a Continue inside the assist panel, a Save and Continue at the bottom, built without knowing about each other.`, afterCaption:`The same first step today: one field, one sentence of static help text.`, caption:`How the wizard starts, before and after.`},
-        {type:'section', eyebrow:'The Pivot', heading:`Moving AI into the fields themselves`},
-        {type:'para', text:`So I moved AI out of the side panel and onto the fields it actually concerned: recommendations and reasoning surfaced inline or on hover instead of narrated in a transcript. Most of what this wizard asks already has a bounded, correct answer that maps to a field. Conversation just adds a translation step.`},
-        {type:'para', text:`It also changed what the assistant was for. Instead of narrating controls the admin could already see, it started narrating state they couldn't otherwise see at a glance: a connection test just succeeded, no child endpoints were found.`},
-        {type:'para', text:`That didn't mean cutting chat out entirely, though. Harbor Pilot, SailPoint's own AI agent, still sits one tab away for whatever a structured field can't anticipate. A bounded question lives inline, where it can be scanned at a glance; something genuinely open-ended, like why did you recommend this, still has somewhere to go. I wanted the wizard to stay scannable without also making it a help desk.`},
+        {type:'versioncards', items:[
+          {v:'V1', title:'Scripted chat', text:`Guided, but rigid.`, split:'30%'},
+          {v:'V2', title:'Inline AI', text:`Contextual, but cluttered.`, split:'55%'},
+          {v:'V3', title:'Wand + drawer', text:`Progressive, controllable, explainable.`, split:'72%'}
+        ]},
+        {type:'image', slot:'cs-sailpoint-fullflow', ratio:'1.6', caption:`The complete flow: connector picker through source setup, recommendation, and review.`},
+        {type:'section', eyebrow:'03 · The Pivot', heading:`Moving AI into the workflow`},
+        {type:'para', text:`I moved AI out of the dedicated chat panel and into the fields it actually affected. Instead of narrating what the admin could already see, AI could surface recommendations, confidence, and reasoning directly within the configuration flow.`},
         {type:'image', slot:'cs-sailpoint-inlinegood', ratio:'1.3', caption:`The same assistant, moved inline: narrating what just happened, not describing a button already on screen.`},
-        {type:'para', text:`This is where I ran into a real tension, not just a minor tradeoff. My instinct was to simplify by showing less of the AI's mechanics, since a cleaner surface always looks like a win. But these admins needed the opposite: one wanted connector capabilities shown upfront so he wouldn't have to dig through documentation, another said he'd verify every recommendation against the real API docs no matter what I gave him. I kept the confidence scores and reasoning visible instead of tucking them away. Simplicity and trust pulled in different directions, and I chose trust.`},
-        {type:'section', eyebrow:'Where It Broke', heading:`Four indicators on one field reads as noise, not help`},
-        {type:'para', text:`Even after moving inline, my first draft still tried to say too much at once: four stacked indicators on a single field, an info icon, a confidence tag, an "AI-generated" tag, a success tag. In testing, it read as noise, not help. Admins had to learn the interface's own iconography before they could learn anything about their actual source.`},
-        {type:'para', text:`The fix wasn't more explanation, it was fewer decisions: one affordance per field, a wand icon that only appears on hover. Nothing shows until the admin shows intent to look.`},
-        {type:'para', text:`Three passes, watched side by side, make the arc easier to see than any single before/after: the scripted chat panel, the cluttered inline draft, and the wand-and-drawer version that shipped.`},
+        {type:'para', text:`This also changed what the AI was responsible for. The product requirements called for AI to recommend endpoints, validate outputs, provide context for recommendations, and support refreshed recommendations when APIs changed. I used those capabilities to make AI useful at the point where an admin was making a decision, while keeping Harbor Pilot available for questions that could not be answered by the structured workflow.`},
+        {type:'comparetable', beforeLabel:'Before', afterLabel:'After', rows:[
+          {before:'AI explains visible controls', after:'AI explains invisible system state'},
+          {before:'Fixed conversation', after:'Contextual recommendations'},
+          {before:'Large chat panel', after:'AI attached to relevant fields'},
+          {before:'Linear workflow', after:'Structured flow + Harbor Pilot'}
+        ]},
+        {type:'section', eyebrow:'04 · Customer Feedback', heading:`What admins needed before they would trust AI`},
+        {type:'para', text:`Customer feedback made it clear that trust did not mean hiding the complexity of the AI. Admins wanted to inspect recommendations when they needed to. One customer said he would trust SailPoint's recommendations while still verifying them, particularly because the tool could save research time by quickly determining whether an application's APIs could support governance. Another described the feature as "100% helpful," while a different team called it "exactly what we are looking for" as they worked toward onboarding 50+ applications per quarter.`},
+        {type:'para', text:`That changed how I approached the interface. Instead of trying to convince users that the AI was trustworthy, I designed for verification as part of the experience. The AI could make the recommendation, but the admin needed an easy way to understand why it was made and where the information came from.`},
+        {type:'quotegrid', items:[
+          {quote:`I would still verify them.`, label:'Trust requires verification'},
+          {quote:`100% helpful.`, label:'The value is in reducing real workload'},
+          {quote:`Exactly what we are looking for.`, label:'AI has to solve a meaningful scale problem'}
+        ]},
+        {type:'section', eyebrow:'05 · The Iteration', heading:`From visual noise to one clear entry point`},
+        {type:'para', text:`My first inline version swung too far in the other direction. A single field could show an info icon, confidence indicator, AI-generated label, and success state simultaneously. Instead of communicating trust, the interface made users decode the UI before evaluating the recommendation.`},
         {type:'carousel', ratio:'1.5', slides:[
           {label:'V1', title:'A full-screen overlay', text:`A modal covering half the screen. Thorough, but heavy enough to read as an interruption.`, img:'assets/sailpoint-reasoning-v1.jpg'},
           {label:'V2', title:'Inline, but always on', text:`Embedded directly in the schema table. No longer blocking, but always on whether the admin wanted it or not.`, img:'assets/sailpoint-reasoning-v2.jpg'},
           {label:'V3', title:'A popover, plus somewhere to ask more', text:`A small confidence badge that opens a focused popover on request, with Harbor Pilot one tab away for anything it doesn't cover.`, video:'assets/sailpoint-v3-reasoning.mp4'}
         ]},
-        {type:'section', eyebrow:'What Drove V3', heading:`Customer feedback, before the wand and drawer existed`},
-        {type:'para', text:`Three things came up often enough across client calls, before V3 existed, that they stopped reading as preferences and started reading as requirements.`},
-        {type:'para', text:`First: don't hide the reasoning, and don't oversimplify it either. One admin wanted connector capabilities shown upfront so he wouldn't have to leave for documentation; another said he'd verify every recommendation against the real API docs regardless of what I gave him. I took that as a mandate for full reasoning available on request, not a summary standing in for it.`},
-        {type:'para', text:`Second: handle it when the AI is wrong, not just when it's right. Neither earlier version had a real answer for this. V1 offered nothing but starting over; V2 just flagged the field. Admins asked some version of "okay, but what if it's wrong" often enough that it stopped feeling like an edge case and started feeling like a requirement.`},
-        {type:'para', text:`Third: match what people actually expect AI to be good for. One admin running IAM alone across 1,200+ applications called the tool "highly valuable," and he clearly meant valuable for saving real time at that scale, not for being flawless. Another, missing a target of 50+ apps a quarter by a wide margin, was blunter: "exactly what we're looking for." Trust wasn't the only bar these admins held the tool to. Being useful at their actual scale mattered just as much.`},
-        {type:'section', eyebrow:'The Decision', heading:`Why V3 won`},
-        {type:'para', text:`It solved two problems at once. It removed the clutter of four competing icons, so a field with AI involvement looks identical to any other until someone reaches for it, and it put control of information density entirely in the admin's hands: trust the AI and never hover, or want to check something and hover to go deeper.`},
-        {type:'para', text:`The wand is the entry point. What it opens is where the second decision lives: a side drawer, not a tooltip. A tooltip would have solved the clutter problem too, but it caps how much you can actually say. Schemas, provisioning logic, and source links don't fit in a hover-triggered sentence.`},
-        {type:'para', text:`The drawer holds three tabs, each doing a different job instead of one tab trying to do all three: Overview for the plain-language summary, Deep Dive for the actual reasoning and its sources, Ask Harbor Pilot for anything the first two don't cover. I wanted an admin to check my work, not just take my word for it, and a single ambiguous icon was never going to let them do that.`},
+        {type:'para', text:`I reduced that complexity to one interaction: a wand that appears when the admin wants more information. Hovering opens a side drawer with three levels of support: Overview for the recommendation and confidence, Deep Dive for reasoning and sources, and Ask Harbor Pilot for questions the structured information could not answer.`},
+        {type:'cardgrid', items:[
+          {label:'Overview', text:`What did the AI recommend?`},
+          {label:'Deep Dive', text:`Why did it recommend it, and where did the information come from?`},
+          {label:'Ask Harbor Pilot', text:`What if I still have a question?`}
+        ]},
         {type:'shotnotes', img:'assets/sailpoint-decision-overview.png', ratio:'2.562', caption:`Overview: the plain-language summary, with a confidence score attached before the admin clicks anything further.`, notes:[{text:`Confidence, shown up front, not buried a click deep`, topPct:14}]},
         {type:'shotnotes', img:'assets/sailpoint-decision-deepdive.png', ratio:'1.533', caption:`Deep Dive: the reasoning, as a checked list, plus the real sources behind it.`, notes:[{text:`Why this was suggested, and what it's sourced from`, topPct:38}]},
         {type:'shotnotes', img:'assets/sailpoint-decision-askpilot.png', ratio:'2.543', caption:`Ask Harbor Pilot: a direct hand-off for anything the first two tabs don't cover.`, notes:[{text:`One click into Harbor Pilot, scoped to this exact field`, topPct:38}]},
-        {type:'para', text:`Clarity wasn't the only reason V3 won, though. It's the first version that actually treats being wrong as something to design for, not an afterthought. The recovery paths below are why.`},
-        {type:'section', eyebrow:'Calibrating Trust', heading:`Defaults set by the cost of being wrong`},
-        {type:'para', text:`I calibrated how much authority the AI gets to how expensive a mistake would be, not evenly across the wizard. Most decisions here are cheap to reverse, a wrong account-object guess just costs a redo, so the wizard defaults to the AI's answer and lets the admin catch it: child endpoints arrive pre-selected, ready to uncheck. Provisioning is the opposite case. A wrong rule there can silently grant real access, sometimes invisibly until an audit, so nothing activates until the admin approves it.`},
+        {type:'para', text:`This gave admins control over information density. They could accept a recommendation without opening anything, or investigate further when they needed confidence.`},
+        {type:'section', eyebrow:'06 · Designing Trust', heading:`Giving AI responsibility without giving up control`},
+        {type:'para', text:`Not every AI decision carries the same consequences. I designed the wizard around the cost of being wrong, rather than giving every recommendation the same level of automation.`},
+        {type:'para', text:`For lower-risk configuration decisions, AI could make a recommendation and let the admin correct it. Provisioning was different. Because provisioning can directly affect access, I designed it as explicitly opt-in, requiring the admin to review and approve the change before it could activate. Customer feedback reinforced this direction, with customers specifically asking for provisioning to remain under their control.`},
+        {type:'cardgrid', items:[
+          {label:'Lower Risk', text:`AI recommends\n→ Admin can adjust`},
+          {label:'Higher Risk', text:`AI recommends\n→ Admin reviews\n→ Admin explicitly activates`}
+        ]},
         {type:'compare', beforeLabel:'Wizard: opt-out', afterLabel:'Provisioning: opt-in', beforeSlot:'cs-sailpoint-optout', afterSlot:'cs-sailpoint-optin', beforeCaption:`AI-recommended child endpoints arrive pre-checked. Cheap to reverse, so the default does the work.`, afterCaption:`Nothing enabled until the admin actively chooses.`, caption:`Same platform, two postures, set by how expensive a wrong answer would be.`},
-        {type:'para', text:`This wasn't a preference I designed in isolation, either. It's a validated requirement. Asked directly whether provisioning should activate automatically once the wizard finished, participants said no. They wanted it deliberate.`},
-        {type:'section', eyebrow:'Designing for Failure', heading:`What happens when the AI is wrong`},
-        {type:'para', text:`The AI isn't reliable for every application, especially undocumented ones, so I designed a manual "Standard Setup" exit that preserves context and data, plus an upload state for admins to hand the AI documentation directly.`},
-        {type:'image', slot:'cs-sailpoint-standardsetup', ratio:'1.3', caption:`The exit ramp: dropping to Standard Setup mid-wizard, with a confirmation rather than a silent switch.`},
-        {type:'para', text:`This one I caught and fixed myself, worth being honest about rather than glossing over. The AI populates the Base URL field directly, and an early version of that error message blamed the admin instead of the recommendation that had actually failed. I rewrote it to state ownership plainly: "Harbor Pilot got a 404 Not Found from the base URL you entered." Then I gave four ways out instead of one dead end: try the AI's suggested fix, retry, edit manually, or ask Harbor Pilot directly. In a product whose entire job is earning trust in an AI, blaming the user for that AI's own mistake was exactly the wrong place to get it wrong.`},
-        {type:'image', videoSrc:'assets/sailpoint-error-case.mp4', ratio:'1.333', videoMaxW:'640px', caption:`The recovery ladder in action: a failed connection test, attributed correctly, resolved in four ways instead of one.`},
-        {type:'para', text:`I also built alerts for a specific downstream failure: a correct schema still missing a mandatory provisioning field, which wouldn't otherwise surface until much later. I wanted to catch that at the point of failure on purpose. A silent miss here isn't just a bad UI moment, it's a broken access policy in production.`},
-        {type:'diagram', fromLabel:'AI Wizard', toLabel:'Standard Setup', branchLabel:'context and mapped data preserved', caption:`Dropping out of the AI wizard never costs the user their progress.`},
-        {type:'para', text:`One constraint I designed around rather than invented: renaming the target system re-runs schema analysis, which costs real compute at scale, so I capped edits to that field. What I haven't fully solved is how to communicate a limit the admin can't see the reasoning for. Counting down from a fixed number states the ceiling without the reason, which reads as arbitrary. Surfacing the count only near the limit, paired with the reason, is the direction I'd push next.`},
-        {type:'section', eyebrow:'The Full Flow', heading:`Start to finish`},
-        {type:'para', text:`Each of these decisions is easier to defend on its own than it is to actually feel. Watched start to finish, the wizard reads less like a checklist and more like a single conversation the interface is having with the admin, one that just happens to be held without words.`},
-        {type:'image', slot:'cs-sailpoint-fullflow', ratio:'1.6', caption:`The complete flow: connector picker through source setup, recommendation, and review.`},
-        {type:'section', eyebrow:'Bonus', heading:`Surfacing provisioning rules`},
-        {type:'para', text:`Outside the core scope of this project, I extended the same wand-and-drawer language to a second surface: the provisioning rules that decide what the AI is actually allowed to create, update, or delete once a source goes live. Nobody asked for this. But the same trust problem lives there, so it felt worth prototyping rather than leaving as a gap.`},
+        {type:'section', eyebrow:'07 · Beyond Onboarding', heading:`AI assistance beyond initial onboarding`},
+        {type:'para', text:`The initial configuration was only one moment in the source lifecycle. I designed a second flow for admins who return later to make changes. From the source dropdown, selecting Edit reopens the configuration. After a change, the LLM can quickly rerun its checks and surface updated recommendations based on the new configuration.`},
+        {type:'para', text:`This extended the same trust model beyond initial generation. AI responds to what the admin changes, but does not silently modify the source. The admin can review the new recommendations and decide what to apply.`},
+        {type:'stepflow', items:[
+          {num:'01', label:'Edit', text:`Admin changes the source.`},
+          {num:'02', label:'Recheck', text:`LLM reruns relevant checks.`},
+          {num:'03', label:'Recommend', text:`AI surfaces what should change.`},
+          {num:'04', label:'Review', text:`Admin evaluates the recommendation.`},
+          {num:'05', label:'Apply', text:`Admin decides what to keep.`}
+        ]},
+        {type:'section', eyebrow:'08 · Provisioning', heading:`Recommending access changes with higher stakes`},
+        {type:'para', text:`I extended the same interaction model into provisioning, where AI could recommend new provisioning rules or suggest edits to existing rules. The challenge was not simply showing what the AI wanted to change. Admins needed to understand the recommendation before allowing it to affect access.`},
+        {type:'para', text:`I therefore kept the recommendation and decision separate. AI could identify the rule, explain the suggested change, and help the admin understand the result. The admin remained responsible for approving the final configuration.`},
+        {type:'stepflow', items:[
+          {num:'01', label:'AI Recommends', text:`New rule or edit to an existing rule.`},
+          {num:'02', label:'Admin Reviews', text:`Logic, conditions, and expected behavior.`},
+          {num:'03', label:'Admin Approves', text:`Change becomes active.`}
+        ]},
         {type:'image', slot:'cs-sailpoint-provisioningrules', ratio:'1.6', caption:`Provisioning rules, surfaced with the same reasoning-on-request pattern as the wizard.`},
-        {type:'section', eyebrow:'Validation', heading:`Testing for the low-confidence moment, not the happy path`},
-        {type:'para', text:`I built the research plan around one hypothesis: happy-path testing wouldn't tell us anything useful, because the real failure mode was what admins did when the AI's confidence was low. We ran demos across ten enterprise customers over several weeks.`},
-        {type:'para', text:`Feedback was broadly positive: cleaner setup, faster time-to-connection, disconnected-app support called out as a standout. What struck me more was that customers independently asked for the exact fallback behaviors already sitting in the design: document upload, template support, resuming a setup instead of restarting it.`},
+        {type:'tension', label:`The more consequential the action, the more explicit the human decision should be.`, text:`This became an important extension of the broader design principle behind the wizard.`},
+        {type:'section', eyebrow:'09 · Designing for Failure', heading:`What happens when the AI gets it wrong?`},
+        {type:'para', text:`The most important trust moment is not when AI gets everything right. It is when something goes wrong.`},
+        {type:'para', text:`I designed a manual Standard Setup path so admins could leave the AI wizard without losing their progress or context. I also designed recovery options around specific AI failures. When an AI-generated Base URL returned a 404 error, I changed the messaging to clearly attribute the failure to the recommendation rather than the user, then gave four ways forward.`},
+        {type:'image', slot:'cs-sailpoint-standardsetup', ratio:'1.3', caption:`The exit ramp: dropping to Standard Setup mid-wizard, with a confirmation rather than a silent switch.`},
+        {type:'cardgrid', items:[
+          {label:'Try Suggested Fix', text:`Let AI attempt a correction.`},
+          {label:'Retry', text:`Run the recommendation again.`},
+          {label:'Edit Manually', text:`Take control of the configuration.`},
+          {label:'Ask Harbor Pilot', text:`Get additional help with context preserved.`}
+        ]},
+        {type:'image', videoSrc:'assets/sailpoint-error-case.mp4', ratio:'1.333', videoMaxW:'640px', caption:`The recovery ladder in action: a failed connection test, attributed correctly, resolved in four ways instead of one.`},
+        {type:'para', text:`I also designed alerts for downstream configuration issues, such as a missing mandatory provisioning field, so problems could surface at the point of failure rather than much later in the setup process.`},
+        {type:'diagram', fromLabel:'AI Wizard', toLabel:'Standard Setup', branchLabel:'context and mapped data preserved', caption:`Dropping out of the AI wizard never costs the user their progress.`},
+        {type:'section', eyebrow:'10 · Validation', heading:`Testing the low-confidence moments`},
+        {type:'para', text:`I built the research plan around the moments where admins might hesitate: whether the reasoning was sufficient, what information they needed before accepting a recommendation, how they would evaluate a source, and what they would do if the AI was wrong. The testing plan focused on trust, reasoning clarity, decision-making, and workflow fit.`},
+        {type:'para', text:`We ran the experience with 10 enterprise customers across several weeks. Overall reception was positive, with customers calling out cleaner setup, faster time-to-connection, and the value of reducing manual work. Customers also independently surfaced needs that aligned with the recovery model, including documentation upload and the ability to resume setup rather than starting over.`},
         {type:'metrics', metrics:[
-          {icon:'user', dir:'flat', eyebrow:'Validation', value:'10 customers', desc:`Live demos run across several weeks, targeting the low-confidence moment rather than the happy path.`},
-          {icon:'check', dir:'up', eyebrow:'Reception', value:'50% positive', desc:`On the AI-driven discovery flow for one integration type, across 4 of those customers.`},
-          {icon:'target', dir:'up', eyebrow:'Target', value:'10% of new configs', desc:`The AI wizard's share of new source configurations, first release.`}
+          {icon:'user', dir:'flat', eyebrow:'Enterprise Customers', value:'10', desc:`Included in validation across several weeks.`},
+          {icon:'check', dir:'up', eyebrow:'Discovery Flow', value:'+50%', desc:`Positive reception across the 4 customers evaluated on it.`},
+          {icon:'target', dir:'flat', eyebrow:'Target', value:'10%', desc:`Share of new source configurations the AI wizard is targeted to carry.`}
         ]},
-        {type:'quote', label:'Direct customer request', text:`Disable it by default.`},
-        {type:'para', text:`That was one enterprise customer's direct request: AI-generated provisioning should require explicit opt-in before it could write changes, not just read them. It became a hard requirement, not a suggestion, and honestly the clearest evidence I had that the trust problem I'd been designing around was real.`},
-        {type:'section', eyebrow:'Feedback', heading:`How it actually landed, after V3 shipped`},
-        {type:'para', text:`Reaction built up across rounds of client calls, not from one test with a single verdict: the same admins reacting to the chat panel, then the cluttered draft, then the wand-and-drawer version. V1 versus the redesign was split roughly evenly, not a clean win for either, and I'd rather keep that in the record than smooth it over. One participant preferred V1's guidance and still found the redesign "also good." The requirements it was judged against, though, came from the feedback earlier in this case study, from before V3 existed.`},
         {type:'statrow', stats:[
-          {icon:'user', label:'Customer orgs in this round', value:'8'},
           {icon:'message', label:'Independently asked for private API upload', value:'5 of 8'},
-          {icon:'lock', label:'Confirmed provisioning should stay manual', value:'2 named leads'}
+          {icon:'lock', label:'Confirmed provisioning should stay manual', value:'2 leads'}
         ]},
-        {type:'para', text:`Not every reaction was unqualified, and I'd rather keep that here than edit it out. One customer named disconnected applications, mostly government portals, as their actual biggest pain point, and was upfront that the AI connector "solves a small problem" next to the 70-plus disconnected systems still waiting on a fix. It's the same instinct behind Scope below. A tool doesn't have to solve everything to be worth shipping, but the case study for it should say so.`},
-        {type:'section', eyebrow:'Scope', heading:`What this doesn't solve yet`},
-        {type:'para', text:`The most frequently repeated request across these sessions was support for uploading private API documentation, for homegrown applications with no public docs to point the AI at. That's out of scope for what's built today, and I'd rather say so plainly than let this case study imply full coverage: this wizard earns trust for the class of systems it targets, well-documented public SaaS APIs, and it doesn't solve that yet for internal tooling.`},
-        {type:'section', eyebrow:'Impact', heading:`From validated design to reference pattern`},
-        {type:'para', text:`The validated design moved toward general availability, targeting August 2026 and a goal of routing 10% of new source configurations through the AI wizard in its first release. The wand-and-drawer pattern also became the reference model the broader team adopted for surfacing AI reasoning elsewhere in the platform: one door in, and let the person on the other side decide how far to walk through it.`}
+        {type:'section', eyebrow:'11 · What Came Next', heading:`Designing for the systems AI could not yet reach`},
+        {type:'para', text:`The strongest recurring request was support for private API documentation. Several customers work with homegrown applications that do not expose public documentation, making the current AI approach less useful for their environments. Five of eight customers independently raised API documentation upload as a need.`},
+        {type:'para', text:`That became an important direction for future iterations while remaining outside the scope of the current release. The current wizard targets straightforward, well-documented SaaS systems, which is also how the product requirements define the initial capability.`},
+        {type:'quote', label:'Customer Request · 5 of 8 customers', text:`Can I give the AI our private API documentation?`},
+        {type:'section', eyebrow:'12 · Impact', heading:`From one wizard to a reusable AI pattern`},
+        {type:'para', text:`The validated design moved toward beta with a goal of routing 10% of new source configurations through the AI wizard in its first release. Beyond the wizard itself, I extended the same interaction model across editing and provisioning, creating a consistent approach to how AI recommends, explains, and responds to change.`},
+        {type:'para', text:`The bigger outcome was a reusable UX pattern for AI that recommends without taking away control: make the recommendation visible, make the reasoning accessible, calibrate automation to risk, and give people a clear way forward when the system gets something wrong.`},
+        {type:'cardgrid', items:[
+          {label:'Recommend', text:`AI does the heavy lifting.`},
+          {label:'Explain', text:`Users can inspect the reasoning.`},
+          {label:'Control', text:`High-risk actions require approval.`},
+          {label:'Recover', text:`Users always have a path forward.`}
+        ]}
       ],
       'seed-library': [
         {type:'section', eyebrow:'Context', heading:`A resource people didn't know existed`},
@@ -1725,10 +1839,12 @@ class Component extends DCLogic {
         isSection:b.type==='section', isPara:b.type==='para', isLede:b.type==='lede', isTension:b.type==='tension',
         isQuote:b.type==='quote', isImage:b.type==='image', isSplit:b.type==='split',
         isList:b.type==='list', isHmw:b.type==='hmwcards', isMetrics:b.type==='metrics', isProcess:b.type==='process', isBars:b.type==='bars', isStatrow:b.type==='statrow', isZoomImg:b.type==='zoomimage', isPair:b.type==='imagepair', isScrolly:b.type==='scrolly', isCarousel:b.type==='carousel', isShot:b.type==='shotnotes', isCompare:b.type==='compare', isDiagram:b.type==='diagram',
+        isCardGrid:b.type==='cardgrid', isStepFlow:b.type==='stepflow', isVersionCards:b.type==='versioncards', isQuoteGrid:b.type==='quotegrid', isCompareTable:b.type==='comparetable',
         quoteLabel: b.type==='quote' ? (b.label || 'Marginalia') : undefined,
         isVideo:b.type==='image'&&!!b.video, isVideoFile:b.type==='image'&&(!!b.videoSrc||!!b.videoSrcs), showVidCtl:!b.noVidControls, notVideo:b.type==='image'&&!b.video&&!b.videoSrc&&!b.videoSrcs,
         hasNote:b.type==='para'&&!!b.note&&(this.props.showMarginNotes!==false) };
       if (b.type==='section') { sec++; o.secNum = String(sec).padStart(2,'0'); o.anchor = 'sec-' + sec; firstPara = true; }
+      if (b.type==='stepflow') { o.items = (b.items||[]).map((s,i) => ({ ...s, needsArrow: i>0 })); }
       if (b.type==='image') { fig++; o.figNum = String(fig).padStart(2,'0'); o.hasImg = !!b.img; o.img = b.img || this.BLANK_IMG; o.ratio = b.ratio || '1.778'; o.videos = (b.videoSrcs || (b.videoSrc ? [b.videoSrc] : [])).map(s => ({src:s})); o.videoMaxW = b.videoMaxW || (o.videos.length ? '360px' : '100%'); o.needsSlot = !b.video && !b.videoSrc && !b.videoSrcs && !b.img; o.hasNotes = Array.isArray(b.notes) && b.notes.length>0; o.openFig = () => this.setState({ lightbox: { img: o.img, title:'', label:'Fig. ' + o.figNum, caption: b.caption || '', ratio: o.ratio } }); }
       if (b.type==='imagepair') { const shared = b.sharedCaption || ''; let sharedNum = ''; if (shared) { fig++; sharedNum = String(fig).padStart(2,'0'); o.figNum = sharedNum; o.sharedCaption = shared; o.hasShared = true; } o.showPairCap = !shared; o.pairs = (b.images||[]).map((im, pi) => { let figNum = sharedNum; if (!shared) { fig++; figNum = String(fig).padStart(2,'0'); } const img = im.img || this.BLANK_IMG; const ratio = b.ratio || im.ratio || '1.173'; const caption = im.caption || shared; return { img, ratio, caption, figNum, uid: figNum + '-' + pi, showCap: !shared, hasImg: !!im.img, hasLabel: !!im.label, label: im.label || '', labelColor: im.labelColor || 'var(--accent)', open: () => this.setState({ lightbox: { img, title:'', label:'Fig. ' + figNum, caption, ratio } }) }; }); }
       if (b.type==='shotnotes') { fig++; o.figNum = String(fig).padStart(2,'0'); o.hasImg = !!b.img; o.img = b.img || this.BLANK_IMG; o.ratio = b.ratio || '1.25'; o.needsSlot = !b.img; }
