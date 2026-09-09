@@ -735,12 +735,14 @@
               <div data-reveal="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2vw,24px);margin:clamp(28px,3.6vw,44px) 0;align-items:start;">
                 <sc-for list="{{ block.items }}" as="s" hint-placeholder-count="2">
                   <figure style="margin:0;">
+                    <div data-scalemock="" style="width:100%;overflow:hidden;">
+                    <div data-scaleinner="" style="width:320px;">
                     <div style="display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:9px 15px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);font-family:var(--font-sans);font-weight:700;font-size:13.5px;color:var(--ink);margin-bottom:12px;">
                       <sc-if value="{{ s.isError }}" hint-placeholder-val="{{ true }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2"><path d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg></sc-if>
                       <sc-if value="{{ s.isSuccess }}" hint-placeholder-val="{{ false }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1f7a3d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></sc-if>
                       {{ s.badge }}
                     </div>
-                    <div style="border:1px solid {{ s.borderColor }};border-radius:14px;padding:clamp(18px,2.2vw,24px);background:{{ s.bgColor }};">
+                    <div style="border:1px solid {{ s.borderColor }};border-radius:14px;padding:20px;background:{{ s.bgColor }};">
                       <div style="display:flex;gap:13px;align-items:flex-start;">
                         <div style="flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:{{ s.iconBg }};display:flex;align-items:center;justify-content:center;">
                           <sc-if value="{{ s.isError }}" hint-placeholder-val="{{ true }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2.2"><path d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg></sc-if>
@@ -760,6 +762,8 @@
                           </sc-if>
                         </div>
                       </div>
+                    </div>
+                    </div>
                     </div>
                   </figure>
                 </sc-for>
@@ -1035,6 +1039,8 @@
                       <image-slot id="{{ block.beforeSlot }}" style="width:100%;height:auto;aspect-ratio:5/4;display:block;" shape="rect" placeholder="{{ block.beforeCaption }}"></image-slot>
                       </sc-if>
                       <sc-if value="{{ block.hasBeforeMockEndpoint }}" hint-placeholder-val="{{ false }}">
+                      <div data-scalemock="" style="width:100%;overflow:hidden;">
+                      <div data-scaleinner="" style="width:360px;">
                         <div style="border:1px solid var(--line);border-radius:12px;padding:16px;background:#fff;">
                           <div style="display:flex;gap:18px;border-bottom:1px solid var(--line);margin-bottom:14px;">
                             <div style="font-family:var(--font-sans);font-weight:700;font-size:12.5px;color:#4c3fd8;border-bottom:2px solid #4c3fd8;padding-bottom:8px;">Endpoint Configuration</div>
@@ -1071,6 +1077,8 @@
                             </div>
                           </div>
                         </div>
+                      </div>
+                      </div>
                       </sc-if>
                       <sc-for list="{{ block.beforeNotes }}" as="note" hint-placeholder-count="1">
                         <span style="position:absolute;left:{{ note.ax }}%;top:{{ note.ay }}%;width:7px;height:7px;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%);box-shadow:0 0 0 3px rgba(255,255,255,.7);"></span>
@@ -2507,7 +2515,7 @@ class Component extends DCLogic {
     this.syncLeaves();
     if (this.state.view === 'home') { this.bindTrackEyes(); this.initCube(); this.initCarousel(); this._featIdx = 0; this._featSlug = this.PROJECTS[0].slug; requestAnimationFrame(() => this.setupContentsPreview()); }
     if (this.state.view === 'about') { this.setState({ opened:false, typed:'', typing:false }); }
-    if (this.state.view === 'work') this.bindSketchSlider();
+    if (this.state.view === 'work') { this.bindSketchSlider(); requestAnimationFrame(() => this.lockMockScale()); }
     this._prevView = this.state.view;
     this._prevSlug = this.state.slug;
     // Correct the address bar in place (no history entry) if the URL we booted
@@ -2548,7 +2556,7 @@ class Component extends DCLogic {
       requestAnimationFrame(() => this.checkVideoPlayback());
       if (this.state.view === 'about') { this.syncLeaves(); this._jIdx = -1; requestAnimationFrame(() => { this.syncLeaves(); this.updateJourneyWheel(); }); }
       if (this.state.view !== 'home' && this._cpHide) this._cpHide();
-      if (this.state.view === 'work') { this._activeSec = -1; this._scrollyActive = {}; requestAnimationFrame(() => this.trackScroll()); this.coverReveal(); this.bindSketchSlider(); }
+      if (this.state.view === 'work') { this._activeSec = -1; this._scrollyActive = {}; requestAnimationFrame(() => this.trackScroll()); this.coverReveal(); this.bindSketchSlider(); requestAnimationFrame(() => this.lockMockScale()); }
       if (this.state.view === 'home' && prev.view !== 'home') { this.bindTrackEyes(); this.initCube(); this.initCarousel(); this._featIdx = 0; this._featSlug = this.PROJECTS[0].slug; requestAnimationFrame(() => { this.updateFooterReveal(); this.setupContentsPreview(); }); }
       if (this.state.view === 'about' && prev.view !== 'about') this.setState({ opened:false, typed:'', typing:false });
     }
@@ -2591,6 +2599,7 @@ class Component extends DCLogic {
     if (this._cubeMove) window.removeEventListener('pointermove', this._cubeMove);
     clearInterval(this._carTimer);
     if (this._carRaf) cancelAnimationFrame(this._carRaf);
+    if (this._mockObservers) this._mockObservers.forEach(ro => ro.disconnect());
     clearTimeout(this._wipeFb);
     [this._curDot, this._curRing, this._curLab].forEach(n => { if (n && n.parentNode) n.parentNode.removeChild(n); });
     document.documentElement.classList.remove('eink');
@@ -2956,6 +2965,35 @@ class Component extends DCLogic {
     }));
     clearTimeout(this._coverFb);
     this._coverFb = setTimeout(() => { el.style.filter='blur(0)'; el.style.opacity='1'; el.style.transform='none'; }, 1300);
+  }
+  // Hand-built UI mockups (recreated screenshots) are authored at a fixed
+  // pixel width so their internal layout never reflows. This measures each
+  // one's natural size once, then scales the whole thing as a single rigid
+  // unit to fit its container, the same way an <img> with a locked aspect
+  // ratio would, instead of letting flex/grid reformat it into a different
+  // shape at different widths.
+  lockMockScale(){
+    const root = this.rootRef.current; if (!root) return;
+    if (!this._mockObservers) this._mockObservers = [];
+    root.querySelectorAll('[data-scalemock]').forEach(outer => {
+      if (outer.dataset.scaleBound) return;
+      const inner = outer.querySelector('[data-scaleinner]');
+      if (!inner) return;
+      const refW = inner.offsetWidth, refH = inner.offsetHeight;
+      if (!refW || !refH) return;
+      outer.dataset.scaleBound = '1';
+      inner.style.transformOrigin = 'top left';
+      const apply = () => {
+        const w = outer.clientWidth; if (!w) return;
+        const scale = w / refW;
+        inner.style.transform = 'scale(' + scale.toFixed(4) + ')';
+        outer.style.height = (refH * scale).toFixed(1) + 'px';
+      };
+      apply();
+      const ro = new ResizeObserver(apply);
+      ro.observe(outer);
+      this._mockObservers.push(ro);
+    });
   }
   // Signature focus-pull: hero headline resolves from a heavy gaussian blur, like a lens finding focus.
   focusPull(instant){
