@@ -641,7 +641,7 @@
       </div>
       <div style="margin-top:clamp(40px,6vw,80px);">
         <div style="font-family:var(--font-sans);font-size:16px;letter-spacing:.02em;color:var(--accent);margin-bottom:20px;">{{ coverEyebrow }}</div>
-        <h1 data-velo="0.5" data-wipe="" style="font-family:var(--font-serif);font-weight:400;font-size:calc(45px * var(--sc-header,1));line-height:.9;letter-spacing:-.028em;margin:0 0 clamp(18px,2vw,26px);">{{ cur.title }}</h1>
+        <h1 data-hfade="" style="font-family:var(--font-serif);font-weight:400;font-size:calc(45px * var(--sc-header,1));line-height:.9;letter-spacing:-.028em;margin:0 0 clamp(18px,2vw,26px);">{{ cur.title }}</h1>
         <p style="font-family:var(--font-sans);font-size:calc(18px * var(--sc-sub,1));line-height:1.6;color:var(--ink-2);margin:0;text-wrap:pretty;">{{ cur.overview }}</p>
       </div>
       <!-- COVER PLATE: same media as the landing cover -->
@@ -715,7 +715,7 @@
               <div id="{{ block.anchor }}" data-sec="" data-reveal="" style="margin:clamp(52px,8vw,104px) 0 clamp(20px,3vw,30px);padding-top:0;">
                 <div style="font-family:var(--font-sans);font-weight:400;font-size:calc(18px * var(--sc-sub,1));letter-spacing:0;color:var(--muted-2);line-height:1.4;margin:0 0 14px;max-width:40ch;">{{ block.eyebrow }}</div>
                 <div style="display:flex;align-items:baseline;gap:16px;">
-                  <h2 data-velo="0.5" data-wipe="" style="font-family:var(--font-serif);font-weight:400;font-size:calc(45px * var(--sc-header,1));line-height:1.02;letter-spacing:-.02em;color:var(--ink);margin:0;max-width:none;">{{ block.heading }}</h2>
+                  <h2 data-hfade="" style="font-family:var(--font-serif);font-weight:400;font-size:calc(45px * var(--sc-header,1));line-height:1.02;letter-spacing:-.02em;color:var(--ink);margin:0;max-width:none;">{{ block.heading }}</h2>
                 </div>
               </div>
             </sc-if>
@@ -2071,6 +2071,7 @@ class Component extends DCLogic {
     this.updateFooterReveal();
     this.updateHeroFade();
     if (this.state.view !== 'work') return;
+    this.initHeaderFade();
     const art = root.querySelector('[data-article]');
     const secs = [...root.querySelectorAll('[data-sec]')];
     if (art) {
@@ -2385,6 +2386,7 @@ class Component extends DCLogic {
     if (this._focusRaf) cancelAnimationFrame(this._focusRaf);
     if (this._tagUp) window.removeEventListener('pointerup', this._tagUp);
     if (this._veloRaf) cancelAnimationFrame(this._veloRaf);
+    if (this._hfadeRaf) cancelAnimationFrame(this._hfadeRaf);
     if (this._eyeMove) window.removeEventListener('pointermove', this._eyeMove);
     clearTimeout(this._blinkTimeout);
     if (this._skMove) window.removeEventListener('pointermove', this._skMove);
@@ -2469,6 +2471,43 @@ class Component extends DCLogic {
       else { this._vel = 0; this.applyVelo(0); this._veloRaf = 0; }
     };
     this._veloRaf = requestAnimationFrame(tick);
+  }
+  // Case-study headings (H1 title, H2 section headers) fade based on scroll
+  // position instead of floating with scroll velocity. The opacity itself
+  // eases toward its target over time rather than snapping every frame, so
+  // the fade reads as trailing slightly behind the scroll instead of
+  // tracking it 1:1 — same exponential-smoothing shape as the cursor, just
+  // applied to opacity instead of position.
+  initHeaderFade(){
+    const root = this.rootRef.current; if (!root) return;
+    if (this._hfadeRaf) { cancelAnimationFrame(this._hfadeRaf); this._hfadeRaf = 0; }
+    if (this.prefersReduced()) return;
+    if (!this._hfadeState) this._hfadeState = new WeakMap();
+    const TAU = 0.22; // seconds of lag before the fade catches up to scroll
+    let last = 0;
+    const loop = (t) => {
+      if (!last) last = t;
+      const dt = Math.min((t - last) / 1000, 0.05); last = t;
+      const k = 1 - Math.exp(-dt / TAU);
+      const h = window.innerHeight || 800;
+      const els = root.querySelectorAll('[data-hfade]');
+      let stillMoving = false;
+      els.forEach(el => {
+        const r = el.getBoundingClientRect();
+        let target = 1;
+        if (r.top < h * 0.2) target = Math.max(0, r.top / (h * 0.2));
+        else if (r.top > h * 0.8) target = Math.max(0, 1 - (r.top - h * 0.8) / (h * 0.2));
+        let cur = this._hfadeState.get(el);
+        if (cur == null) cur = target;
+        cur += (target - cur) * k;
+        this._hfadeState.set(el, cur);
+        el.style.opacity = cur.toFixed(3);
+        if (Math.abs(target - cur) > 0.004) stillMoving = true;
+      });
+      this._hfadeRaf = stillMoving ? requestAnimationFrame(loop) : 0;
+      if (!stillMoving) last = 0;
+    };
+    this._hfadeRaf = requestAnimationFrame(loop);
   }
   applyVelo(v){
     const root = this.rootRef.current; if (!root) return;
