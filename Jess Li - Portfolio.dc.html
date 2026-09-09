@@ -1999,6 +1999,22 @@ class Component extends DCLogic {
       this._cpList = null;
     };
   }
+  // Hero fades out on the way past it, rather than just scrolling off — a
+  // plain opacity+drift tied to scroll position, same easing shape as the
+  // footer reveal below. Fully faded well before the hero leaves the
+  // viewport so the next section arrives onto a clean page, not mid-exit.
+  updateHeroFade(){
+    const root = this.rootRef.current; if (!root) return;
+    if (this.state.view !== 'home' || this.prefersReduced()) return;
+    const grid = root.querySelector('.hero-grid');
+    if (!grid) return;
+    const header = grid.closest('header');
+    const span = (header ? header.offsetHeight : window.innerHeight) * 0.55;
+    const p = Math.min(1, Math.max(0, (window.scrollY || 0) / Math.max(1, span)));
+    const ease = 1 - Math.pow(1 - p, 2);
+    grid.style.opacity = (1 - ease).toFixed(3);
+    grid.style.transform = 'translateY(' + (-ease * 34).toFixed(1) + 'px)';
+  }
   updateFooterReveal(){
     const root = this.rootRef.current; if (!root) return;
     if (this.state.view !== 'home') return;
@@ -2027,6 +2043,7 @@ class Component extends DCLogic {
     this.checkVideoPlayback();
     this.updateJourneyWheel();
     this.updateFooterReveal();
+    this.updateHeroFade();
     if (this.state.view !== 'work') return;
     const art = root.querySelector('[data-article]');
     const secs = [...root.querySelectorAll('[data-sec]')];
