@@ -228,7 +228,7 @@
   /* Registration-loupe cursor — reads intent, springs after the pointer */
   @media (hover:hover) and (pointer:fine){
     html.eink, html.eink *{cursor:none !important;}
-    .eink-dot{position:fixed;top:0;left:0;width:5px;height:5px;border-radius:50%;background:#2f6fed;z-index:2147482600;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform;transition:opacity .25s ease;}
+    .eink-dot{position:fixed;top:0;left:0;width:10px;height:10px;border-radius:50%;background:#2f6fed;z-index:2147482600;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform;transition:opacity .25s ease;}
     /* Fixed at its largest (78px) footprint; state changes scale an inner
        circle via transform instead of resizing width/height, so growing the
        ring is a compositor-only operation, not a layout+paint one. Idle
@@ -237,15 +237,10 @@
     .eink-ring{position:fixed;top:0;left:0;width:78px;height:78px;border-radius:50%;z-index:2147482550;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform;}
     .eink-ring-inner{position:absolute;inset:0;border:1px solid rgba(20,20,22,.42);border-radius:50%;transform:scale(0);transition:transform .32s cubic-bezier(.2,.7,.2,1),border-color .3s ease,background .3s ease,filter .4s ease;will-change:transform;}
     .eink-ring.link .eink-ring-inner{transform:scale(.5897);border-color:var(--color-ink);}
-    .eink-ring.view .eink-ring-inner{transform:scale(1);background:var(--color-ink);border-color:transparent;}
     /* A plain photo (Home/About only) softens the ring into a small blurred
        halo — the site's existing blur-follow language (see the kicker
        headline effect), not a new motif — instead of a hard-edged link ring. */
     .eink-ring.peek .eink-ring-inner{transform:scale(.718);border-color:var(--color-ink);filter:blur(1.75px);}
-    .eink-dot.view{opacity:0;}
-    .eink-label{position:fixed;top:0;left:0;z-index:2147482650;pointer-events:none;transform:translate3d(-50%,-50%,0);font-family:var(--font-sans);font-size:8.5px;letter-spacing:.04em;color:#fbfbfc;opacity:0;transition:opacity .25s ease,font-size .25s ease;}
-    .eink-label.on{font-size:13px;letter-spacing:.02em;}
-    .eink-label.on{opacity:1;}
   }
 
   /* Ink-rule draws L→R under the hovered Contents row (line-drawing, not a fade) */
@@ -337,7 +332,7 @@
 
   @media (prefers-reduced-motion:reduce){
     [data-wipe]{clip-path:none !important;opacity:1 !important;}
-    .eink-dot,.eink-ring,.eink-label{display:none !important;}
+    .eink-dot,.eink-ring{display:none !important;}
     html.eink, html.eink *{cursor:auto !important;}
   }
   /* Fixed background layers: drifting color blobs + a soft white glow that follows the cursor */
@@ -365,9 +360,7 @@
   [data-ambient="night"] .googly-eye{background:var(--paper);}
   body[data-ambient="night"] .eink-ring-inner{border-color:rgba(238,240,245,.42);}
   body[data-ambient="night"] .eink-ring.link .eink-ring-inner{border-color:#eef0f5;}
-  body[data-ambient="night"] .eink-ring.view .eink-ring-inner{background:#eef0f5;}
   body[data-ambient="night"] .eink-ring.peek .eink-ring-inner{border-color:#eef0f5;}
-  body[data-ambient="night"] .eink-label{color:#12151b;}
   [data-ambient="night"]{--color-ink:#eef0f5;--color-ink-2:#d6dae2;--color-muted:#b3b9c4;--color-muted-2:#a0a7b4;--color-paper:#12151b;--color-surface:#171b22;--color-surface-2:#1d222b;--color-line:rgba(255,255,255,.13);--color-line-strong:#eef0f5;--color-accent:#eef0f5;--accent:#eef0f5 !important;}
   [data-ambient="plain"]{--glow-c1:rgba(20,20,22,.055);--glow-c2:rgba(20,20,22,0);}
   @media (prefers-reduced-motion:reduce){ .bg-layer{animation:none !important;} .bg-glow{display:none !important;} }
@@ -2601,7 +2594,7 @@ class Component extends DCLogic {
     if (this._carRaf) cancelAnimationFrame(this._carRaf);
     if (this._mockObservers) this._mockObservers.forEach(ro => ro.disconnect());
     clearTimeout(this._wipeFb);
-    [this._curDot, this._curRing, this._curLab].forEach(n => { if (n && n.parentNode) n.parentNode.removeChild(n); });
+    [this._curDot, this._curRing].forEach(n => { if (n && n.parentNode) n.parentNode.removeChild(n); });
     document.documentElement.classList.remove('eink');
   }
   applyAccent(){
@@ -3572,9 +3565,8 @@ class Component extends DCLogic {
     const ring = document.createElement('div'); ring.className = 'eink-ring';
     const ringInner = document.createElement('div'); ringInner.className = 'eink-ring-inner'; ring.appendChild(ringInner);
     const dot  = document.createElement('div'); dot.className = 'eink-dot';
-    const lab  = document.createElement('div'); lab.className = 'eink-label'; lab.textContent = 'View';
-    [ring, dot, lab].forEach(n => document.body.appendChild(n));
-    this._curRing = ring; this._curDot = dot; this._curLab = lab;
+    [ring, dot].forEach(n => document.body.appendChild(n));
+    this._curRing = ring; this._curDot = dot;
     document.documentElement.classList.add('eink');
     let tx = window.innerWidth/2, ty = window.innerHeight/2;
     let rx = tx, ry = ty;      // ring / glow — the trailing soft light
@@ -3604,24 +3596,18 @@ class Component extends DCLogic {
       dx += (tx - dx) * kD; dy += (ty - dy) * kD;
       // Clamp the drawn position (not the eased state) so the ring never gets
       // visually cut off at a viewport edge. The ring's actual radius varies
-      // with hover state (~15px idle, ~23px over a link/button, ~39px over a
-      // labeled target) — clamping every state to the largest one's margin
-      // made the ring stall well short of small UI near an edge, like the
-      // top nav links.
-      const M = 40;
-      const RING_M = { link: 25, peek: 29, view: M };
+      // with hover state (~15px idle, ~23px over a link/button) — clamping
+      // every state to the largest one's margin made the ring stall well
+      // short of small UI near an edge, like the top nav links.
+      const RING_M = { link: 25, peek: 29 };
       const ringM = RING_M[this._curMode] || 17;
-      // The dot is 5px — it only needs real room near an edge when the label
-      // (view mode) is showing text next to it; otherwise let it track the
-      // real pointer almost exactly, same reasoning as the ring above.
-      const dotM = this._curMode === 'view' ? M : 10;
+      const dotM = 10;
       const cx = Math.min(Math.max(rx, ringM), window.innerWidth - ringM);
       const cy = Math.min(Math.max(ry, ringM), window.innerHeight - ringM);
       const cdx = Math.min(Math.max(dx, dotM), window.innerWidth - dotM);
       const cdy = Math.min(Math.max(dy, dotM), window.innerHeight - dotM);
       ring.style.transform = 'translate3d(' + cx.toFixed(2) + 'px,' + cy.toFixed(2) + 'px,0) translate(-50%,-50%)';
       dot.style.transform  = 'translate3d(' + cdx.toFixed(2) + 'px,' + cdy.toFixed(2) + 'px,0) translate(-50%,-50%)';
-      lab.style.transform  = 'translate3d(' + cdx.toFixed(2) + 'px,' + cdy.toFixed(2) + 'px,0) translate(-50%,-50%)';
       if (now - lastGlowAt >= GLOW_INTERVAL) {
         lastGlowAt = now;
         if (glow) { glow.style.setProperty('--gx', cx.toFixed(2) + 'px'); glow.style.setProperty('--gy', cy.toFixed(2) + 'px'); }
@@ -3649,45 +3635,36 @@ class Component extends DCLogic {
     window.addEventListener('pointerup', this._curUp, { passive:true });
   }
   readCursorIntent(t){
-    const ring = this._curRing, dot = this._curDot, lab = this._curLab;
+    const ring = this._curRing;
     if (!ring || this._editMode) return;
-    const cover = t.closest && t.closest('.entry-imgwrap');
-    const greet = t.closest && t.closest('[data-herotitle]');
-    const connect = t.closest && t.closest('[data-connect]');
-    const link  = t.closest && t.closest('a,button,[data-focusrow],[data-tocitem],[role="slider"],.note-marker,.sticky,input,textarea');
+    // Every clickable target — nav links, buttons, case-study cover cards,
+    // the hero chips, contact links, etc. — gets the same simple ring
+    // expand as a plain navlink, no per-target filled-circle/label variants.
+    const link  = t.closest && t.closest('a,button,[data-focusrow],[data-tocitem],[role="slider"],.note-marker,.sticky,input,textarea,.entry-imgwrap,[data-exptext]');
     // A plain, non-interactive photo outside the case-study reader gets a
     // small "peek" wink on the cursor. Case-study figures render as
     // <image-slot> (pointer-events:none) with their own scrolly/compare
-    // treatments, not raw <img>, so this never fires there — the view
-    // check is just belt-and-suspenders for the one plain <img> the work
-    // page does use (the cover plate).
-    const peek = !greet && !connect && !cover && !link && this.state.view !== 'work' && t.closest && t.closest('img');
+    // treatments, not raw <img>, so this never fires there.
+    const peek = !link && this.state.view !== 'work' && t.closest && t.closest('img');
     // Drives the edge-clamp margin in frame() — recomputed every tick since
     // it's cheap and needs to track the true hovered element, independent of
-    // the dedup below (which only guards the class/label DOM writes).
-    this._curMode = (greet || connect || cover) ? 'view' : (link ? 'link' : (peek ? 'peek' : 'none'));
+    // the dedup below (which only guards the class churn).
+    this._curMode = link ? 'link' : (peek ? 'peek' : 'none');
     // Skip the class churn entirely when the hovered category hasn't
     // changed since last frame — this now runs once per rAF tick rather
     // than once per raw pointermove, but a still cursor over one element
     // for many frames shouldn't keep re-triggering style recalculation.
-    let key = 'none';
-    if (greet) key = 'greet'; else if (connect) key = 'connect';
-    else if (cover) key = 'cover:' + (cover.getAttribute('data-cover-label') || 'View');
-    else if (link) key = 'link';
-    else if (peek) key = 'peek';
+    const key = link ? 'link' : (peek ? 'peek' : 'none');
     if (key === this._lastIntentKey) return;
     this._lastIntentKey = key;
-    ring.classList.remove('link','view','peek'); dot.classList.remove('view'); lab.classList.remove('on');
-    if (greet) { lab.textContent = 'Hello!'; ring.classList.add('view'); dot.classList.add('view'); lab.classList.add('on'); }
-    else if (connect) { lab.textContent = 'Hi!'; ring.classList.add('view'); dot.classList.add('view'); lab.classList.add('on'); }
-    else if (cover) { lab.textContent = cover.getAttribute('data-cover-label') || 'View'; ring.classList.add('view'); dot.classList.add('view'); lab.classList.add('on'); }
-    else if (link) { ring.classList.add('link'); }
-    else if (peek) { ring.classList.add('peek'); }
+    ring.classList.remove('link','peek');
+    if (link) ring.classList.add('link');
+    else if (peek) ring.classList.add('peek');
   }
   cursorVisible(on){
     if (!this._curInit) return;
     if (on) document.documentElement.classList.add('eink'); else document.documentElement.classList.remove('eink');
-    [this._curDot, this._curRing, this._curLab].forEach(n => { if (n) n.style.display = on ? '' : 'none'; });
+    [this._curDot, this._curRing].forEach(n => { if (n) n.style.display = on ? '' : 'none'; });
   }
   /* ===== Ink-wipe reveal: type sets left→right on entry ===== */
   // Ink-wipe reveal — driven by the rAF scroll poll (IntersectionObserver's viewport
