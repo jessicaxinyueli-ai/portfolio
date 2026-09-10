@@ -1550,6 +1550,7 @@ class Component extends DCLogic {
         {type:'section', eyebrow:'Extending AI Beyond Onboarding', heading:`AI assistance beyond initial onboarding`},
         {type:'para', text:`The initial configuration was only one moment in the source lifecycle. I designed a second flow for admins who return later to make changes. From the source dropdown, selecting Edit reopens the configuration. After a change, the LLM can quickly rerun its checks and surface updated recommendations based on the new configuration.`},
         {type:'para', text:`This extended the same trust model beyond initial generation. AI responds to what the admin changes, but does not silently modify the source. The admin can review the new recommendations and decide what to apply.`},
+        {type:'image', videoSrc:'assets/sailpoint-edit-source.mp4', ratio:'1.333', videoMaxW:'640px', caption:`Editing an existing source: reopening the configuration, rerunning checks, and surfacing updated recommendations for what changed.`},
         {type:'stepflow', items:[
           {num:'01', label:'Edit', text:`Admin changes the source.`},
           {num:'02', label:'Recheck', text:`LLM reruns relevant checks.`},
