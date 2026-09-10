@@ -228,12 +228,14 @@
   /* Registration-loupe cursor — reads intent, springs after the pointer */
   @media (hover:hover) and (pointer:fine){
     html.eink, html.eink *{cursor:none !important;}
-    .eink-dot{position:fixed;top:0;left:0;width:5px;height:5px;border-radius:50%;background:var(--color-ink);z-index:2147482600;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform;transition:opacity .25s ease;}
+    .eink-dot{position:fixed;top:0;left:0;width:5px;height:5px;border-radius:50%;background:#2f6fed;z-index:2147482600;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform;transition:opacity .25s ease;}
     /* Fixed at its largest (78px) footprint; state changes scale an inner
        circle via transform instead of resizing width/height, so growing the
-       ring is a compositor-only operation, not a layout+paint one. */
+       ring is a compositor-only operation, not a layout+paint one. Idle
+       state scales the ring to 0 so only the plain dot shows at rest;
+       hover states below expand it back out. */
     .eink-ring{position:fixed;top:0;left:0;width:78px;height:78px;border-radius:50%;z-index:2147482550;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform;}
-    .eink-ring-inner{position:absolute;inset:0;border:1px solid rgba(20,20,22,.42);border-radius:50%;transform:scale(.3846);transition:transform .32s cubic-bezier(.2,.7,.2,1),border-color .3s ease,background .3s ease,filter .4s ease;will-change:transform;}
+    .eink-ring-inner{position:absolute;inset:0;border:1px solid rgba(20,20,22,.42);border-radius:50%;transform:scale(0);transition:transform .32s cubic-bezier(.2,.7,.2,1),border-color .3s ease,background .3s ease,filter .4s ease;will-change:transform;}
     .eink-ring.link .eink-ring-inner{transform:scale(.5897);border-color:var(--color-ink);}
     .eink-ring.view .eink-ring-inner{transform:scale(1);background:var(--color-ink);border-color:transparent;}
     /* A plain photo (Home/About only) softens the ring into a small blurred
@@ -361,7 +363,6 @@
   [data-ambient="night"] .cube-face{background:var(--ink);border-color:rgba(255,255,255,.1);}
   [data-ambient="night"] .cube-face i,[data-ambient="night"] .cube-face span{color:var(--paper) !important;}
   [data-ambient="night"] .googly-eye{background:var(--paper);}
-  body[data-ambient="night"] .eink-dot{background:#eef0f5;}
   body[data-ambient="night"] .eink-ring-inner{border-color:rgba(238,240,245,.42);}
   body[data-ambient="night"] .eink-ring.link .eink-ring-inner{border-color:#eef0f5;}
   body[data-ambient="night"] .eink-ring.view .eink-ring-inner{background:#eef0f5;}
