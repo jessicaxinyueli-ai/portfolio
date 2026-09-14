@@ -1832,6 +1832,13 @@ class Component extends DCLogic {
     const blur = wrap.querySelector('[data-kickerblur]');
     const sharp = wrap.querySelector('[data-herokicker]');
     if (blur) blur.style.opacity = '0';
+    // kickerMove's rAF loop eases the mask hole toward the cursor over
+    // several frames; leaving mid-ease used to leave that loop running with
+    // wrap._kx/_ky nulled out below, so it kept computing frames from a
+    // stale/zeroed position and kept repainting the sharp text's mask well
+    // after the pointer was gone — a hole sliding across the headline with
+    // no cursor there. Cancel it before resetting state.
+    if (wrap._kRaf){ cancelAnimationFrame(wrap._kRaf); wrap._kRaf = null; }
     // The blur fades out over .45s (see [data-kickerblur]'s opacity
     // transition), but clearing the sharp text's mask immediately used to
     // snap it back to fully visible right away — for that .45s window the
