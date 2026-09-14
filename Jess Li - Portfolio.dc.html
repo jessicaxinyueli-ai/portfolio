@@ -228,8 +228,7 @@
   /* Registration-loupe cursor — reads intent, springs after the pointer */
   @media (hover:hover) and (pointer:fine){
     html.eink, html.eink *{cursor:none !important;}
-    .eink-dot{position:fixed;top:0;left:0;width:15px;height:15px;color:#2f6fed;z-index:2147482600;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform;transition:opacity .25s ease;}
-    .eink-dot svg{display:block;width:100%;height:100%;}
+    .eink-dot{position:fixed;top:0;left:0;width:10px;height:10px;border-radius:50%;background:#2f6fed;z-index:2147482600;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform;transition:opacity .25s ease;}
     /* Fixed at its largest (78px) footprint; state changes scale an inner
        circle via transform instead of resizing width/height, so growing the
        ring is a compositor-only operation, not a layout+paint one. Idle
@@ -3564,7 +3563,6 @@ class Component extends DCLogic {
     const ring = document.createElement('div'); ring.className = 'eink-ring';
     const ringInner = document.createElement('div'); ringInner.className = 'eink-ring-inner'; ring.appendChild(ringInner);
     const dot  = document.createElement('div'); dot.className = 'eink-dot';
-    dot.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12C12 12 4.5 10.3 4.5 5.8C4.5 3 7 1.6 9.3 2.8C10.8 3.6 12 5.6 12 8C12 5.6 13.2 3.6 14.7 2.8C17 1.6 19.5 3 19.5 5.8C19.5 10.3 12 12 12 12Z"/><path d="M12 12C12 12 4.5 10.3 4.5 5.8C4.5 3 7 1.6 9.3 2.8C10.8 3.6 12 5.6 12 8C12 5.6 13.2 3.6 14.7 2.8C17 1.6 19.5 3 19.5 5.8C19.5 10.3 12 12 12 12Z" transform="rotate(90 12 12)"/><path d="M12 12C12 12 4.5 10.3 4.5 5.8C4.5 3 7 1.6 9.3 2.8C10.8 3.6 12 5.6 12 8C12 5.6 13.2 3.6 14.7 2.8C17 1.6 19.5 3 19.5 5.8C19.5 10.3 12 12 12 12Z" transform="rotate(180 12 12)"/><path d="M12 12C12 12 4.5 10.3 4.5 5.8C4.5 3 7 1.6 9.3 2.8C10.8 3.6 12 5.6 12 8C12 5.6 13.2 3.6 14.7 2.8C17 1.6 19.5 3 19.5 5.8C19.5 10.3 12 12 12 12Z" transform="rotate(270 12 12)"/></svg>';
     [ring, dot].forEach(n => document.body.appendChild(n));
     this._curRing = ring; this._curDot = dot;
     document.documentElement.classList.add('eink');
