@@ -660,7 +660,7 @@
         <div style="padding:0;"><div style="font-size:16px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">Role</div><div style="font-size:16px;color:var(--ink);">{{ cur.role }}</div></div>
         <div style="padding:0;"><div style="font-size:16px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">Timeline</div><div style="font-size:16px;color:var(--ink);">{{ cur.timeline }}</div></div>
         <div style="padding:0;"><div style="font-size:16px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">Team</div><div style="font-size:16px;color:var(--ink);">{{ cur.team }}</div></div>
-        <div style="padding:0;"><div style="font-size:16px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">Status</div><div style="font-size:16px;color:var(--ink);">{{ cur.status }}</div></div>
+        <div style="padding:0;"><div style="font-size:16px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">Status</div><div style="font-size:16px;color:var(--ink);">{{ cur.statusDisplay }}</div></div>
       </div>
     </div>
 
@@ -1423,7 +1423,7 @@ class Component extends DCLogic {
     this.PROJECTS = [
       {slug:'sailpoint', date:'May 2026', caseCover:'assets/sailpoint-case-cover.png', title:'SailPoint', category:'Product Design, AI, Enterprise UX', role:'Product Design & Research Intern', timeline:'Summer 2026', team:'Solo UX ownership · Figma, Claude', status:'Beta Testing', locked:true, overview:'Redesigned source configuration with human-in-the-loop AI, cutting setup time by 60%.', publicIntro:[`This summer I worked as the sole UX design intern on SailPoint's identity security team, designing for enterprise administrators who manage access across thousands of applications.`, `My main project was an AI-assisted configuration wizard, and I owned the UX through two full rounds of redesign, from an early conversational prototype through the trust and recovery patterns that shipped. A few smaller design efforts ran alongside it, each with its own stakeholders and timeline.`, `Working at this scale taught me as much about people as it did about interfaces: how to read a room of stakeholders, how to hold a design opinion under pressure, and how to let real customer feedback change my mind.`], publicImg:'assets/sailpoint-onboarding-welcome.jpg', publicImgCaption:`The AI-assisted onboarding flow I designed the trust and interaction model for.`, takeaways:[{num:'1', label:'Designing for skepticism, not delight', text:`Admins are trained to question anything automated. Building trust here meant designing for scrutiny first, adoption followed once people felt in control.`}, {num:'2', label:'Customer feedback reshapes the brief', text:`Real usage across release rounds pushed the design further than internal review ever could, and changed decisions I thought were already settled.`}, {num:'3', label:'Advocacy has to be earned, not assumed', text:`Turning stakeholders into champions meant genuinely listening to their concerns while still being clear about why certain calls mattered.`}]},
       {slug:'seed-library', date:'Sep 2025', caseCover:'assets/seed-case-cover.png', title:'UM Seed Library', category:'Product Design, User Research, Mobile', role:'Product Designer', timeline:'Aug 2025 to Mar 2026', team:'4-person team, designers, PM, instructor', status:'Completed', overview:'Simplified seed lending from 6 steps to 4, reaching 95% task completion.'},
-      {slug:'copperhill', date:'Jun 2025', title:'Copperhill', category:'Product Design, Design Systems, B2B', role:'Product Design Intern', timeline:'Jun — Aug 2025', team:'Solo designer · 4 engineers', status:'Completed', overview:'Redesigned workflows for 2,000+ daily users, reducing out-of-platform work by 95%.'},
+      {slug:'copperhill', date:'Jun 2025', title:'Copperhill', category:'Product Design, Design Systems, B2B', role:'Solo Product Designer', timeline:'Jun to Aug 2025', team:'4 engineers', status:'Completed', statusLabel:'Shipped to beta', overview:'Redesigned an end-to-end supplier Q&A workflow for 2,000+ daily users, reducing out-of-platform work by 95%.'},
       {slug:'umgpt', date:'Sep 2025', caseCover:'assets/umgpt-case-cover.png', title:'UM GPT', category:'Product Design, AI, Interaction Design', role:'Product Designer', timeline:'Sep — Dec 2025 (course), continued independently after', team:'Solo · Figma, Lovable, Figma Make, Claude', status:'Completed', overview:'Unified a fragmented AI workflow spanning four tools into one experience.'}
     ];
     // Real, shareable URLs for each view. Case-study paths drop the hyphen
@@ -1448,11 +1448,11 @@ class Component extends DCLogic {
         ],
       },
       'copperhill': {
-        body:`Copperhill runs trade compliance for global shipments. Analysts could find a problem in the data but couldn't act on one without leaving the platform for Outlook and losing the thread. I shadowed analysts, wrote the requirements from what I saw, and designed a supplier Q&A workflow into the tables they already worked in. Two decisions carried it: how open questions should surface in a dense table (three iterations to get the interaction cost right), and how to strip the repetitive labor out of asking and sending (a question catalog and a batch-scheduling queue).`,
+        body:`Copperhill analysts needed to ask suppliers questions about parts without breaking their workflow. I redesigned how open questions surface inside dense compliance tables, built a reusable question bank for recurring requests, and connected the full ask-to-resolve loop so analysts never had to leave the platform for Outlook.`,
         metrics:[
-          {dir:'down', value:`~60%`, label:`review time observed, 8 min to ~3 min`},
-          {dir:'down', value:`95%`, label:`reduced out-of-app batch email for parts clarification`},
-          {dir:'flat', value:`3`, label:`versions shipped to beta with real customers`},
+          {dir:'down', value:`~8 → 3 min`, label:`observed batch review time`},
+          {dir:'down', value:`95% less`, label:`out-of-platform batch email work`},
+          {dir:'flat', value:`3`, label:`iterations from concept to beta`},
         ],
       },
       'umgpt': {
@@ -1677,42 +1677,83 @@ class Component extends DCLogic {
         {type:'tension', label:`The Seed Library started with two disconnected experiences.`, text:`We left with one.`}
       ],
       copperhill: [
-        {type:'section', eyebrow:'The Problem', heading:`They could find the problem. They just could not do anything about it.`},
-        {type:'para', text:`Copperhill runs trade compliance for global shipments, which means analysts spend the day inside data tables looking for parts that need attention. When they found one, the workflow left the building. Asking a supplier a question meant switching to Outlook and tracking the reply in an email thread the platform had no memory of. No record tied to the part. No way to see which items had open questions. No way to prep for a supplier call except re-reading an inbox.`, note:`Rejected idea: a notifications inbox to ping analysts about updates. Shadowing showed the real gap wasn't awareness. It was that the platform couldn't hold a conversation at all.`},
-        {type:'para', text:`I saw this before it was scoped. Shadowing the Ops team, I watched analysts leave the platform to do the core of their job. The broken Outlook loop was something I observed firsthand, not something handed to me. I translated those sessions into the workflows that defined the project: compose questions, send now or queue for a bulk send, view open questions per client, and reuse common questions by part type. A second persona, the Technical Contact, needed a clean way to respond. I wrote the requirements, then worked with my PM to confirm the direction and narrow the space to a few things worth building.`},
-        {type:'para', text:`The problems I'd watched pointed to three questions that anchored the rest of the work:`},
-        {type:'hmwcards', cards:[
-          {observed:`Asking a supplier meant leaving for Outlook, and the thread was lost.`, hmw:`ask and resolve supplier questions without leaving the platform?`},
-          {observed:`No way to see which parts had open questions without opening every row.`, hmw:`surface a part's open questions at a glance?`},
-          {observed:`Analysts retyped the same question part after part, saving no time.`, hmw:`cut the effort of asking a common question?`}
+        {type:'section', eyebrow:'What I Designed', heading:`A connected supplier Q&A workflow inside Copperhill`},
+        {type:'para', text:`A connected workflow for identifying, asking, sending, and resolving supplier questions inside Copperhill.`},
+        {type:'stepflow', items:[
+          {num:'01', label:'Triage', text:`Spot which parts need attention.`},
+          {num:'02', label:'Ask', text:`Pull a question from the bank or write a new one.`},
+          {num:'03', label:'Batch', text:`Group questions across parts.`},
+          {num:'04', label:'Send', text:`Schedule supplier outreach at once.`},
+          {num:'05', label:'Track', text:`Watch responses tied to their part.`},
+          {num:'06', label:'Resolve', text:`Close the loop without leaving the platform.`}
         ]},
-        {type:'para', text:`That focus mattered, because the brief was broad. I went deep on the two workflows carrying the most repeated friction: surfacing open questions inside a dense table without drowning it, and removing the retyping and one-by-one sending that made analysts avoid the feature. The rest of the surface area, per-client views, contact management, and the Technical Contact response side, shipped as part of the system but sits outside this study.`},
-        {type:'para', text:`Before touching the Q&A screen itself, I mapped Copperhill's primary navigation end to end. The platform's depth was the double edge: powerful, but the workflow I needed to fix sat several levels down a sprawling hierarchy, far from where analysts actually spent their day.`},
+        {type:'para', text:`I redesigned how open questions surfaced inside dense compliance tables, created a reusable question bank for recurring requests, and introduced batch scheduling so analysts could manage supplier outreach without jumping between Copperhill and Outlook.`},
+        {type:'section', eyebrow:'The Problem', heading:`Analysts could identify issues, but acting on them broke the workflow.`},
+        {type:'para', text:`Copperhill analysts spend much of their day reviewing dense compliance tables. When they found a part that needed clarification, the workflow moved to Outlook.`, note:`Rejected idea: a notifications inbox to ping analysts about updates. Shadowing showed the real gap wasn't awareness. It was that the platform couldn't hold a conversation at all.`},
+        {type:'para', text:`That meant the question, supplier response, and affected part were no longer connected inside the product. Analysts had to remember what had been asked, search through email threads, and manually reconstruct context before supplier calls.`},
+        {type:'para', text:`I identified this while shadowing the Ops team. Rather than treating the initial feature request as the problem definition, I mapped the workflow I observed and translated it into requirements with my PM.`},
+        {type:'para', text:`Three recurring pain points shaped the project:`},
+        {type:'cardgrid', items:[
+          {label:'Questions left the platform', text:`Supplier outreach happened in Outlook, breaking traceability.`},
+          {label:'Open questions were hard to scan', text:`Analysts had to open rows individually to understand what needed attention.`},
+          {label:'Common questions were repeatedly recreated', text:`The same requests were typed again across different parts.`}
+        ]},
+        {type:'para', text:`This narrowed the project to one central question:`},
+        {type:'quote', label:'The Design Question', text:`How might we keep supplier clarification inside the workflow analysts already use?`},
+        {type:'para', text:`Before designing the Q&A experience, I mapped Copperhill's primary navigation end to end. The workflow sat several levels deep in a complex hierarchy, far from where analysts spent most of their time.`},
         {type:'image', img:(window.__resources&&window.__resources.copperhillSitemap)||'assets/copperhill-sitemap.jpg', ratio:'1.403', caption:`Copperhill's primary navigation mapped in full: Q&A sits three levels down under HTS, with the Questions Bank nested below it.`},
-        {type:'section', eyebrow:'Iteration', heading:`Getting the interaction cost right took three tries.`},
-        {type:'para', text:`I judged every version against one question: which parts need attention right now? Each one had to answer it. The first two failed for the same underlying reason; the third split the problem in two.`},
-        {type:'para', text:`Two versions failed for the same reason before I could name it. I was treating "how many parts need attention" and "what exactly is wrong with them" as one problem. They are two. V1 hid the count. V2 destroyed the grouping. V3 split them: a live question count on every row so triage takes zero clicks, full detail on expand.`},
+        {type:'tension', label:`The solution could not simply improve Q&A. It needed to fit naturally into the existing workflow.`, text:``},
+        {type:'section', eyebrow:'The Table Interaction', heading:`The hardest part was deciding what information deserved to be visible.`},
+        {type:'para', text:`The Q&A experience lived inside an already dense data table, so adding more information risked making the interface harder to scan.`},
+        {type:'tension', label:`Can an analyst immediately tell what needs attention?`, text:``},
         {type:'scrolly', steps:[
-          {v:'V1', title:`Grouped under expandable parts`, ratio:'1.542', text:`My first instinct was to keep the table clean, questions nested under their parent part, collapsed by default. Then I tried to answer that one question and couldn't, without opening every single row. The table looked orderly, but it hid the one thing analysts needed to see first. My design manager agreed: the collapsed state was hiding urgency rather than organizing it.`, img:(window.__resources&&window.__resources.qaV1)||'assets/qa-v1.jpg', caption:`V1: questions nested under each part and collapsed by default, so triage means opening every row.`, notes:[{text:`Grouping clustered questions, but urgency stays hidden until you expand every row`, ax:8, ay:22, qx:24, qy:38, lx:30, ly:66, w:'16ch'}]},
-          {v:'V2', title:`Flattened: one question per row`, ratio:'1.553', text:`I reacted by going to the opposite extreme: every question got its own row, nothing collapsed. A deliberate overcorrection, not a targeted fix. Visibility stopped being the problem, but related questions about the same part lost any connection. Three small questions on one part looked identical, at a glance, to three unrelated one-off issues.`, img:(window.__resources&&window.__resources.qaV2)||'assets/qa-v2.jpg', caption:`V2: every question on its own row and fully visible, but structure and grouping are lost.`, notes:[{text:`Status landed mid-row and interrupted the left-to-right scan`, ax:36, ay:34, qx:32, qy:56, lx:41, ly:74, w:'18ch'}]},
-          {v:'V3', title:`Hybrid: count at a glance, detail on expand`, ratio:'1.575', text:`Both versions had failed for the same reason: I was treating "how many need attention" and "what exactly are they" as one problem instead of two. The fix was to split them. Each row shows a live question count, so triage needs no clicks; expanding reveals full detail, restoring the grouping V2 lost. I added batch-select across parts to schedule one supplier call at once.`, img:(window.__resources&&window.__resources.qaV3)||'assets/qa-v3.jpg', caption:`V3: part grouping restored, with each question its own selectable row so triage can cross parts.`, notes:[{text:`Reorder by part number`, ax:27, ay:20, qx:10, qy:52, lx:6, ly:80, w:'12ch'},{text:`Per-question select, triage individual questions across parts`, ax:30.5, ay:36, qx:50, qy:62, lx:44, ly:82, w:'16ch'}]},
+          {v:'V1', title:`Count hidden until you expand`, ratio:'1.542', text:`Questions were available, but the number of open items was hidden. Analysts could access the detail, but triage still required opening individual rows.`, img:(window.__resources&&window.__resources.qaV1)||'assets/qa-v1.jpg', caption:`V1: questions nested under each part and collapsed by default, so triage means opening every row.`, notes:[{text:`Grouping clustered questions, but urgency stays hidden until you expand every row`, ax:8, ay:22, qx:24, qy:38, lx:30, ly:66, w:'16ch'}]},
+          {v:'V2', title:`Flattened, but grouping lost`, ratio:'1.553', text:`I surfaced more information directly in the table. This improved visibility, but weakened the grouping and made it harder to understand which questions belonged to which part.`, img:(window.__resources&&window.__resources.qaV2)||'assets/qa-v2.jpg', caption:`V2: every question on its own row and fully visible, but structure and grouping are lost.`, notes:[{text:`Status landed mid-row and interrupted the left-to-right scan`, ax:36, ay:34, qx:32, qy:56, lx:41, ly:74, w:'18ch'}]},
+          {v:'V3', title:`Count at a glance, detail on demand`, ratio:'1.575', text:`I separated two different jobs: how many questions are open, shown immediately, and what those questions are, revealed on demand. Each row now shows a live question count for zero-click triage. Expanding the row reveals full detail while preserving the relationship between the part and its questions. I also added multi-select so analysts could act across multiple parts without opening each one individually.`, img:(window.__resources&&window.__resources.qaV3)||'assets/qa-v3.jpg', caption:`V3: part grouping restored, with each question its own selectable row so triage can cross parts.`, notes:[{text:`Reorder by part number`, ax:27, ay:20, qx:10, qy:52, lx:6, ly:80, w:'12ch'},{text:`Per-question select, triage individual questions across parts`, ax:30.5, ay:36, qx:50, qy:62, lx:44, ly:82, w:'16ch'}]},
         ]},
-        {type:'para', text:`In sessions where I directly observed analysts using V3 against their prior workflow, review time for a typical batch of questions dropped from roughly 8 minutes to about 3. This wasn't an instrumented, platform-wide metric. It's what I watched happen across specific sessions, consistent enough that I trust it as a real signal rather than a fluke.`},
-        {type:'section', eyebrow:'Supporting the workflow', heading:`Does this actually give analysts their time back?`},
-        {type:'para', text:`The table decided how questions are seen. The next problem was the repetitive labor of asking and sending, where the catalog and queue came in. These flows are the loop running end to end, and the clearest evidence the redesign removed manual work rather than relocating it.`},
-        {type:'para', text:`My first instinct for killing the retyping was autocomplete: predict the rest of a question as the analyst typed. After talking it through with engineering, that was out of scope for the MVP, so I redesigned around the constraint and built a question bank instead: a library of vetted questions organized by category, from which an analyst pulls a common ask rather than rewriting it.`},
-        {type:'para', text:`The constraint made the feature better, not worse. Autocomplete would have sped up typing for a question you already knew you wanted. The bank did that too, but it also let analysts browse what was commonly asked across categories, which surfaced questions a newer analyst wouldn't have thought to ask. The version I was forced into served a need the version I first wanted would have missed.`},
+        {type:'quote', label:'Design decision', text:`Count at a glance. Detail on demand.`},
+        {type:'para', text:`In observed sessions, analysts reviewed a typical batch in roughly 3 minutes instead of 8.`},
+        {type:'section', eyebrow:'Reducing Repetitive Work', heading:`An engineering constraint pushed the solution beyond faster typing.`},
+        {type:'para', text:`Once analysts could find open questions quickly, the next source of friction was creating them.`},
+        {type:'para', text:`My first concept used autocomplete to predict recurring questions as analysts typed. After reviewing feasibility with engineering, it was ruled out for the MVP.`},
+        {type:'para', text:`Instead, I designed a question bank containing predefined, reusable questions organized by category.`},
+        {type:'para', text:`That solved the original problem of repetitive typing, but also introduced a second benefit.`},
+        {type:'para', text:`Autocomplete would help an experienced analyst type a known question faster. The question bank could also help a newer analyst understand what questions were commonly worth asking.`},
+        {type:'cardgrid', items:[
+          {label:'Constraint', text:`Autocomplete was out of scope`},
+          {label:'Design response', text:`Reusable question library`},
+          {label:'Result', text:`Faster input plus better question discovery`}
+        ]},
+        {type:'para', text:`Analysts could also apply several questions across multiple parts in one action, reducing repeated setup even further.`},
         {type:'shotnotes', img:(window.__resources&&window.__resources.qaAddQuestions)||'assets/qa-add-questions-clean.jpg', ratio:'0.652', caption:`The Add Questions modal: pre-defined questions applied across several parts at once, with attachments.`, notes:[{text:`Pre-defined questions, pick a common ask instead of retyping it`, topPct:24},{text:`Add several questions at once, across multiple parts`, topPct:50}]},
         {type:'image', videoSrcs:['assets/copperhill-add-task.mp4'], ratio:'1.575', videoMaxW:'100%', caption:`Adding a question: a recurring ask drops from a full retype to a pick from the bank, applied across multiple parts in one pass.`},
-        {type:'section', eyebrow:'The loop', heading:`Adding and sending, end to end.`},
+        {type:'section', eyebrow:'Connecting the Full Workflow', heading:`The goal was not to remove email. It was to remove the fragmented process around it.`},
+        {type:'para', text:`The final experience connected the full question lifecycle:`},
+        {type:'stepflow', items:[
+          {num:'01', label:'Identify', text:`Spot a part that needs clarification.`},
+          {num:'02', label:'Ask', text:`Pull from the bank or write a new question.`},
+          {num:'03', label:'Queue', text:`Add it to a shared send queue.`},
+          {num:'04', label:'Send', text:`Batch supplier outreach in one pass.`},
+          {num:'05', label:'Track', text:`Follow the response in context.`},
+          {num:'06', label:'Resolve', text:`Close it out without leaving Copperhill.`}
+        ]},
+        {type:'para', text:`Analysts could create questions, select them across parts, and add them to a shared send queue.`},
+        {type:'para', text:`From there, they could batch supplier outreach instead of composing individual emails one by one.`},
         {type:'image', videoSrcs:['assets/copperhill-send-task.mp4'], ratio:'1.575', videoMaxW:'100%', caption:`Sending questions: analysts compose into a queue, select across parts, and batch-schedule a single supplier outreach without ever opening Outlook.`},
-        {type:'para', text:`In sessions where I watched analysts run the finished workflow against their old one, review time for a typical batch dropped from roughly 8 minutes to about 3. This wasn't an instrumented, platform-wide metric. It's what I observed directly, consistent enough across sessions that I trust it as a real signal.`},
+        {type:'para', text:`Most importantly, each question remained tied to the relevant part and supplier, so the response could be understood in context rather than reconstructed later from an inbox.`},
+        {type:'para', text:`This moved supplier Q&A from an external communication task into the compliance workflow itself.`},
         {type:'section', eyebrow:'Results', heading:`What I can actually claim`},
-        {type:'para', text:`The redesigned Q&A workflow shipped to beta and went live with real customers. In the sessions I ran, analysts moved through a batch of supplier questions in about 3 minutes, down from roughly 8, and the whole loop, asking, tracking, and sending, now happened inside the platform instead of scattered across Outlook.`},
-        {type:'metrics', metrics:[{icon:'clock', dir:'up', eyebrow:'Time to Resolve', value:'~8 → 3 min', desc:`Observed review time per question batch dropped by more than half in sessions with the Ops team.`},{icon:'nav', dir:'up', eyebrow:'Shipped', value:'Live in beta', desc:`Rolled out to a limited set of real customers for testing, not left as a prototype.`},{icon:'layers', dir:'up', eyebrow:'Reusability', value:'1-click reuse', desc:`Recurring questions now pull from a template library instead of being retyped part by part.`}]},
-        {type:'section', eyebrow:'Reflection', heading:`Feasibility is a creative constraint, not just a blocker`},
-        {type:'list', items:[`Feasibility is a creative constraint, not just a blocker. Twice this project got better because I couldn't build the obvious thing. Autocomplete was out of scope, so I built a question bank, and the bank turned out to do something autocomplete never could: let analysts see what was worth asking, not just type faster. The V3 table came the same way, from treating "how many" and "what exactly" as two problems once I stopped trying to solve both in one view.`, `Watching hesitation told me more than asking did. Analysts never said "I need urgency signaling." They paused, scrolled back up, reopened rows they'd already checked. Reading that hesitation across three iterations is what pointed me to the right design, and it's the research habit I trust most.`, `Instrument the impact, not just the interface. My strongest evidence here is what I watched happen in the room, and that carried the design to beta. Next time I'd pair it with lightweight event tracking from day one, timestamps from question-open to resolved, so the story is backed by both the observation and the numbers behind it.`]},
-        {type:'para', text:`Also shipped at Copperhill: density-preset table filtering, entity-specific global search, client-override rules engine, Design System 2.0 migrated to Zeroheight.`}
+        {type:'para', text:`The redesigned Q&A workflow shipped to beta with real customers.`},
+        {type:'metrics', metrics:[{icon:'clock', dir:'up', eyebrow:'Time to Resolve', value:'~8 → 3 min', desc:`Observed review time for a typical question batch.`},{icon:'growth', dir:'up', eyebrow:'Off-Platform Work', value:'95% reduction', desc:`In out-of-platform batch email work for parts clarification.`},{icon:'layers', dir:'up', eyebrow:'Reusability', value:'1-click reuse', desc:`Recurring questions could be pulled from the question bank instead of rewritten.`},{icon:'nav', dir:'up', eyebrow:'Shipped', value:'Beta release', desc:`Three iterations progressed from concept to customer testing.`}]},
+        {type:'para', text:`The strongest outcome was not just speed. The redesign kept the entire clarification process connected to the data analysts were already reviewing.`},
+        {type:'section', eyebrow:'Reflection', heading:`Constraints improved the work when I treated them as design inputs.`},
+        {type:'para', text:`Two of the strongest decisions came from limits.`},
+        {type:'para', text:`When autocomplete was not feasible, the question bank evolved into something more useful than the original idea. It reduced typing while also helping analysts discover what to ask.`},
+        {type:'para', text:`The table iterations taught me something similar. My early versions tried to show urgency and detail at the same time. The final design improved once I treated those as separate jobs.`},
+        {type:'para', text:`I also learned to pay closer attention to hesitation during testing. Analysts did not explicitly ask for better urgency signaling, but their pauses, backtracking, and repeated row opening showed where the interaction was failing.`},
+        {type:'para', text:`Next time, I would pair those observations with event tracking from the start so I could measure the full path from question creation to resolution.`},
+        {type:'para', text:`Also shipped at Copperhill:`},
+        {type:'list', items:[`Density-preset table filtering`, `Entity-specific global search`, `Client-override rules engine`, `Design System 2.0 migration to Zeroheight`]}
       ],
       umgpt: [
         {type:'lede', text:`UM GPT is the University of Michigan's AI platform for student group work, free, private, and already in wide use. This started as an SI 307 assignment. After earning top marks, I kept going, using Claude, Lovable, and Figma Make as active design partners rather than just faster tools. What I found surprised me: none of the three features I built got a usable first draft. Every one needed a correction that only became visible once I checked the output against what students had actually told me. That correction, not the features themselves, is the real subject of this case study.`},
@@ -3841,6 +3882,7 @@ class Component extends DCLogic {
     const { view, slug, leaf, bookScale } = this.state;
     const coverRatio = this.props.coverShape === 'Portrait (4:5)' ? '4/5' : this.props.coverShape === 'Square (1:1)' ? '1/1' : '16/10';
     const mapped = this.PROJECTS.map((p, i) => ({ ...p,
+      statusDisplay: p.statusLabel || p.status,
       num: String(i + 1).padStart(2, '0'),
       idx: i + 1,
       i0: i,
