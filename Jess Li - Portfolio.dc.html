@@ -503,11 +503,19 @@
         </div>
       </div>
       <div style="max-width:1340px;margin:0 auto;padding:clamp(4px,1vw,12px) clamp(24px,6vw,80px) clamp(50px,7vw,96px);">
-        <div class="feat-visual work-grid" style="min-width:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(28px,3.4vw,52px) clamp(24px,3vw,44px);">
+        <div class="feat-visual work-grid" style="min-width:0;display:flex;flex-direction:column;gap:clamp(56px,7vw,88px);">
           <sc-for list="{{ projects }}" as="project" hint-placeholder-count="4">
             <section id="entry-{{ project.slug }}" data-projblock="" data-idx="{{ project.i0 }}" data-slug="{{ project.slug }}" style="position:relative;min-width:0;">
-              <div class="feat-sticky" style="display:flex;flex-direction:column;gap:clamp(12px,1.4vw,18px);">
-                <figure class="entry-imgwrap feat-figure" data-cover-label="{{ project.coverLabel }}" onClick="{{ project.openImg }}" style="margin:0;cursor:{{ project.coverCursor }};">
+              <div class="feat-sticky" style="display:flex;flex-wrap:wrap;align-items:center;gap:clamp(28px,4vw,56px);">
+                <figcaption class="feat-caption" style="flex:1 1 300px;max-width:400px;display:flex;flex-direction:column;gap:clamp(14px,1.6vw,20px);order:1;">
+                  <div>
+                    <div style="font-family:var(--font-sans);font-size:13px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">{{ project.metaLine }}</div>
+                    <div style="font-family:var(--font-serif);font-weight:400;font-size:clamp(24px,2.4vw,32px);line-height:1.12;letter-spacing:-.015em;color:var(--ink);">{{ project.title }}</div>
+                  </div>
+                  <p style="font-family:var(--font-sans);font-size:16px;line-height:1.55;color:var(--ink-2);margin:0;text-wrap:pretty;">{{ project.overview }}</p>
+                  <button onClick="{{ project.openImg }}" style="align-self:flex-start;margin-top:2px;font-family:var(--font-sans);font-size:14px;color:var(--ink);background:none;border:1px solid var(--line);border-radius:20px;padding:9px 16px;cursor:{{ project.coverCursor }};display:inline-flex;align-items:center;gap:6px;" style-hover="border-color:var(--accent);color:var(--accent);">Read more ↗</button>
+                </figcaption>
+                <figure class="entry-imgwrap feat-figure" data-cover-label="{{ project.coverLabel }}" onClick="{{ project.openImg }}" style="margin:0;cursor:{{ project.coverCursor }};flex:2 1 440px;order:2;">
                   <div class="feat-cover" style="position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--surface);border-radius:6px;">
                     <sc-if value="{{ project.fullImg }}" hint-placeholder-val="{{ false }}">
                       <img data-lazysrc="{{ project.fullImg }}" alt="{{ project.title }} — cover image" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:var(--surface);">
@@ -525,10 +533,6 @@
                     </div>
                   </div>
                 </figure>
-                <figcaption class="feat-caption" style="display:flex;flex-direction:column;gap:clamp(8px,1vw,12px);">
-                  <div style="font-family:var(--font-sans);font-size:13px;letter-spacing:.02em;color:var(--muted-2);">{{ project.metaLine }}</div>
-                  <div style="font-family:var(--font-serif);font-weight:400;font-size:clamp(15px,1.3vw,18px);line-height:1.25;letter-spacing:-.01em;color:var(--ink);">{{ project.overview }}</div>
-                </figcaption>
               </div>
             </section>
           </sc-for>
