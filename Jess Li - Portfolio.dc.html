@@ -380,12 +380,12 @@
   /* ===== Footer reveal (content slides away over a pinned footer) ===== */
   .reveal-content{position:relative;z-index:2;background:var(--color-paper);}
   .reveal-content > .reveal-blobs{position:fixed;inset:0;z-index:-1;pointer-events:none;background-color:var(--color-paper);background-image:radial-gradient(circle 24vmax at var(--gx,50%) var(--gy,50%), var(--glow-c1,transparent), var(--glow-c2,transparent));background-repeat:no-repeat;}
-  .reveal-footer{position:fixed;left:0;right:0;bottom:0;z-index:1;background:var(--surface-2);}
-  [data-ambient="sunrise"] .reveal-footer,[data-ambient="sunset"] .reveal-footer{background:#0f0f11;--ink:#f4f4f2;--ink-2:#f4f4f2;--muted-2:#9a9aa2;--accent:#f4f4f2;--line:rgba(255,255,255,.22);--surface-2:#0f0f11;}
+  .reveal-footer{position:fixed;left:0;right:0;bottom:0;z-index:1;background:#000;--ink:#f4f4f2;--ink-2:#f4f4f2;--muted-2:#9a9aa2;--accent:#f4f4f2;--line:rgba(255,255,255,.22);--surface-2:#000;}
+  [data-ambient="sunrise"] .reveal-footer,[data-ambient="sunset"] .reveal-footer{background:#000;--ink:#f4f4f2;--ink-2:#f4f4f2;--muted-2:#9a9aa2;--accent:#f4f4f2;--line:rgba(255,255,255,.22);--surface-2:#000;}
   [data-ambient="night"] .reveal-footer{background:#f4f4f2;--ink:#141416;--ink-2:#141416;--muted-2:#6a6a72;--accent:#141416;--line:rgba(0,0,0,.16);--surface-2:#f4f4f2;}
   .reveal-footer [data-rf-inner]{will-change:transform,opacity;}
-  .static-footer{background:var(--surface-2);}
-  [data-ambient="sunrise"] .static-footer,[data-ambient="sunset"] .static-footer{background:#0f0f11;--ink:#f4f4f2;--ink-2:#f4f4f2;--muted-2:#9a9aa2;--accent:#f4f4f2;--line:rgba(255,255,255,.22);--surface-2:#0f0f11;}
+  .static-footer{background:#000;--ink:#f4f4f2;--ink-2:#f4f4f2;--muted-2:#9a9aa2;--accent:#f4f4f2;--line:rgba(255,255,255,.22);--surface-2:#000;}
+  [data-ambient="sunrise"] .static-footer,[data-ambient="sunset"] .static-footer{background:#000;--ink:#f4f4f2;--ink-2:#f4f4f2;--muted-2:#9a9aa2;--accent:#f4f4f2;--line:rgba(255,255,255,.22);--surface-2:#000;}
   [data-ambient="night"] .static-footer{background:#f4f4f2;--ink:#141416;--ink-2:#141416;--muted-2:#6a6a72;--accent:#141416;--line:rgba(0,0,0,.16);--surface-2:#f4f4f2;}
   @media (prefers-reduced-motion:reduce){ .reveal-content,.reveal-footer [data-rf-inner]{transform:none !important;} }
   /* A repeating clover badge strip along the very bottom of the footer —
