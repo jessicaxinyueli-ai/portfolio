@@ -623,6 +623,10 @@
           this._img.src = url;
           this._ghost.src = url;
         }
+        // The caption passed as `placeholder` is the only description this
+        // image has anywhere in the DOM, so screen readers need it as real
+        // alt text once a real image is showing — not just empty-state copy.
+        this._img.alt = this.getAttribute('placeholder') || '';
         this._img.style.display = 'block';
         this._empty.style.display = 'none';
         this.setAttribute('data-filled', '');
