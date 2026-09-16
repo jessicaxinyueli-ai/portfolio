@@ -397,8 +397,8 @@
   .work-sticky-panel{position:sticky;top:clamp(96px,13vh,140px);}
   .work-sticky-imgwrap{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;border-radius:6px;background:var(--surface);}
   .work-sticky-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
-  .work-sticky-tags{display:flex;flex-wrap:wrap;gap:8px;}
-  .work-sticky-tag{font-family:var(--font-sans);font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);background:color-mix(in srgb, var(--accent) 12%, transparent);border-radius:999px;padding:5px 12px;white-space:nowrap;}
+  .work-sticky-tags{display:flex;flex-wrap:wrap;gap:8px;min-width:0;}
+  .work-sticky-tag{font-family:var(--font-sans);font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2);background:transparent;border:1px solid var(--line);border-radius:999px;padding:5px 12px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box;}
 
   /* ===== Footer reveal (content slides away over a pinned footer) ===== */
   .reveal-content{position:relative;z-index:2;background:var(--color-paper);}
@@ -577,7 +577,7 @@
           </sc-for>
           <div class="work-sticky-panel" data-panelswap="">
             <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(28px,4vw,56px);">
-              <div style="flex:1 1 240px;max-width:340px;display:flex;flex-direction:column;gap:clamp(14px,1.6vw,20px);order:1;">
+              <div style="flex:1 1 240px;max-width:340px;min-width:0;display:flex;flex-direction:column;gap:clamp(14px,1.6vw,20px);order:1;">
                 <div>
                   <div style="font-family:var(--font-sans);font-size:13px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;"><span data-pnum=""></span> — <span data-pcat=""></span></div>
                   <div style="font-family:var(--font-serif);font-weight:400;font-size:clamp(24px,2.4vw,32px);line-height:1.12;letter-spacing:-.015em;color:var(--ink);" data-pname=""></div>
@@ -2346,9 +2346,7 @@ class Component extends DCLogic {
     const ease = 1 - Math.pow(1 - p, 3);
     const inner = footer.querySelector('[data-rf-inner]');
     if (inner){ inner.style.transform = 'translateY(' + ((1 - ease) * 56).toFixed(1) + 'px)'; inner.style.opacity = (0.15 + 0.85 * ease).toFixed(3); }
-    // No upward slide on content — it used to nudge up 26px as the footer
-    // fully revealed, but that opened a visible gap against the new
-    // home-page background flow, so content now stays flush with the footer.
+    content.style.transform = 'translateY(' + (-ease * 26).toFixed(1) + 'px)';
   }
   trackScroll(){
     const root = this.rootRef.current; if (!root) return;
