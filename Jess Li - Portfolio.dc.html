@@ -2346,7 +2346,9 @@ class Component extends DCLogic {
     const ease = 1 - Math.pow(1 - p, 3);
     const inner = footer.querySelector('[data-rf-inner]');
     if (inner){ inner.style.transform = 'translateY(' + ((1 - ease) * 56).toFixed(1) + 'px)'; inner.style.opacity = (0.15 + 0.85 * ease).toFixed(3); }
-    content.style.transform = 'translateY(' + (-ease * 26).toFixed(1) + 'px)';
+    // No upward slide on content — it used to nudge up 26px as the footer
+    // fully revealed, but that opened a visible gap against the new
+    // home-page background flow, so content now stays flush with the footer.
   }
   trackScroll(){
     const root = this.rootRef.current; if (!root) return;
