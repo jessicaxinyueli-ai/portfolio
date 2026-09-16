@@ -391,6 +391,8 @@
   .work-sticky-panel{position:sticky;top:clamp(96px,13vh,140px);}
   .work-sticky-imgwrap{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;border-radius:6px;background:var(--surface);}
   .work-sticky-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+  .work-sticky-tags{display:flex;flex-wrap:wrap;gap:8px;}
+  .work-sticky-tag{font-family:var(--font-sans);font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);background:color-mix(in srgb, var(--accent) 12%, transparent);border-radius:999px;padding:5px 12px;white-space:nowrap;}
 
   /* ===== Footer reveal (content slides away over a pinned footer) ===== */
   .reveal-content{position:relative;z-index:2;background:var(--color-paper);}
@@ -579,8 +581,10 @@
                   <div style="font-family:var(--font-serif);font-weight:400;font-size:clamp(24px,2.4vw,32px);line-height:1.12;letter-spacing:-.015em;color:var(--ink);" data-pname=""></div>
                 </div>
                 <p style="font-family:var(--font-sans);font-size:16px;line-height:1.55;color:var(--ink-2);margin:0;text-wrap:pretty;" data-pdesc=""></p>
-                <div style="display:flex;flex-wrap:wrap;gap:6px 10px;font-family:var(--font-sans);font-size:12px;letter-spacing:.02em;color:var(--muted-2);">
-                  <span data-prole=""></span><span>·</span><span data-ptime=""></span><span>·</span><span data-pstatus=""></span>
+                <div class="work-sticky-tags">
+                  <span class="work-sticky-tag" data-prole=""></span>
+                  <span class="work-sticky-tag" data-ptime=""></span>
+                  <span class="work-sticky-tag" data-pstatus=""></span>
                 </div>
                 <button onClick="{{ panelCTA }}" data-pcta="" style="align-self:flex-start;margin-top:2px;font-family:var(--font-sans);font-size:14px;color:var(--ink);background:none;border:1px solid var(--line);border-radius:20px;padding:9px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;" style-hover="border-color:var(--accent);color:var(--accent);">Read case study</button>
               </div>
@@ -3898,7 +3902,8 @@ class Component extends DCLogic {
     blocks.forEach((b, i) => { if (b.getBoundingClientRect().top <= line) idx = i; });
     if (idx === this._featIdx) { this._featPend = null; clearTimeout(this._featDwellT); return; }
     // Pace the handover: the candidate must hold the reading line for a beat
-    // before the panel swaps — decoupled from raw scroll speed.
+    // before the panel swaps — decoupled from raw scroll speed. Short enough
+    // to feel immediate, just long enough to skip past on a fast flick-scroll.
     if (this._featPend !== idx) {
       this._featPend = idx;
       clearTimeout(this._featDwellT);
@@ -3906,7 +3911,7 @@ class Component extends DCLogic {
         if (this._featPend !== idx || idx === this._featIdx) return;
         this._featIdx = idx;
         this.swapPanel(idx);
-      }, 340);
+      }, 100);
     }
   }
   swapPanel(idx){
@@ -3935,33 +3940,23 @@ class Component extends DCLogic {
       }
     };
     if (this.prefersReduced()) { fill(); panel.style.transform = 'none'; return; }
+    // Content swaps the instant this runs — no waiting on an exit animation
+    // first — then a short, clean slide settles it into place. That's the
+    // only motion; no fade, no delay before the new text/image appear.
+    fill();
     const M = window.Motion;
+    if (this._swapAnim && this._swapAnim.stop) this._swapAnim.stop();
+    panel.style.transition = 'none';
     if (M) {
-      // Text slides on the y-axis only — no opacity fade — while it swaps content.
-      if (this._swapAnim && this._swapAnim.stop) this._swapAnim.stop();
-      panel.style.transition = 'none';
-      this._swapAnim = M.animate(panel, { y: -10 }, { duration: 0.22, ease: 'easeInOut' });
-      // This Motion UMD build's animate() returns a thenable (no .finished).
-      Promise.resolve(this._swapAnim).then(() => {
-        fill();
-        this._swapAnim = M.animate(panel, { y: [18, 0] }, { type: 'spring', stiffness: 120, damping: 22, mass: 1 });
-      }).catch(() => {});
+      this._swapAnim = M.animate(panel, { y: [14, 0] }, { duration: 0.28, ease: [0.22, 1, 0.36, 1] });
       return;
     }
     // fallback: CSS transition, y-only, no opacity
-    panel.style.transition = 'transform .22s cubic-bezier(.4,0,.2,1)';
-    panel.style.transform = 'translateY(-14px)';
-    clearTimeout(this._swapT);
-    this._swapT = setTimeout(() => {
-      fill();
-      // … new content rises spring-eased into the exact same position
-      panel.style.transition = 'none';
-      panel.style.transform = 'translateY(14px)';
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        panel.style.transition = 'transform .5s cubic-bezier(.34,1.15,.4,1)';
-        panel.style.transform = 'translateY(0)';
-      }));
-    }, 250);
+    panel.style.transform = 'translateY(14px)';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      panel.style.transition = 'transform .28s cubic-bezier(.22,1,.36,1)';
+      panel.style.transform = 'translateY(0)';
+    }));
   }
   setBgMode(mode){ this.setState({ bgMode: mode }); try { localStorage.setItem('jl_bgmode', mode); document.body.setAttribute('data-ambient', mode); } catch(e) {} requestAnimationFrame(() => { const r = this.rootRef.current; if (r) void r.offsetHeight; }); }
   renderVals(){
