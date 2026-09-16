@@ -349,6 +349,12 @@
   .bg-layer[data-layer="sunrise"]{background-image:radial-gradient(38% 44% at 22% 24%, rgba(255,197,140,.22), transparent 68%),radial-gradient(40% 46% at 76% 18%, rgba(255,206,220,.20), transparent 70%),radial-gradient(48% 52% at 28% 72%, rgba(203,188,244,.20), transparent 70%),radial-gradient(46% 50% at 82% 76%, rgba(168,222,248,.22), transparent 70%),radial-gradient(42% 46% at 54% 50%, rgba(190,240,224,.16), transparent 70%);background-size:200% 200%,220% 200%,210% 220%,205% 210%,230% 230%;background-position:0% 0%,100% 0%,0% 100%,100% 100%,50% 50%;}
   .bg-layer[data-layer="sunset"]{background-image:radial-gradient(42% 48% at 20% 22%, rgba(255,158,110,.30), transparent 68%),radial-gradient(44% 50% at 78% 16%, rgba(255,130,120,.22), transparent 70%),radial-gradient(50% 54% at 26% 78%, rgba(255,190,140,.24), transparent 70%),radial-gradient(48% 52% at 84% 80%, rgba(232,140,150,.22), transparent 70%),radial-gradient(44% 48% at 52% 48%, rgba(255,205,150,.20), transparent 70%);background-size:200% 200%,220% 200%,210% 220%,205% 210%,230% 230%;background-position:0% 0%,100% 0%,0% 100%,100% 100%,50% 50%;}
   .bg-layer[data-layer="night"]{background-image:radial-gradient(46% 52% at 18% 20%, rgba(64,84,140,.38), transparent 68%),radial-gradient(46% 52% at 80% 14%, rgba(46,58,92,.42), transparent 70%),radial-gradient(52% 56% at 24% 80%, rgba(70,66,110,.34), transparent 70%),radial-gradient(50% 54% at 84% 82%, rgba(40,52,74,.42), transparent 70%),radial-gradient(46% 50% at 52% 50%, rgba(54,64,90,.30), transparent 70%);background-size:200% 200%,220% 200%,210% 220%,205% 210%,230% 230%;background-position:0% 0%,100% 0%,0% 100%,100% 100%,50% 50%;}
+  /* Home page only, default (plain) mode only: a soft pink/sage flow that
+     tiles vertically the full length of the page (background-size in vh, so
+     it repeats down instead of one set of blobs stretched thin over it),
+     using the same drifting layer system for continuous motion. */
+  [data-ambient="plain"] .reveal-blobs .bg-layer[data-layer="plain"]{opacity:1;}
+  .reveal-blobs .bg-layer[data-layer="plain"]{background-repeat:repeat;background-image:radial-gradient(40% 46% at 22% 20%, rgba(216,138,149,.26), transparent 68%),radial-gradient(42% 48% at 78% 16%, rgba(156,175,136,.24), transparent 70%),radial-gradient(50% 54% at 26% 78%, rgba(250,236,225,.36), transparent 70%),radial-gradient(46% 50% at 82% 80%, rgba(216,138,149,.20), transparent 70%),radial-gradient(44% 48% at 52% 48%, rgba(156,175,136,.18), transparent 70%);background-size:200vh 200vh,220vh 200vh,210vh 220vh,205vh 210vh,230vh 230vh;background-position:0% 0%,100% 0%,0% 100%,100% 100%,50% 50%;}
   .bg-glow{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity .6s ease;background:radial-gradient(circle 24vmax at var(--gx,50%) var(--gy,50%), var(--glow-c1,rgba(255,255,255,.6)), var(--glow-c2,rgba(255,255,255,0)) 60%);}
   .bg-glow.on{opacity:1;}
   [data-ambient="sunrise"]{--glow-c1:rgba(190,215,255,.42);--glow-c2:rgba(190,215,255,0);}
@@ -472,16 +478,12 @@
   <section data-screen-label="Home" style="">
     <div class="reveal-content" data-reveal-content="">
     <div class="reveal-blobs" aria-hidden="true">
+      <div class="bg-layer" data-layer="plain"></div>
       <div class="bg-layer" data-layer="sunrise"></div>
       <div class="bg-layer" data-layer="sunset"></div>
       <div class="bg-layer" data-layer="night"></div>
     </div>
     <header style="position:relative;max-width:1340px;margin:0 auto;padding:clamp(84px,11vh,120px) clamp(24px,6vw,80px) clamp(32px,5vh,64px);overflow:hidden;height:100svh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;">
-      <div aria-hidden="true" style="position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;">
-        <div style="position:absolute;top:-12%;right:-8%;width:52vw;height:52vw;max-width:640px;max-height:640px;border-radius:50%;background:radial-gradient(circle, rgba(216,138,149,.4), rgba(216,138,149,0) 70%);filter:blur(60px);"></div>
-        <div style="position:absolute;bottom:-15%;left:-10%;width:44vw;height:44vw;max-width:560px;max-height:560px;border-radius:50%;background:radial-gradient(circle, rgba(156,175,136,.35), rgba(156,175,136,0) 70%);filter:blur(70px);"></div>
-        <div style="position:absolute;top:38%;left:28%;width:26vw;height:26vw;max-width:340px;max-height:340px;border-radius:50%;background:radial-gradient(circle, rgba(250,236,225,.55), rgba(250,236,225,0) 72%);filter:blur(50px);"></div>
-      </div>
 
       <div class="hero-grid" style="position:relative;z-index:1;display:flex;align-items:center;">
         <div class="hero-copy" style="flex:1 1 100%;min-width:0;width:100%;margin:0;text-align:left;">
