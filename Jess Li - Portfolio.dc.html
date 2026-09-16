@@ -3939,24 +3939,8 @@ class Component extends DCLogic {
         imgSlot.setAttribute('placeholder', p.title + ' — cover image');
       }
     };
-    if (this.prefersReduced()) { fill(); panel.style.transform = 'none'; return; }
-    // Content swaps the instant this runs — no waiting on an exit animation
-    // first — then a short, clean slide settles it into place. That's the
-    // only motion; no fade, no delay before the new text/image appear.
+    // No scroll-triggered animation — content just cuts to the new project.
     fill();
-    const M = window.Motion;
-    if (this._swapAnim && this._swapAnim.stop) this._swapAnim.stop();
-    panel.style.transition = 'none';
-    if (M) {
-      this._swapAnim = M.animate(panel, { y: [14, 0] }, { duration: 0.28, ease: [0.22, 1, 0.36, 1] });
-      return;
-    }
-    // fallback: CSS transition, y-only, no opacity
-    panel.style.transform = 'translateY(14px)';
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      panel.style.transition = 'transform .28s cubic-bezier(.22,1,.36,1)';
-      panel.style.transform = 'translateY(0)';
-    }));
   }
   setBgMode(mode){ this.setState({ bgMode: mode }); try { localStorage.setItem('jl_bgmode', mode); document.body.setAttribute('data-ambient', mode); } catch(e) {} requestAnimationFrame(() => { const r = this.rootRef.current; if (r) void r.offsetHeight; }); }
   renderVals(){
