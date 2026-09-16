@@ -3915,7 +3915,6 @@ class Component extends DCLogic {
     const p = this.PROJECTS[idx]; if (!p) return;
     this._featSlug = p.slug;
     const numEl = root.querySelector('[data-pnum]');
-    const imgWrap = panel.querySelector('.work-sticky-imgwrap');
     const has = !!this.CASE[p.slug];
     const fill = () => {
       const set = (sel, val) => { const el = panel.querySelector(sel); if (el) el.textContent = val; };
@@ -3928,59 +3927,39 @@ class Component extends DCLogic {
       set('[data-pstatus]', p.status);
       const cta = panel.querySelector('[data-pcta]');
       if (cta) { cta.textContent = has ? 'Read case study' : 'View progress'; }
+      // Image frame stays completely still — only the source cuts, no motion.
       const imgSlot = panel.querySelector('[data-pimg]');
       if (imgSlot) {
         if (p.caseCover) imgSlot.setAttribute('src', p.caseCover); else imgSlot.removeAttribute('src');
         imgSlot.setAttribute('placeholder', p.title + ' — cover image');
       }
     };
-    if (this.prefersReduced()) { fill(); panel.style.opacity = '1'; panel.style.transform = 'none'; return; }
+    if (this.prefersReduced()) { fill(); panel.style.transform = 'none'; return; }
     const M = window.Motion;
     if (M) {
-      // Motion (Framer Motion vanilla): soft ease-out exit, gentle spring entrance.
-      // The panel (text) rises on the y-axis; the image swipes on the x-axis,
-      // so the two halves read as distinct motions during a swap.
+      // Text slides on the y-axis only — no opacity fade — while it swaps content.
       if (this._swapAnim && this._swapAnim.stop) this._swapAnim.stop();
-      if (this._imgAnim && this._imgAnim.stop) this._imgAnim.stop();
       panel.style.transition = 'none';
-      if (imgWrap) imgWrap.style.transition = 'none';
-      // If the panel is already (mostly) hidden — a previous swap interrupted
-      // mid-flight during continuous scroll — skip the exit and go straight
-      // to fill + entrance, so the panel is never left blank.
-      if (parseFloat(getComputedStyle(panel).opacity) < 0.5) {
-        fill();
-        this._swapAnim = M.animate(panel, { opacity: [0, 1], y: [18, 0] }, { type: 'spring', stiffness: 120, damping: 22, mass: 1 });
-        if (imgWrap) this._imgAnim = M.animate(imgWrap, { opacity: [0, 1], x: [28, 0] }, { type: 'spring', stiffness: 120, damping: 22, mass: 1 });
-        return;
-      }
-      this._swapAnim = M.animate(panel, { opacity: 0, y: -10 }, { duration: 0.3, ease: 'easeInOut' });
-      if (imgWrap) M.animate(imgWrap, { opacity: 0, x: -28 }, { duration: 0.3, ease: 'easeInOut' });
+      this._swapAnim = M.animate(panel, { y: -10 }, { duration: 0.22, ease: 'easeInOut' });
       // This Motion UMD build's animate() returns a thenable (no .finished).
       Promise.resolve(this._swapAnim).then(() => {
         fill();
-        this._swapAnim = M.animate(panel, { opacity: [0, 1], y: [18, 0] }, { type: 'spring', stiffness: 120, damping: 22, mass: 1 });
-        if (imgWrap) this._imgAnim = M.animate(imgWrap, { opacity: [0, 1], x: [28, 0] }, { type: 'spring', stiffness: 120, damping: 22, mass: 1 });
+        this._swapAnim = M.animate(panel, { y: [18, 0] }, { type: 'spring', stiffness: 120, damping: 22, mass: 1 });
       }).catch(() => {});
       return;
     }
-    // fallback: CSS transition dance
-    panel.style.transition = 'opacity .26s ease, transform .26s cubic-bezier(.4,0,.2,1)';
-    panel.style.opacity = '0';
+    // fallback: CSS transition, y-only, no opacity
+    panel.style.transition = 'transform .22s cubic-bezier(.4,0,.2,1)';
     panel.style.transform = 'translateY(-14px)';
-    if (imgWrap) { imgWrap.style.transition = 'opacity .26s ease, transform .26s cubic-bezier(.4,0,.2,1)'; imgWrap.style.opacity = '0'; imgWrap.style.transform = 'translateX(-22px)'; }
     clearTimeout(this._swapT);
     this._swapT = setTimeout(() => {
       fill();
       // … new content rises spring-eased into the exact same position
       panel.style.transition = 'none';
       panel.style.transform = 'translateY(14px)';
-      panel.style.opacity = '0';
-      if (imgWrap) { imgWrap.style.transition = 'none'; imgWrap.style.transform = 'translateX(22px)'; imgWrap.style.opacity = '0'; }
       requestAnimationFrame(() => requestAnimationFrame(() => {
-        panel.style.transition = 'opacity .5s ease, transform .55s cubic-bezier(.34,1.15,.4,1)';
-        panel.style.opacity = '1';
+        panel.style.transition = 'transform .5s cubic-bezier(.34,1.15,.4,1)';
         panel.style.transform = 'translateY(0)';
-        if (imgWrap) { imgWrap.style.transition = 'opacity .5s ease, transform .55s cubic-bezier(.34,1.15,.4,1)'; imgWrap.style.opacity = '1'; imgWrap.style.transform = 'translateX(0)'; }
       }));
     }, 250);
   }
