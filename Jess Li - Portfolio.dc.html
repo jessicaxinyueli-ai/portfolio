@@ -591,6 +591,7 @@
                 <button onClick="{{ panelCTA }}" data-pcta="" style="align-self:flex-start;margin-top:2px;font-family:var(--font-sans);font-size:14px;color:var(--ink);background:none;border:1px solid var(--line);border-radius:20px;padding:9px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;" style-hover="border-color:var(--accent);color:var(--accent);">Read case study</button>
               </div>
               <figure class="work-sticky-imgwrap" style="margin:0;flex:3 1 460px;order:2;">
+                <video data-pvid="" loop="" muted="" playsinline="" preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;background:var(--surface);"></video>
                 <image-slot data-pimg="" style="width:100%;height:100%;display:block;" shape="rect" fit="cover" placeholder=""></image-slot>
               </figure>
             </div>
@@ -3935,10 +3936,25 @@ class Component extends DCLogic {
       const cta = panel.querySelector('[data-pcta]');
       if (cta) { cta.textContent = has ? 'Read case study' : 'View progress'; }
       // Image frame stays completely still — only the source cuts, no motion.
+      // Copperhill has a cover video, not a static cover image — show that
+      // instead of falling through to the (empty) image placeholder.
+      const coverVideo = p.slug === 'copperhill' ? ((window.__resources && window.__resources.copperhillHomeCover) || 'assets/copperhill-home-cover.mp4') : '';
+      const vid = panel.querySelector('[data-pvid]');
       const imgSlot = panel.querySelector('[data-pimg]');
-      if (imgSlot) {
-        if (p.caseCover) imgSlot.setAttribute('src', p.caseCover); else imgSlot.removeAttribute('src');
-        imgSlot.setAttribute('placeholder', p.title + ' — cover image');
+      if (coverVideo) {
+        if (vid) {
+          if (vid.getAttribute('src') !== coverVideo) vid.setAttribute('src', coverVideo);
+          vid.style.display = 'block';
+          const playPromise = vid.play(); if (playPromise && playPromise.catch) playPromise.catch(() => {});
+        }
+        if (imgSlot) imgSlot.style.display = 'none';
+      } else {
+        if (vid) { vid.pause(); vid.style.display = 'none'; vid.removeAttribute('src'); }
+        if (imgSlot) {
+          imgSlot.style.display = 'block';
+          if (p.caseCover) imgSlot.setAttribute('src', p.caseCover); else imgSlot.removeAttribute('src');
+          imgSlot.setAttribute('placeholder', p.title + ' — cover image');
+        }
       }
     };
     // No scroll-triggered animation — content just cuts to the new project.
