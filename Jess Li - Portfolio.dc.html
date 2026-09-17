@@ -2289,8 +2289,11 @@ class Component extends DCLogic {
     let p = (winBottom - contentBottom) / Math.max(1, fh);
     p = Math.min(1, Math.max(0, p));
     const ease = 1 - Math.pow(1 - p, 3);
-    const inner = footer.querySelector('[data-rf-inner]');
-    if (inner){ inner.style.transform = 'translateY(' + ((1 - ease) * 56).toFixed(1) + 'px)'; inner.style.opacity = (0.15 + 0.85 * ease).toFixed(3); }
+    // The footer's inner content used to fade + rise in as a slow reveal
+    // (opacity .15 -> 1) tuned for the old tall black footer. Now that it's
+    // a plain one-line utility bar, that made it read as invisible/missing
+    // unless scrolled to the exact pixel-perfect bottom — it's just shown
+    // at full opacity immediately instead, like the static footer.
     // Uses `top` (content is already position:relative) instead of `transform`
     // for this nudge — a `transform` here would create a new containing block
     // for fixed-position/fixed-attachment descendants, breaking the fixed
