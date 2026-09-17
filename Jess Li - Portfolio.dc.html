@@ -2329,7 +2329,11 @@ class Component extends DCLogic {
     const ease = 1 - Math.pow(1 - p, 3);
     const inner = footer.querySelector('[data-rf-inner]');
     if (inner){ inner.style.transform = 'translateY(' + ((1 - ease) * 56).toFixed(1) + 'px)'; inner.style.opacity = (0.15 + 0.85 * ease).toFixed(3); }
-    content.style.transform = 'translateY(' + (-ease * 26).toFixed(1) + 'px)';
+    // Uses `top` (content is already position:relative) instead of `transform`
+    // for this nudge — a `transform` here would create a new containing block
+    // for fixed-position/fixed-attachment descendants, breaking the fixed
+    // background photo nested inside this element.
+    content.style.top = (-ease * 26).toFixed(1) + 'px';
   }
   trackScroll(){
     const root = this.rootRef.current; if (!root) return;
