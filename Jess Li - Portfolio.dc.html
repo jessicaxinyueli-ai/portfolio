@@ -231,30 +231,12 @@
     .eink-dot{position:fixed;top:0;left:0;width:14px;height:14px;z-index:2147482600;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform;transition:opacity .25s ease,background .25s ease;border-radius:50%;background:#2563eb;}
     .eink-dot.link{background:#ff1493;}
     .eink-dot svg{display:block;width:100%;height:100%;}
-    /* Fixed at its largest (78px) footprint; state changes scale an inner
-       circle via transform instead of resizing width/height, so growing the
-       ring is a compositor-only operation, not a layout+paint one. Idle
-       state scales the ring to 0 so only the plain dot shows at rest;
-       hover states below expand it back out. */
-    .eink-ring{position:fixed;top:0;left:0;width:78px;height:78px;border-radius:50%;z-index:2147482550;pointer-events:none;transform:translate3d(-50%,-50%,0);will-change:transform;}
-    .eink-ring-inner{position:absolute;inset:0;border:1px solid rgba(20,20,22,.42);border-radius:50%;transform:scale(0);transition:transform .32s cubic-bezier(.2,.7,.2,1),border-color .3s ease,background .3s ease,filter .4s ease;will-change:transform;}
-    .eink-ring.link .eink-ring-inner{transform:scale(0);}
-    /* A plain photo (Home/About only) softens the ring into a small blurred
-       halo — the site's existing blur-follow language (see the kicker
-       headline effect), not a new motif — instead of a hard-edged link ring. */
-    .eink-ring.peek .eink-ring-inner{transform:scale(.718);border-color:var(--color-ink);filter:blur(1.75px);}
   }
 
   /* Ink-rule draws L→R under the hovered Contents row (line-drawing, not a fade) */
   [data-focusrow]{position:relative;}
   [data-inkrule]{display:none;}
 
-  /* Experience panels: body reveals on hover */
-  [data-exp]{transition:background .4s ease;}
-  [data-exp] [data-exp-body]{overflow:hidden;max-height:0;opacity:0;transition:max-height .55s cubic-bezier(.16,.84,.3,1),opacity .4s ease;}
-  [data-exp]:hover [data-exp-body],[data-exp]:focus-within [data-exp-body]{max-height:320px;opacity:1;}
-  [data-exp] [data-exp-role]{transition:color .35s ease;}
-  [data-exp]:hover [data-exp-role]{color:var(--accent);}
 
   /* Inline keyword highlight with image-on-hover tooltip */
   .hl{position:relative;display:inline;cursor:pointer;font-weight:500;color:var(--ink);white-space:nowrap;box-shadow:inset 0 -0.5em 0 var(--hl-wash,rgba(211,69,59,.14));transition:box-shadow .35s ease,color .35s ease;border-radius:2px;padding:0 .05em;}
@@ -335,7 +317,7 @@
 
   @media (prefers-reduced-motion:reduce){
     [data-wipe]{clip-path:none !important;opacity:1 !important;}
-    .eink-dot,.eink-ring{display:none !important;}
+    .eink-dot{display:none !important;}
     html.eink, html.eink *{cursor:auto !important;}
   }
   /* Fixed background layers: drifting color blobs + a soft white glow that follows the cursor */
@@ -366,9 +348,6 @@
   [data-ambient="night"] .cube-face{background:var(--ink);border-color:rgba(255,255,255,.1);}
   [data-ambient="night"] .cube-face i,[data-ambient="night"] .cube-face span{color:var(--paper) !important;}
   [data-ambient="night"] .googly-eye{background:var(--paper);}
-  body[data-ambient="night"] .eink-ring-inner{border-color:rgba(238,240,245,.42);}
-  body[data-ambient="night"] .eink-ring.link .eink-ring-inner{border-color:#eef0f5;}
-  body[data-ambient="night"] .eink-ring.peek .eink-ring-inner{border-color:#eef0f5;}
   [data-ambient="night"]{--color-ink:#eef0f5;--color-ink-2:#d6dae2;--color-muted:#b3b9c4;--color-muted-2:#a0a7b4;--color-paper:#12151b;--color-surface:#171b22;--color-surface-2:#1d222b;--color-line:rgba(255,255,255,.13);--color-line-strong:#eef0f5;--color-accent:#eef0f5;--accent:#eef0f5 !important;}
   [data-ambient="plain"]{--glow-c1:rgba(20,20,22,.055);--glow-c2:rgba(20,20,22,0);--color-paper:#ffffff;--color-ink-2:#6b6c74;--color-muted:#76767d;--color-muted-2:#82828a;}
   @media (prefers-reduced-motion:reduce){ .bg-layer{animation:none !important;} .bg-glow{display:none !important;} }
@@ -603,7 +582,7 @@
         <p style="font-family:var(--font-sans);font-size:16px;letter-spacing:.01em;color:var(--muted-2);margin:0 0 clamp(36px,5vw,54px);">{{ cur.role }} · {{ cur.timeline }}</p>
         <div style="display:flex;flex-direction:column;gap:20px;margin-bottom:clamp(40px,5vw,56px);">
           <sc-for list="{{ cur.publicIntro }}" as="para" hint-placeholder-count="3">
-            <p style="font-family:var(--font-sans);font-size:18px;line-height:1.7;color:var(--ink-2);margin:0;">{{ para }}</p>
+            <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-body,1));line-height:1.7;color:var(--ink-2);margin:0;">{{ para }}</p>
           </sc-for>
         </div>
         <figure style="margin:0 0 clamp(48px,6vw,68px);width:100%;">
@@ -616,7 +595,7 @@
             <sc-for list="{{ cur.takeaways }}" as="tk" hint-placeholder-count="3">
               <div style="display:flex;gap:16px;align-items:baseline;">
                 <span style="font-family:var(--font-serif);font-size:20px;color:var(--muted-2);flex:0 0 auto;line-height:1.5;">{{ tk.num }}.</span>
-                <p style="font-family:var(--font-sans);font-size:16px;line-height:1.7;color:var(--ink-2);margin:0;"><strong style="color:var(--ink);font-weight:600;">{{ tk.label }}.</strong> {{ tk.text }}</p>
+                <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-body,1));line-height:1.7;color:var(--ink-2);margin:0;"><strong style="color:var(--ink);font-weight:600;">{{ tk.label }}.</strong> {{ tk.text }}</p>
               </div>
             </sc-for>
           </div>
@@ -626,7 +605,7 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
             Full case study, password protected
           </div>
-          <p style="font-family:var(--font-sans);font-size:16px;line-height:1.75;color:var(--ink-2);margin:0 0 clamp(28px,4vw,38px);max-width:52ch;">The full account, including research findings and design decisions, needs a password to open. Enter the passphrase below, or reach out and I'll gladly share it.</p>
+          <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-body,1));line-height:1.75;color:var(--ink-2);margin:0 0 clamp(28px,4vw,38px);max-width:52ch;">The full account, including research findings and design decisions, needs a password to open. Enter the passphrase below, or reach out and I'll gladly share it.</p>
           <form onSubmit="{{ submitPass }}" style="display:flex;flex-direction:column;gap:16px;">
             <div style="display:flex;flex-wrap:wrap;gap:12px;">
               <input ref="{{ passRef }}" class="pass-input" type="password" aria-label="Passphrase" placeholder="Passphrase" autocomplete="off" style="flex:1 1 220px;min-width:0;font-family:var(--font-sans);font-size:14px;color:var(--ink);background:transparent;border:none;border-bottom:1px solid var(--ink);padding:12px 2px;outline:none;">
@@ -690,7 +669,7 @@
             <nav style="display:flex;flex-direction:column;">
               <sc-for list="{{ toc }}" as="t" hint-placeholder-count="6">
                 <button data-tocitem="" onClick="{{ t.go }}" style="background:none;border:none;cursor:pointer;text-align:left;display:flex;align-items:baseline;gap:10px;padding:9px 0;font-family:var(--font-sans);color:var(--muted-2);" style-hover="color:var(--accent)">
-                  <span data-toclabel="" style="font-size:16px;letter-spacing:.01em;color:var(--muted-2);line-height:1.4;">{{ t.label }}</span>
+                  <span data-toclabel="" style="font-size:calc(16px * var(--sc-body,1));letter-spacing:.01em;color:var(--muted-2);line-height:1.4;">{{ t.label }}</span>
                 </button>
               </sc-for>
             </nav>
@@ -703,7 +682,7 @@
         <sc-if value="{{ hasSkim }}" hint-placeholder-val="{{ false }}">
           <div data-reveal="" style="border-top:1px solid var(--ink);border-bottom:1px solid var(--line);padding:clamp(24px,3.4vw,38px) 0;margin:0 0 clamp(30px,4vw,44px);">
             <div style="font-family:var(--font-sans);font-size:16px;letter-spacing:.02em;color:var(--accent);margin-bottom:clamp(16px,2vw,22px);">TL;DR</div>
-            <p style="font-family:var(--font-sans);font-size:18px;line-height:1.7;color:var(--ink);margin:0;text-wrap:pretty;">{{ skimBody }}</p>
+            <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-body,1));line-height:1.7;color:var(--ink);margin:0;text-wrap:pretty;">{{ skimBody }}</p>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:clamp(20px,3vw,40px);margin-top:clamp(24px,3vw,34px);">
               <sc-for list="{{ skimMetrics }}" as="m" hint-placeholder-count="3">
                 <div style="display:flex;flex-direction:column;gap:6px;">
@@ -1309,7 +1288,7 @@
         <div data-reveal="" style="margin-top:clamp(48px,7vw,90px);padding:clamp(48px,8vw,100px) clamp(28px,5vw,60px);text-align:center;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);">
           <div style="font-family:var(--font-sans);font-size:12px;letter-spacing:.04em;color:var(--accent);margin-bottom:22px;">In progress — no. {{ curNum }}</div>
           <h2 style="font-family:var(--font-serif);font-weight:400;font-size:45px;line-height:1.0;margin:0 0 24px;letter-spacing:-.02em;">This account is still being written.</h2>
-          <p style="font-family:var(--font-sans);font-size:16px;line-height:1.75;color:var(--ink-2);max-width:52ch;margin:0 auto 32px;">I'm currently deep in this work. Check back soon — or reach out and I'll happily walk you through the process so far.</p>
+          <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-body,1));line-height:1.75;color:var(--ink-2);max-width:52ch;margin:0 auto 32px;">I'm currently deep in this work. Check back soon — or reach out and I'll happily walk you through the process so far.</p>
           <a href="mailto:jxl@umich.edu" style="display:inline-block;text-decoration:none;font-family:var(--font-sans);font-size:12px;letter-spacing:.03em;border-bottom:1px solid var(--ink);padding-bottom:4px;" style-hover="color:var(--accent);border-color:var(--accent)">Email me →</a>
         </div>
       </div>
@@ -1335,10 +1314,11 @@
     <div style="max-width:1000px;margin:0 auto;">
       <div style="display:flex;gap:clamp(28px,5vw,64px);align-items:flex-start;flex-wrap:wrap;">
         <div style="flex:1 1 340px;min-width:min(100%,300px);display:flex;flex-direction:column;gap:14px;">
-          <div style="font-family:var(--font-sans);font-size:11px;letter-spacing:.04em;color:var(--accent);margin-bottom:8px;">About</div>
+          <div style="font-family:var(--font-sans);font-weight:400;font-size:16px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin-bottom:8px;">About</div>
           <h1 style="font-family:var(--font-serif);font-weight:400;font-size:45px;line-height:.98;letter-spacing:-.026em;margin:0;">Hi, I'm Jess</h1>
           <div style="font-family:var(--font-sans);font-size:16px;line-height:1.5;color:var(--ink-2);display:flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d3453b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg> Ann Arbor, MI · {{ localTime }}</div>
-          <p style="font-family:var(--font-sans);font-size:18px;line-height:1.7;color:var(--ink-2);margin:6px 0 4px;text-wrap:pretty;">I'm a product design student at Michigan, graduating December 2026, and most of my job is subtraction. I design enterprise tools and AI products: identity software, trade compliance, and one civic seed library that won an award. The work I like best starts as a mess and ends looking obvious.</p>
+          <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-body,1));line-height:1.7;color:var(--ink-2);margin:6px 0 0;text-wrap:pretty;">Design started as the thing I did instead of the thing I was supposed to be doing. I grew up in Shanghai painting and doing calligraphy, convinced I'd end up an artist, until I found UX and realized I liked problems with constraints better than a blank canvas.</p>
+          <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-body,1));line-height:1.7;color:var(--ink-2);margin:14px 0 4px;text-wrap:pretty;">Today I design enterprise tools and AI products, identity software, trade compliance, one civic seed library that won an award, and most of my job turns out to be subtraction. I like the work best when it starts as a mess and ends looking obvious, and the best compliment I get isn't "this looks great," it's "oh, that makes sense."</p>
           <div style="font-family:var(--font-sans);font-size:16px;line-height:1.5;color:var(--ink);display:flex;align-items:center;gap:8px;">
             <a href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px;" style-hover="color:var(--accent)">Resume <span style="font-size:.85em;">&#8599;</span></a>
             <span style="color:var(--muted-2);">·</span>
@@ -1364,43 +1344,28 @@
       </div>
 
       <!-- Experience — editorial index, styled like Contents -->
-      <h2 style="font-family:var(--font-serif);font-weight:400;font-size:45px;line-height:1;letter-spacing:-.018em;margin:0 0 clamp(28px,3.4vw,40px);">Experience</h2>
+      <h2 style="font-family:var(--font-sans);font-weight:400;font-size:16px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin:0 0 clamp(28px,3.4vw,40px);">Experience</h2>
       <div style="border-top:1px solid var(--line);margin:0 0 clamp(56px,7vw,88px);">
-      <div data-exp="" tabindex="0" style="border-bottom:1px solid var(--line);padding:clamp(20px,2.6vw,30px) 4px;cursor:pointer;">
-        <div style="min-width:0;">
-          <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;">
-            <span style="font-family:var(--font-display);font-weight:400;font-size:30px;line-height:1;letter-spacing:-.005em;color:var(--ink);">SailPoint</span>
-            <span data-exp-role="" style="font-family:var(--font-sans);font-size:16px;color:var(--ink-2);">Product Design Intern</span>
-          </div>
-          <div data-exp-body="">
-            <div style="font-family:var(--font-sans);font-size:11px;letter-spacing:.1em;color:var(--muted-2);margin:13px 0 13px;">Identity Security · Hybrid · Jun 2026 – Present</div>
-            <p style="font-family:var(--font-sans);font-size:16px;line-height:1.7;color:var(--muted);margin:0;max-width:64ch;text-wrap:pretty;">Designing structured LLM source documentation for Identity Security Cloud, tuning markdown and content hierarchy so AI agents produce better context-aware outputs across design workflows.</p>
-          </div>
-        </div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:14px 4px;">
+        <span style="font-family:var(--font-sans);font-size:16px;color:var(--ink);">Product Design Intern</span>
+        <span style="display:flex;align-items:baseline;gap:10px;white-space:nowrap;">
+          <span style="font-family:var(--font-sans);font-size:16px;color:var(--ink);">SailPoint</span>
+          <span style="font-family:var(--font-sans);font-size:14px;color:var(--muted-2);">2026</span>
+        </span>
       </div>
-      <div data-exp="" tabindex="0" style="border-bottom:1px solid var(--line);padding:clamp(20px,2.6vw,30px) 4px;cursor:pointer;">
-        <div style="min-width:0;">
-          <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;">
-            <span style="font-family:var(--font-display);font-weight:400;font-size:30px;line-height:1;letter-spacing:-.005em;color:var(--ink);">Copperhill</span>
-            <span data-exp-role="" style="font-family:var(--font-sans);font-size:16px;color:var(--ink-2);">Product Design Intern</span>
-          </div>
-          <div data-exp-body="">
-            <div style="font-family:var(--font-sans);font-size:11px;letter-spacing:.1em;color:var(--muted-2);margin:13px 0 13px;">Trade Compliance · Livonia, MI · Jun–Aug 2025</div>
-            <p style="font-family:var(--font-sans);font-size:16px;line-height:1.7;color:var(--muted);margin:0;max-width:64ch;text-wrap:pretty;">Researched with 15+ analysts and rebuilt the authentication workflow for 2,000+ daily users, then shipped Design System 2.0 in Zeroheight, cutting engineering handoff questions by 65%.</p>
-          </div>
-        </div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:14px 4px;">
+        <span style="font-family:var(--font-sans);font-size:16px;color:var(--ink);">Product Design Intern</span>
+        <span style="display:flex;align-items:baseline;gap:10px;white-space:nowrap;">
+          <span style="font-family:var(--font-sans);font-size:16px;color:var(--ink);">Copperhill</span>
+          <span style="font-family:var(--font-sans);font-size:14px;color:var(--muted-2);">2025</span>
+        </span>
       </div>
-      <div data-exp="" tabindex="0" style="border-bottom:1px solid var(--line);padding:clamp(20px,2.6vw,30px) 4px;cursor:pointer;">
-        <div style="min-width:0;">
-          <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;">
-            <span style="font-family:var(--font-display);font-weight:400;font-size:30px;line-height:1;letter-spacing:-.005em;color:var(--ink);">Siemens Energy</span>
-            <span data-exp-role="" style="font-family:var(--font-sans);font-size:16px;color:var(--ink-2);">UX &amp; Graphic Design Intern</span>
-          </div>
-          <div data-exp-body="">
-            <div style="font-family:var(--font-sans);font-size:11px;letter-spacing:.1em;color:var(--muted-2);margin:13px 0 13px;">Shanghai, China · Jun–Aug 2024</div>
-            <p style="font-family:var(--font-sans);font-size:16px;line-height:1.7;color:var(--muted);margin:0;max-width:64ch;text-wrap:pretty;">Restructured the information architecture of an omnichannel web platform for international stakeholders, cutting click-depth 60% through progressive disclosure.</p>
-          </div>
-        </div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:14px 4px;">
+        <span style="font-family:var(--font-sans);font-size:16px;color:var(--ink);">UX &amp; Graphic Design Intern</span>
+        <span style="display:flex;align-items:baseline;gap:10px;white-space:nowrap;">
+          <span style="font-family:var(--font-sans);font-size:16px;color:var(--ink);">Siemens Energy</span>
+          <span style="font-family:var(--font-sans);font-size:14px;color:var(--muted-2);">2024</span>
+        </span>
       </div>
       </div>
 
@@ -2567,7 +2532,7 @@ class Component extends DCLogic {
     if (this._carRaf) cancelAnimationFrame(this._carRaf);
     if (this._mockObservers) this._mockObservers.forEach(ro => ro.disconnect());
     clearTimeout(this._wipeFb);
-    [this._curDot, this._curRing].forEach(n => { if (n && n.parentNode) n.parentNode.removeChild(n); });
+    if (this._curDot && this._curDot.parentNode) this._curDot.parentNode.removeChild(this._curDot);
     document.documentElement.classList.remove('eink');
   }
   applyAccent(){
@@ -3562,11 +3527,9 @@ class Component extends DCLogic {
   initCursor(){
     if (this._curInit || !this.finePointer() || this.prefersReduced()) return;
     this._curInit = true;
-    const ring = document.createElement('div'); ring.className = 'eink-ring';
-    const ringInner = document.createElement('div'); ringInner.className = 'eink-ring-inner'; ring.appendChild(ringInner);
     const dot  = document.createElement('div'); dot.className = 'eink-dot';
-    [ring, dot].forEach(n => document.body.appendChild(n));
-    this._curRing = ring; this._curDot = dot;
+    document.body.appendChild(dot);
+    this._curDot = dot;
     document.documentElement.classList.add('eink');
     let tx = window.innerWidth/2, ty = window.innerHeight/2;
     let rx = tx, ry = ty;      // ring / glow — the trailing soft light
@@ -3594,19 +3557,14 @@ class Component extends DCLogic {
       const kD = 1 - Math.exp(-dt / TAU_DOT);
       rx += (tx - rx) * kR; ry += (ty - ry) * kR;
       dx += (tx - dx) * kD; dy += (ty - dy) * kD;
-      // Clamp the drawn position (not the eased state) so the ring never gets
-      // visually cut off at a viewport edge. The ring's actual radius varies
-      // with hover state (~15px idle, ~23px over a link/button) — clamping
-      // every state to the largest one's margin made the ring stall well
-      // short of small UI near an edge, like the top nav links.
-      const RING_M = { link: 25, peek: 29 };
-      const ringM = RING_M[this._curMode] || 17;
+      // rx/ry still eases toward the pointer for the glow effect below,
+      // clamped so the glow center never sits at a viewport edge.
+      const glowM = 17;
       const dotM = 10;
-      const cx = Math.min(Math.max(rx, ringM), window.innerWidth - ringM);
-      const cy = Math.min(Math.max(ry, ringM), window.innerHeight - ringM);
+      const cx = Math.min(Math.max(rx, glowM), window.innerWidth - glowM);
+      const cy = Math.min(Math.max(ry, glowM), window.innerHeight - glowM);
       const cdx = Math.min(Math.max(dx, dotM), window.innerWidth - dotM);
       const cdy = Math.min(Math.max(dy, dotM), window.innerHeight - dotM);
-      ring.style.transform = 'translate3d(' + cx.toFixed(2) + 'px,' + cy.toFixed(2) + 'px,0) translate(-50%,-50%)';
       dot.style.transform  = 'translate3d(' + cdx.toFixed(2) + 'px,' + cdy.toFixed(2) + 'px,0) translate(-50%,-50%)';
       if (now - lastGlowAt >= GLOW_INTERVAL) {
         lastGlowAt = now;
@@ -3635,38 +3593,24 @@ class Component extends DCLogic {
     window.addEventListener('pointerup', this._curUp, { passive:true });
   }
   readCursorIntent(t){
-    const ring = this._curRing;
-    if (!ring || this._editMode) return;
+    const dot = this._curDot;
+    if (!dot || this._editMode) return;
     // Every clickable target — nav links, buttons, case-study cover cards,
-    // the hero chips, contact links, etc. — gets the same simple ring
-    // expand as a plain navlink, no per-target filled-circle/label variants.
+    // the hero chips, contact links, etc. — turns the dot hot pink.
     const link  = t.closest && t.closest('a,button,[data-focusrow],[data-tocitem],[role="slider"],.note-marker,.sticky,input,textarea,.entry-imgwrap,[data-exptext]');
-    // A plain, non-interactive photo outside the case-study reader gets a
-    // small "peek" wink on the cursor. Case-study figures render as
-    // <image-slot> (pointer-events:none) with their own scrolly/compare
-    // treatments, not raw <img>, so this never fires there.
-    const peek = !link && this.state.view !== 'work' && t.closest && t.closest('img');
-    // Drives the edge-clamp margin in frame() — recomputed every tick since
-    // it's cheap and needs to track the true hovered element, independent of
-    // the dedup below (which only guards the class churn).
-    this._curMode = link ? 'link' : (peek ? 'peek' : 'none');
     // Skip the class churn entirely when the hovered category hasn't
     // changed since last frame — this now runs once per rAF tick rather
     // than once per raw pointermove, but a still cursor over one element
     // for many frames shouldn't keep re-triggering style recalculation.
-    const key = link ? 'link' : (peek ? 'peek' : 'none');
+    const key = link ? 'link' : 'none';
     if (key === this._lastIntentKey) return;
     this._lastIntentKey = key;
-    ring.classList.remove('link','peek');
-    if (link) ring.classList.add('link');
-    else if (peek) ring.classList.add('peek');
-    const dot = this._curDot;
-    if (dot) { dot.classList.remove('link'); if (link) dot.classList.add('link'); }
+    dot.classList.toggle('link', !!link);
   }
   cursorVisible(on){
     if (!this._curInit) return;
     if (on) document.documentElement.classList.add('eink'); else document.documentElement.classList.remove('eink');
-    [this._curDot, this._curRing].forEach(n => { if (n) n.style.display = on ? '' : 'none'; });
+    if (this._curDot) this._curDot.style.display = on ? '' : 'none';
   }
   /* ===== Ink-wipe reveal: type sets left→right on entry ===== */
   // Ink-wipe reveal — driven by the rAF scroll poll (IntersectionObserver's viewport
