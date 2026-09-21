@@ -804,12 +804,12 @@
                 <svg viewBox="0 0 700 {{ block.svgHeight }}" width="700" height="{{ block.svgHeight }}" style="position:absolute;top:0;left:0;overflow:visible;" aria-hidden="true">
                   <defs>
                     <marker id="flowpath-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                      <path d="M1,1 L9,5 L1,9" fill="none" stroke="var(--muted-2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                      <path d="M1,1 L9,5 L1,9" fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
                     </marker>
                   </defs>
                   <sc-for list="{{ block.items }}" as="it" hint-placeholder-count="6">
                     <sc-if value="{{ it.pathD }}">
-                      <path d="{{ it.pathD }}" fill="none" stroke="var(--muted-2)" stroke-width="1.5" stroke-dasharray="4 5" marker-end="url(#flowpath-arrow)"></path>
+                      <path d="{{ it.pathD }}" fill="none" stroke="var(--ink)" stroke-width="1.5" marker-end="url(#flowpath-arrow)"></path>
                     </sc-if>
                   </sc-for>
                 </svg>
@@ -1911,7 +1911,18 @@ class Component extends DCLogic {
             const ncx = nextIndent + CARD_W / 2, ncTop = (i + 1) * ROW_H;
             const y1 = cBottom + 8, y2 = ncTop - 8;
             const ym = (y1 + y2) / 2;
-            pathD = 'M ' + cx + ' ' + y1 + ' C ' + cx + ' ' + ym + ', ' + ncx + ' ' + ym + ', ' + ncx + ' ' + y2;
+            const r = 16;
+            const dir = ncx > cx ? 1 : (ncx < cx ? -1 : 0);
+            if (dir === 0) {
+              pathD = 'M ' + cx + ' ' + y1 + ' L ' + ncx + ' ' + y2;
+            } else {
+              pathD = 'M ' + cx + ' ' + y1
+                + ' L ' + cx + ' ' + (ym - r)
+                + ' Q ' + cx + ' ' + ym + ' ' + (cx + r * dir) + ' ' + ym
+                + ' L ' + (ncx - r * dir) + ' ' + ym
+                + ' Q ' + ncx + ' ' + ym + ' ' + ncx + ' ' + (ym + r)
+                + ' L ' + ncx + ' ' + y2;
+            }
           }
           return { ...it, circleClass: (i % 2 === 0) ? 'light' : 'dark', indent, top: i * ROW_H, pathD };
         });
