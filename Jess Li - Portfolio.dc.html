@@ -396,6 +396,7 @@
   <meta property="og:image" content="https://portfolio-jess-li-team.vercel.app/assets/jess-portrait-hi.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
 </helmet>
 <div ref="{{ rootRef }}" data-bg="" data-ambient="{{ bgMode }}" style="--accent:#000000;--paper:var(--color-paper);--paper2:var(--color-surface-2);--ink:var(--color-ink);--ink-2:var(--color-ink-2);--grey:var(--color-muted-2);--line:var(--color-line);--surface:var(--color-surface);--surface-2:var(--color-surface-2);--muted:var(--color-muted);--muted-2:var(--color-muted-2);--sel:var(--color-selection);--sel-ink:var(--color-selection-ink);--ok:var(--color-success);--warn:var(--color-warning);--err:var(--color-error);--font-serif:'Instrument Serif',Georgia,serif;--font-display:'Instrument Serif',Georgia,serif;--font-sans:'Inter',ui-sans-serif,system-ui,sans-serif;min-height:100vh;font-family:var(--font-sans);font-weight:400;color:var(--color-ink);">
   <div class="bg-blobs" aria-hidden="true">
@@ -2392,6 +2393,20 @@ class Component extends DCLogic {
 
   componentDidMount(){
     try { document.body.style.background = 'transparent'; } catch(e) {}
+    // Site-wide smooth/eased scroll (Lenis) — a slight, deliberate lag behind
+    // the raw wheel/touch input instead of the browser's instant native
+    // scroll. Lenis drives the real window scroll position each frame (not
+    // a transformed wrapper), so it still fires native 'scroll' events and
+    // stays compatible with every scroll-position read elsewhere on the
+    // page. Skipped entirely for prefers-reduced-motion.
+    const initLenis = () => {
+      if (this._lenis || this.prefersReduced()) return;
+      if (!window.Lenis) { this._lenisWait = requestAnimationFrame(initLenis); return; }
+      this._lenis = new window.Lenis({ duration: 0.9, easing: (t) => 1 - Math.pow(1 - t, 3), touchMultiplier: 1.5 });
+      const raf = (time) => { if (this._lenis) { this._lenis.raf(time); this._lenisRaf = requestAnimationFrame(raf); } };
+      this._lenisRaf = requestAnimationFrame(raf);
+    };
+    initLenis();
     this._tickClock = () => { try { this.setState({ localTime: new Intl.DateTimeFormat('en-US', { timeZone:'America/Detroit', hour:'numeric', minute:'2-digit', second:'2-digit', hour12:true }).format(new Date()) }); } catch(e) {} };
     this._tickClock();
     this._clockInt = setInterval(this._tickClock, 1000);
@@ -2493,6 +2508,9 @@ class Component extends DCLogic {
     }
   }
   componentWillUnmount(){
+    if (this._lenisRaf) cancelAnimationFrame(this._lenisRaf);
+    if (this._lenisWait) cancelAnimationFrame(this._lenisWait);
+    if (this._lenis) { this._lenis.destroy(); this._lenis = null; }
     window.removeEventListener('keydown', this._key);
     window.removeEventListener('resize', this._rs);
     window.removeEventListener('scroll', this._scroll);
