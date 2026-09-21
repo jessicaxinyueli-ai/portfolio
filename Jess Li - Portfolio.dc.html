@@ -361,6 +361,14 @@
   .metric-item:nth-child(3n+3) .metric-circle{background:#f6ecec;}
   [data-ambient="night"] .metric-item:nth-child(3n+2) .metric-circle{background:#202a3d;}
   [data-ambient="night"] .metric-item:nth-child(3n+3) .metric-circle{background:#332229;}
+  .flowpath-circle.light{background:#d9e9fb;color:var(--ink);}
+  .flowpath-circle.dark{background:var(--ink);color:var(--paper);}
+  [data-ambient="night"] .flowpath-circle.light{background:#1f3350;color:var(--ink);}
+  @media (max-width:1180px){
+    .flowpath-wrap{height:auto !important;}
+    .flowpath-wrap svg{display:none;}
+    .flowpath-wrap .flowpath-row{position:static !important;left:0 !important;top:0 !important;width:100% !important;max-width:none !important;margin-bottom:22px;}
+  }
   [data-globe-active="true"]{border-color:var(--accent) !important;color:var(--accent) !important;background:color-mix(in srgb, var(--accent) 9%, transparent) !important;}
   @media (max-width:760px){ .globe-map{grid-template-columns:1fr !important;} }
   /* Selected Work: stacked rows on mobile, a sticky swap-panel on desktop.
@@ -785,6 +793,31 @@
                     <div style="font-family:var(--font-sans);font-size:calc(12px * var(--sc-cap,1));letter-spacing:.06em;color:var(--accent);margin-bottom:6px;">{{ s.num }}</div>
                     <div style="font-family:var(--font-sans);font-weight:600;font-size:calc(14px * var(--sc-body,1));color:var(--ink);margin-bottom:4px;">{{ s.label }}</div>
                     <div style="font-family:var(--font-sans);font-size:calc(13px * var(--sc-cap,1));line-height:1.5;color:var(--ink-2);">{{ s.text }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ block.isFlowPath }}">
+              <div class="flowpath-wrap" data-reveal="" style="position:relative;width:100%;max-width:700px;height:{{ block.svgHeight }}px;margin:clamp(28px,3.6vw,44px) 0;">
+                <svg viewBox="0 0 700 {{ block.svgHeight }}" width="700" height="{{ block.svgHeight }}" style="position:absolute;top:0;left:0;overflow:visible;" aria-hidden="true">
+                  <defs>
+                    <marker id="flowpath-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                      <path d="M1,1 L9,5 L1,9" fill="none" stroke="var(--muted-2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </marker>
+                  </defs>
+                  <sc-for list="{{ block.items }}" as="it" hint-placeholder-count="6">
+                    <sc-if value="{{ it.pathD }}">
+                      <path d="{{ it.pathD }}" fill="none" stroke="var(--muted-2)" stroke-width="1.5" stroke-dasharray="4 5" marker-end="url(#flowpath-arrow)"></path>
+                    </sc-if>
+                  </sc-for>
+                </svg>
+                <sc-for list="{{ block.items }}" as="it" hint-placeholder-count="6">
+                  <div class="flowpath-row" style="position:absolute;left:{{ it.indent }}px;top:{{ it.top }}px;width:380px;box-sizing:border-box;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:22px 24px;box-shadow:0 10px 28px -20px rgba(20,20,22,.18);">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                      <div class="flowpath-circle {{ it.circleClass }}" style="flex:none;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-sans);font-weight:600;font-size:14px;">{{ it.num }}</div>
+                      <div style="font-family:var(--font-sans);font-weight:600;font-size:calc(15px * var(--sc-body,1));color:var(--ink);">{{ it.label }}</div>
+                    </div>
+                    <div style="font-family:var(--font-sans);font-size:calc(13px * var(--sc-cap,1));line-height:1.5;color:var(--muted);">{{ it.text }}</div>
                   </div>
                 </sc-for>
               </div>
@@ -1311,8 +1344,8 @@
 
   <!-- ================= ABOUT / JOURNAL ================= -->
   <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ true }}">
-  <section data-screen-label="About" style="min-height:100vh;padding:clamp(118px,15vh,176px) clamp(24px,6vw,64px) clamp(72px,9vw,112px);--font-sans:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;">
-    <div style="max-width:1000px;margin:0 auto;">
+  <section data-screen-label="About" style="min-height:100vh;padding:clamp(118px,15vh,176px) clamp(24px,6vw,64px) clamp(72px,9vw,112px);display:flex;flex-direction:column;--font-sans:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;">
+    <div style="max-width:1000px;margin:0 auto;width:100%;flex:1 0 auto;">
       <div style="display:flex;gap:clamp(28px,5vw,64px);align-items:flex-start;flex-wrap:wrap;">
         <div style="flex:1 1 340px;min-width:min(100%,300px);display:flex;flex-direction:column;gap:14px;">
           <div style="font-family:var(--font-sans);font-weight:400;font-size:16px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin-bottom:8px;">About</div>
@@ -1371,18 +1404,18 @@
       </div>
 
       <!-- What I make + philosophy -->
+    </div>
 
-      <!-- Close -->
-      <div class="static-footer" style="margin:clamp(56px,7vw,88px) calc(50% - 50vw) 0;">
-      <div style="max-width:1340px;margin:0 auto;padding:20px clamp(24px,6vw,80px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;">
-        <div style="font-family:var(--font-sans);font-size:15px;color:var(--ink-2);">That's the end. Or maybe the beginning?</div>
-        <div style="display:flex;align-items:center;gap:22px;font-family:var(--font-sans);font-size:14px;color:var(--ink);">
-          <a href="https://www.linkedin.com/in/jessica-li-1219yue" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;" style-hover="color:var(--accent)">LinkedIn</a>
-          <a href="mailto:jxl@umich.edu" style="color:inherit;text-decoration:none;" style-hover="color:var(--accent)">Email</a>
-          <a href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;" style-hover="color:var(--accent)">Resume</a>
-        </div>
+    <!-- Close -->
+    <div class="static-footer" style="margin:clamp(56px,7vw,88px) calc(50% - 50vw) 0;">
+    <div style="max-width:1340px;margin:0 auto;padding:20px clamp(24px,6vw,80px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;">
+      <div style="font-family:var(--font-sans);font-size:15px;color:var(--ink-2);">That's the end. Or maybe the beginning?</div>
+      <div style="display:flex;align-items:center;gap:22px;font-family:var(--font-sans);font-size:14px;color:var(--ink);">
+        <a href="https://www.linkedin.com/in/jessica-li-1219yue" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;" style-hover="color:var(--accent)">LinkedIn</a>
+        <a href="mailto:jxl@umich.edu" style="color:inherit;text-decoration:none;" style-hover="color:var(--accent)">Email</a>
+        <a href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;" style-hover="color:var(--accent)">Resume</a>
       </div>
-      </div>
+    </div>
     </div>
   </section>
   </sc-if>
@@ -1584,7 +1617,7 @@ class Component extends DCLogic {
       copperhill: [
         {type:'section', eyebrow:'What I Designed', heading:`A connected supplier Q&A workflow inside Copperhill`},
         {type:'para', text:`A connected workflow for identifying, asking, sending, and resolving supplier questions inside Copperhill.`},
-        {type:'stepflow', items:[
+        {type:'flowpath', items:[
           {num:'01', label:'Triage', text:`Spot which parts need attention.`},
           {num:'02', label:'Ask', text:`Pull a question from the bank or write a new one.`},
           {num:'03', label:'Batch', text:`Group questions across parts.`},
@@ -1634,7 +1667,7 @@ class Component extends DCLogic {
         {type:'image', videoSrcs:['assets/copperhill-add-task.mp4'], ratio:'1.575', videoMaxW:'100%', caption:`Adding a question: a recurring ask drops from a full retype to a pick from the bank, applied across multiple parts in one pass.`},
         {type:'section', eyebrow:'Connecting the Full Workflow', heading:`The goal was not to remove email. It was to remove the fragmented process around it.`},
         {type:'para', text:`The final experience connected the full question lifecycle:`},
-        {type:'stepflow', items:[
+        {type:'flowpath', items:[
           {num:'01', label:'Identify', text:`Spot a part that needs clarification.`},
           {num:'02', label:'Ask', text:`Pull from the bank or write a new question.`},
           {num:'03', label:'Queue', text:`Add it to a shared send queue.`},
@@ -1857,12 +1890,30 @@ class Component extends DCLogic {
         isSection:b.type==='section', isPara:b.type==='para', isLede:b.type==='lede', isTension:b.type==='tension',
         isQuote:b.type==='quote', isImage:b.type==='image', isSplit:b.type==='split',
         isList:b.type==='list', isHmw:b.type==='hmwcards', isMetrics:b.type==='metrics', isProcess:b.type==='process', isBars:b.type==='bars', isStatrow:b.type==='statrow', isZoomImg:b.type==='zoomimage', isPair:b.type==='imagepair', isScrolly:b.type==='scrolly', isCarousel:b.type==='carousel', isShot:b.type==='shotnotes', isCompare:b.type==='compare', isDiagram:b.type==='diagram',
-        isCardGrid:b.type==='cardgrid', isStepFlow:b.type==='stepflow', isVersionCards:b.type==='versioncards', isQuoteGrid:b.type==='quotegrid', isCompareTable:b.type==='comparetable', isStatusCards:b.type==='statuscards',
+        isCardGrid:b.type==='cardgrid', isStepFlow:b.type==='stepflow', isFlowPath:b.type==='flowpath', isVersionCards:b.type==='versioncards', isQuoteGrid:b.type==='quotegrid', isCompareTable:b.type==='comparetable', isStatusCards:b.type==='statuscards',
         quoteLabel: b.type==='quote' ? (b.label || 'Marginalia') : undefined,
         isVideo:b.type==='image'&&!!b.video, isVideoFile:b.type==='image'&&(!!b.videoSrc||!!b.videoSrcs), showVidCtl:!b.noVidControls, notVideo:b.type==='image'&&!b.video&&!b.videoSrc&&!b.videoSrcs,
         hasNote:b.type==='para'&&!!b.note&&(this.props.showMarginNotes!==false) };
       if (b.type==='section') { sec++; o.secNum = String(sec).padStart(2,'0'); o.anchor = 'sec-' + sec; firstPara = true; }
       if (b.type==='stepflow') { o.items = (b.items||[]).map((s,i) => ({ ...s, needsArrow: i>0 })); }
+      if (b.type==='flowpath') {
+        const ROW_H = 210, INDENT = 320, CARD_W = 380, CARD_H = 150;
+        const items = b.items || [];
+        o.items = items.map((it, i) => {
+          const indent = (i % 2 === 0) ? 0 : INDENT;
+          const cx = indent + CARD_W / 2, cBottom = i * ROW_H + CARD_H;
+          let pathD = '';
+          if (i < items.length - 1) {
+            const nextIndent = ((i + 1) % 2 === 0) ? 0 : INDENT;
+            const ncx = nextIndent + CARD_W / 2, ncTop = (i + 1) * ROW_H;
+            const y1 = cBottom + 8, y2 = ncTop - 8;
+            const ym = (y1 + y2) / 2;
+            pathD = 'M ' + cx + ' ' + y1 + ' C ' + cx + ' ' + ym + ', ' + ncx + ' ' + ym + ', ' + ncx + ' ' + y2;
+          }
+          return { ...it, circleClass: (i % 2 === 0) ? 'light' : 'dark', indent, top: i * ROW_H, pathD };
+        });
+        o.svgHeight = items.length * ROW_H;
+      }
       if (b.type==='statuscards') { o.items = (b.items||[]).map(s => { const err = s.tone==='error'; return { ...s, isError:err, isSuccess:!err, hasActions:Array.isArray(s.actions)&&s.actions.length>0, borderColor: err?'#e3b0aa':'#a9d4b3', bgColor: err?'#fbeeec':'#eaf5ec', iconBg: err?'rgba(192,57,43,.12)':'rgba(31,122,61,.12)', actions:(s.actions||[]).map(a => ({ ...a, isPrimary:a.variant==='primary', isLink:a.variant==='link', isDefault:!a.variant||a.variant==='default' })) }; }); }
       if (b.type==='compare') { o.hasBeforeMockEndpoint = b.beforeMock==='endpointOptOut'; }
       if (b.type==='image') { fig++; o.figNum = String(fig).padStart(2,'0'); o.hasImg = !!b.img; o.img = b.img || this.BLANK_IMG; o.ratio = b.ratio || '1.778'; o.videos = (b.videoSrcs || (b.videoSrc ? [b.videoSrc] : [])).map(s => ({src:s})); o.videoMaxW = b.videoMaxW || (o.videos.length ? '360px' : '100%'); o.needsSlot = !b.video && !b.videoSrc && !b.videoSrcs && !b.img; o.hasNotes = Array.isArray(b.notes) && b.notes.length>0; o.openFig = () => this.setState({ lightbox: { img: o.img, title:'', label:'Fig. ' + o.figNum, caption: b.caption || '', ratio: o.ratio } }); }
