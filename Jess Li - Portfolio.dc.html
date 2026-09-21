@@ -364,8 +364,9 @@
   .flowpath-circle.light{background:#d9e9fb;color:var(--ink);}
   .flowpath-circle.dark{background:var(--ink);color:var(--paper);}
   [data-ambient="night"] .flowpath-circle.light{background:#1f3350;color:var(--ink);}
-  @media (max-width:1100px){
-    .flowpath-wrap{height:auto !important;}
+  @media (max-width:640px){
+    .flowpath-wrap{height:auto !important;overflow:visible !important;}
+    .flowpath-wrap .flowpath-canvas{position:static !important;width:100% !important;height:auto !important;transform:none !important;}
     .flowpath-wrap svg{display:none;}
     .flowpath-wrap .flowpath-row{position:static !important;left:0 !important;top:0 !important;width:100% !important;max-width:none !important;margin-bottom:22px;}
   }
@@ -798,7 +799,8 @@
               </div>
             </sc-if>
             <sc-if value="{{ block.isFlowPath }}">
-              <div class="flowpath-wrap" data-reveal="" style="position:relative;width:100%;max-width:700px;height:{{ block.svgHeight }}px;margin:clamp(28px,3.6vw,44px) 0;">
+              <div class="flowpath-wrap" data-reveal="" data-fp-h="{{ block.svgHeight }}" style="position:relative;width:100%;margin:clamp(28px,3.6vw,44px) 0;overflow:hidden;">
+                <div class="flowpath-canvas" style="position:absolute;top:0;left:0;width:700px;height:{{ block.svgHeight }}px;transform-origin:top left;">
                 <svg viewBox="0 0 700 {{ block.svgHeight }}" width="700" height="{{ block.svgHeight }}" style="position:absolute;top:0;left:0;overflow:visible;" aria-hidden="true">
                   <defs>
                     <marker id="flowpath-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -820,6 +822,7 @@
                     <div style="font-family:var(--font-sans);font-size:calc(13px * var(--sc-cap,1));line-height:1.5;color:var(--muted);">{{ it.text }}</div>
                   </div>
                 </sc-for>
+                </div>
               </div>
             </sc-if>
             <sc-if value="{{ block.isVersionCards }}">
@@ -2470,8 +2473,9 @@ class Component extends DCLogic {
       else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); this.prevPage(); }
     };
     window.addEventListener('keydown', this._key);
-    this._rs = () => { this.setState({ bookScale: this.computeScale() }); };
+    this._rs = () => { this.setState({ bookScale: this.computeScale() }); this.layoutFlowPaths(); };
     window.addEventListener('resize', this._rs);
+    requestAnimationFrame(() => this.layoutFlowPaths());
     this._scroll = () => { if (this._st) return; this._st = requestAnimationFrame(() => { this._st = null; this.trackScroll(); }); };
     window.addEventListener('scroll', this._scroll, { passive:true });
     // Cover pan/fade must recompute every frame while scrolling, independent of
@@ -2553,7 +2557,7 @@ class Component extends DCLogic {
       requestAnimationFrame(() => this.checkVideoPlayback());
       if (this.state.view === 'about') { this.syncLeaves(); this._jIdx = -1; requestAnimationFrame(() => { this.syncLeaves(); this.updateJourneyWheel(); }); }
       if (this.state.view !== 'home' && this._cpHide) this._cpHide();
-      if (this.state.view === 'work') { this._activeSec = -1; this._scrollyActive = {}; requestAnimationFrame(() => this.trackScroll()); this.coverReveal(); this.bindSketchSlider(); requestAnimationFrame(() => this.lockMockScale()); }
+      if (this.state.view === 'work') { this._activeSec = -1; this._scrollyActive = {}; requestAnimationFrame(() => this.trackScroll()); this.coverReveal(); this.bindSketchSlider(); requestAnimationFrame(() => this.lockMockScale()); requestAnimationFrame(() => this.layoutFlowPaths()); }
       if (this.state.view === 'home' && prev.view !== 'home') { this.bindTrackEyes(); this.initCube(); this.initCarousel(); this._featIdx = 0; this._featSlug = this.PROJECTS[0].slug; requestAnimationFrame(() => { this.setupContentsPreview(); }); }
       if (this.state.view === 'about' && prev.view !== 'about') this.setState({ opened:false, typed:'', typing:false });
     }
@@ -2995,6 +2999,23 @@ class Component extends DCLogic {
   // unit to fit its container, the same way an <img> with a locked aspect
   // ratio would, instead of letting flex/grid reformat it into a different
   // shape at different widths.
+  // Scales each flowpath diagram's fixed-700px design canvas down to fit
+  // its actual available width, instead of relying on a breakpoint guess —
+  // works at any container width down to the mobile fallback threshold.
+  layoutFlowPaths(){
+    const root = this.rootRef.current; if (!root) return;
+    root.querySelectorAll('.flowpath-wrap').forEach(wrap => {
+      const canvas = wrap.querySelector('.flowpath-canvas');
+      if (!canvas) return;
+      if (window.innerWidth <= 640) { canvas.style.transform = ''; wrap.style.height = ''; return; }
+      const designH = parseFloat(wrap.getAttribute('data-fp-h')) || canvas.offsetHeight;
+      const availW = wrap.getBoundingClientRect().width;
+      if (!availW) return;
+      const scale = Math.min(1, availW / 700);
+      canvas.style.transform = 'scale(' + scale.toFixed(4) + ')';
+      wrap.style.height = Math.round(designH * scale) + 'px';
+    });
+  }
   lockMockScale(){
     const root = this.rootRef.current; if (!root) return;
     if (!this._mockObservers) this._mockObservers = [];
