@@ -803,13 +803,13 @@
                 <div class="flowpath-canvas" style="position:absolute;top:0;left:0;width:700px;height:{{ block.svgHeight }}px;transform-origin:top left;">
                 <svg viewBox="0 0 700 {{ block.svgHeight }}" width="700" height="{{ block.svgHeight }}" style="position:absolute;top:0;left:0;overflow:visible;" aria-hidden="true">
                   <defs>
-                    <marker id="flowpath-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                      <path d="M1,1 L9,5 L1,9" fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <marker id="flowpath-dot" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="6" markerHeight="6">
+                      <circle cx="4" cy="4" r="3.6" fill="var(--ink)"></circle>
                     </marker>
                   </defs>
                   <sc-for list="{{ block.items }}" as="it" hint-placeholder-count="6">
                     <sc-if value="{{ it.pathD }}">
-                      <path d="{{ it.pathD }}" fill="none" stroke="var(--ink)" stroke-width="1.5" marker-end="url(#flowpath-arrow)"></path>
+                      <path d="{{ it.pathD }}" fill="none" stroke="var(--ink)" stroke-width="1.4" marker-start="url(#flowpath-dot)" marker-end="url(#flowpath-dot)"></path>
                     </sc-if>
                   </sc-for>
                 </svg>
@@ -1911,7 +1911,7 @@ class Component extends DCLogic {
             const ncx = nextIndent + CARD_W / 2, ncTop = (i + 1) * ROW_H;
             const y1 = cBottom + 8, y2 = ncTop - 8;
             const ym = (y1 + y2) / 2;
-            const r = 16;
+            const r = Math.min(28, Math.abs(y2 - y1) / 2, Math.abs(ncx - cx) / 2);
             const dir = ncx > cx ? 1 : (ncx < cx ? -1 : 0);
             if (dir === 0) {
               pathD = 'M ' + cx + ' ' + y1 + ' L ' + ncx + ' ' + y2;
