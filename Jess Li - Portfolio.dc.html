@@ -1900,7 +1900,7 @@ class Component extends DCLogic {
       if (b.type==='section') { sec++; o.secNum = String(sec).padStart(2,'0'); o.anchor = 'sec-' + sec; firstPara = true; }
       if (b.type==='stepflow') { o.items = (b.items||[]).map((s,i) => ({ ...s, needsArrow: i>0 })); }
       if (b.type==='flowpath') {
-        const ROW_H = 210, INDENT = 320, CARD_W = 380, CARD_H = 150;
+        const ROW_H = 210, INDENT = 320, CARD_W = 380, CARD_H = 114;
         const items = b.items || [];
         o.items = items.map((it, i) => {
           const indent = (i % 2 === 0) ? 0 : INDENT;
@@ -1909,7 +1909,7 @@ class Component extends DCLogic {
           if (i < items.length - 1) {
             const nextIndent = ((i + 1) % 2 === 0) ? 0 : INDENT;
             const ncx = nextIndent + CARD_W / 2, ncTop = (i + 1) * ROW_H;
-            const y1 = cBottom + 8, y2 = ncTop - 8;
+            const y1 = cBottom + 4, y2 = ncTop - 4;
             const ym = (y1 + y2) / 2;
             const r = Math.min(28, Math.abs(y2 - y1) / 2, Math.abs(ncx - cx) / 2);
             const dir = ncx > cx ? 1 : (ncx < cx ? -1 : 0);
