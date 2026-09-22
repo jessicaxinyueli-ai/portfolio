@@ -2290,7 +2290,7 @@ class Component extends DCLogic {
       });
     }
   }
-  setView(v){ this.setState({ view:v }); }
+  setView(v){ this.fadeSwap(() => this.setState({ view:v })); }
   /* ===== Routing: real paths (/about, /sailpoint, ...) over the hand-rolled view/slug state ===== */
   resolveRoute(pathname){
     const p = pathname.replace(/^\/+|\/+$/g, '');
@@ -2357,8 +2357,8 @@ class Component extends DCLogic {
     this._scrollyActive[blockIdx] = stepIdx;
     this.forceUpdate();
   }
-  goHome(){ this.setState({ view:'home' }); }
-  openProject(slug){ this.setState({ view:'work', slug }); }
+  goHome(){ this.fadeSwap(() => this.setState({ view:'home' })); }
+  openProject(slug){ this.transitionToCase(slug); }
   tryUnlock(){
     const cur = this.state.slug;
     const want = this.PASSWORDS[cur];
@@ -2378,7 +2378,7 @@ class Component extends DCLogic {
       const el = root && root.querySelector('#work');
       if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 56, behavior:'smooth' });
     };
-    if (this.state.view !== 'home') { this.setState({ view:'home' }); setTimeout(doScroll, 90); }
+    if (this.state.view !== 'home') { this.fadeSwap(() => this.setState({ view:'home' }), doScroll); }
     else doScroll();
   }
   nextPage(){ this.turn(1); }
@@ -2942,11 +2942,11 @@ class Component extends DCLogic {
     window.addEventListener('pointerup', up);
     this._tagUp = up;
   }
-  // Click a cover image → it blurs & swells as a white veil sweeps in, then the case study opens.
-  // Plate-wipe: paper-ink spreads radially FROM the clicked cover into the case study.
-  transitionToCase(slug){
+  // Shared crossfade for any navigation that changes the view: a paper-colored
+  // plate fades in, applyState() swaps the view underneath, then it fades back out.
+  fadeSwap(applyState, afterApply){
     if (this._transitioning) return;
-    if (this.props.reduceMotion || this.prefersReduced()) { this.setState({ view:'work', slug }); return; }
+    if (this.props.reduceMotion || this.prefersReduced()) { applyState(); if (afterApply) afterApply(); return; }
     this._transitioning = true;
     if (this._curInit) this.cursorVisible(false);
     const plate = document.createElement('div');
@@ -2961,7 +2961,8 @@ class Component extends DCLogic {
     document.body.appendChild(plate);
     requestAnimationFrame(() => requestAnimationFrame(() => { plate.style.opacity = '1'; }));
     const swap = () => {
-      this.setState({ view:'work', slug });
+      applyState();
+      if (afterApply) setTimeout(afterApply, 90);
       requestAnimationFrame(() => requestAnimationFrame(() => {
         plate.style.opacity = '0';
         setTimeout(() => { plate.remove(); if (this._curInit && !this._editMode) this.cursorVisible(true); }, 400);
@@ -2971,6 +2972,7 @@ class Component extends DCLogic {
     clearTimeout(this._transFb);
     this._transFb = setTimeout(swap, 380);
   }
+  transitionToCase(slug){ this.fadeSwap(() => this.setState({ view:'work', slug })); }
   // Case study cover resolves from blur when the view opens.
   coverReveal(){
     const root = this.rootRef.current; if (!root) return;
@@ -3875,7 +3877,7 @@ class Component extends DCLogic {
       fullImg: p.caseCover || '',
       noCoverVideo: p.slug !== 'copperhill' && p.slug !== 'sailpoint' && !p.caseCover,
       coverCursor: (p.status === 'Completed' || p.locked) ? 'pointer' : 'default',
-      open: () => { if (p.status !== 'Completed' && !p.locked) return; this.setState({ view:'work', slug:p.slug }); },
+      open: () => { if (p.status !== 'Completed' && !p.locked) return; this.transitionToCase(p.slug); },
       openImg: () => { if (p.status !== 'Completed' && !p.locked) return; this.transitionToCase(p.slug); }
     }));
     const cur = mapped.find(p => p.slug === slug) || null;
@@ -4017,7 +4019,7 @@ class Component extends DCLogic {
       coverSketchSrc: (cur && cur.slug==='seed-library') ? ((window.__resources&&window.__resources.seedCompareOriginal)||'assets/seed-compare-original.png') : '',
       goHome: () => this.goHome(),
       goWork: () => this.gotoWork(),
-      panelCTA: () => { const s = this._featSlug || this.PROJECTS[0].slug; if (this.CASE[s]) this.transitionToCase(s); else this.setState({ view:'work', slug:s }); },
+      panelCTA: () => { const s = this._featSlug || this.PROJECTS[0].slug; this.fadeSwap(() => this.setState({ view:'work', slug:s })); },
       openAbout: () => this.setView('about'),
       nextPage: () => this.nextPage(),
       prevPage: () => this.prevPage(),
