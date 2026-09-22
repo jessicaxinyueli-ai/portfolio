@@ -1261,7 +1261,7 @@
                       <sc-if value="{{ step.active }}" hint-placeholder-val="{{ true }}">
                         <div style="opacity:{{ step.panelOpacity }};transform:{{ step.panelTransform }};transition:opacity .5s cubic-bezier(.2,.6,.2,1),transform .5s cubic-bezier(.2,.7,.2,1);">
                           <div style="font-family:var(--font-sans);font-size:13px;color:var(--accent);margin-bottom:10px;">{{ step.v }}</div>
-                          <h3 style="font-family:var(--font-serif);font-weight:400;font-size:45px;line-height:1.1;letter-spacing:-.012em;margin:0 0 12px;">{{ step.title }}</h3>
+                          <h3 style="font-family:var(--font-serif);font-weight:400;font-size:calc(32px * var(--sc-header,1));line-height:1.1;letter-spacing:-.012em;margin:0 0 12px;">{{ step.title }}</h3>
                           <p style="font-family:var(--font-sans);font-size:13.5px;line-height:1.8;color:var(--ink-2);margin:0;max-width:62ch;">{{ step.text }}</p>
                         </div>
                       </sc-if>
