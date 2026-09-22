@@ -1331,11 +1331,8 @@
     <!-- NEXT / footer -->
     <div style="max-width:1180px;margin:clamp(56px,8vw,120px) auto 0;padding:0 clamp(24px,6vw,64px) clamp(60px,8vw,110px);">
       <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px;padding-top:26px;border-top:1px solid var(--ink);">
-        <div>
-          <div style="font-family:var(--font-sans);font-size:11px;letter-spacing:.04em;color:var(--muted-2);margin-bottom:14px;">Turn to next →</div>
-          <button onClick="{{ next.open }}" style="background:none;border:none;cursor:pointer;font-family:var(--font-serif);font-weight:400;font-size:45px;line-height:.94;letter-spacing:-.022em;color:var(--ink);padding:0;text-align:left;" style-hover="color:var(--accent)">{{ next.title }}</button>
-        </div>
-        <button onClick="{{ goHome }}" style="background:none;border:none;cursor:pointer;font-family:var(--font-sans);font-size:11px;letter-spacing:.03em;color:var(--muted-2);padding:8px 4px;margin:-8px -4px;" style-hover="color:var(--accent)">↩ Index</button>
+        <button onClick="{{ next.open }}" style="background:none;border:none;cursor:pointer;font-family:var(--font-serif);font-weight:400;font-size:45px;line-height:.94;letter-spacing:-.022em;color:var(--ink);padding:0;text-align:left;transition:filter .3s ease;" style-hover="filter:blur(1.6px)">{{ next.title }}</button>
+        <button onClick="{{ scrollTop }}" style="background:none;border:1px solid var(--line);border-radius:20px;cursor:pointer;font-family:var(--font-sans);font-size:12px;letter-spacing:.02em;color:var(--ink);padding:9px 16px;" style-hover="border-color:var(--accent);color:var(--accent)">Back to top</button>
       </div>
     </div>
     </sc-if>
@@ -4019,6 +4016,7 @@ class Component extends DCLogic {
       coverSketchSrc: (cur && cur.slug==='seed-library') ? ((window.__resources&&window.__resources.seedCompareOriginal)||'assets/seed-compare-original.png') : '',
       goHome: () => this.goHome(),
       goWork: () => this.gotoWork(),
+      scrollTop: () => window.scrollTo({ top:0, behavior:'smooth' }),
       panelCTA: () => { const s = this._featSlug || this.PROJECTS[0].slug; this.fadeSwap(() => this.setState({ view:'work', slug:s })); },
       openAbout: () => this.setView('about'),
       nextPage: () => this.nextPage(),
