@@ -257,9 +257,6 @@
   [data-toclabel]{transition:color .4s ease,font-weight .3s ease;}
   [data-tocitem]:hover [data-toclabel]{font-weight:500 !important;color:var(--ink) !important;}
 
-  /* Element-anchored plate-wipe (ink spreading from the clicked cover) */
-  .plate-wipe{position:fixed;z-index:2000;background:var(--color-paper);border-radius:50%;pointer-events:none;will-change:transform,opacity;}
-
   /* ===== Interactive hero: cursor-reactive name cube + auto carousel ===== */
   .cube{--cf:clamp(190px,26vw,300px);--cz:calc(var(--cf)/2);transition:transform .55s cubic-bezier(.34,1.2,.5,1);}
   .cube-face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#141416;border:1px solid rgba(255,255,255,.06);box-shadow:inset 0 0 clamp(40px,7vw,90px) rgba(0,0,0,.55);backface-visibility:visible;overflow:hidden;}
@@ -2951,42 +2948,28 @@ class Component extends DCLogic {
     if (this._transitioning) return;
     if (this.props.reduceMotion || this.prefersReduced()) { this.setState({ view:'work', slug }); return; }
     this._transitioning = true;
-    const root = this.rootRef.current;
-    const wrap = root && root.querySelector('#entry-' + slug + ' .entry-imgwrap');
-    const vw = window.innerWidth, vh = window.innerHeight;
-    let cx = vw/2, cy = vh/2;
-    if (wrap) {
-      const r = wrap.getBoundingClientRect();
-      cx = r.left + r.width/2; cy = r.top + r.height/2;
-      wrap.style.transition = 'transform .5s cubic-bezier(.5,0,.15,1), opacity .5s ease';
-      wrap.style.transformOrigin = 'center';
-      wrap.style.willChange = 'transform,opacity';
-      requestAnimationFrame(() => { wrap.style.transform = 'scale(1.05)'; wrap.style.opacity = '0.62'; });
-    }
-    const maxR = Math.hypot(Math.max(cx, vw - cx), Math.max(cy, vh - cy)) + 4;
-    const plate = document.createElement('div');
-    plate.className = 'plate-wipe';
-    plate.style.width = plate.style.height = (maxR * 2) + 'px';
-    plate.style.left = (cx - maxR) + 'px';
-    plate.style.top = (cy - maxR) + 'px';
-    plate.style.transform = 'scale(0)';
-    plate.style.opacity = '1';
-    plate.style.boxShadow = '0 0 60px rgba(20,20,22,.06)';
-    plate.style.transition = 'transform .62s cubic-bezier(.72,0,.18,1)';
-    document.body.appendChild(plate);
     if (this._curInit) this.cursorVisible(false);
-    requestAnimationFrame(() => requestAnimationFrame(() => { plate.style.transform = 'scale(1)'; }));
+    const plate = document.createElement('div');
+    plate.className = 'plate-fade';
+    plate.style.position = 'fixed';
+    plate.style.inset = '0';
+    plate.style.zIndex = '2000';
+    plate.style.background = 'var(--color-paper)';
+    plate.style.opacity = '0';
+    plate.style.pointerEvents = 'none';
+    plate.style.transition = 'opacity .38s ease';
+    document.body.appendChild(plate);
+    requestAnimationFrame(() => requestAnimationFrame(() => { plate.style.opacity = '1'; }));
     const swap = () => {
       this.setState({ view:'work', slug });
       requestAnimationFrame(() => requestAnimationFrame(() => {
-        plate.style.transition = 'opacity .55s ease';
         plate.style.opacity = '0';
-        setTimeout(() => { plate.remove(); if (this._curInit && !this._editMode) this.cursorVisible(true); }, 560);
+        setTimeout(() => { plate.remove(); if (this._curInit && !this._editMode) this.cursorVisible(true); }, 400);
       }));
       this._transitioning = false;
     };
     clearTimeout(this._transFb);
-    this._transFb = setTimeout(swap, 600);
+    this._transFb = setTimeout(swap, 380);
   }
   // Case study cover resolves from blur when the view opens.
   coverReveal(){
