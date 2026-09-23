@@ -452,12 +452,9 @@
 
       <div class="hero-grid" style="position:relative;z-index:1;display:flex;align-items:center;">
         <div class="hero-copy" style="flex:1 1 100%;min-width:0;width:100%;margin:0;text-align:left;">
-          <div style="display:flex;align-items:center;justify-content:flex-start;gap:clamp(14px,1.8vw,24px);margin-bottom:clamp(16px,2vw,26px);">
+          <div style="display:flex;align-items:center;justify-content:flex-start;gap:clamp(14px,1.8vw,24px);margin-bottom:clamp(16px,2vw,26px);transition:filter .35s ease;" style-hover="filter:blur(1.8px)">
             <img src="assets/jess-portrait-hi.jpg" alt="Portrait of Jessica Li" style="width:clamp(64px,7vw,96px);aspect-ratio:1/1;flex:0 0 auto;object-fit:cover;object-position:33% 34%;display:block;">
-            <div data-kickerwrap="" onMouseMove="{{ kickerMove }}" onMouseLeave="{{ kickerLeave }}" style="position:relative;display:inline-block;">
-              <div data-herokicker="" style="font-family:'Instrument Serif',var(--font-serif),Georgia,serif;font-weight:400;font-size:calc(48px * var(--sc-header,1));line-height:1.05;letter-spacing:-.02em;color:var(--ink);">Hey, I'm Jessica Li.</div>
-              <div data-kickerblur="" aria-hidden="true" style="position:absolute;inset:-100px;font-family:'Instrument Serif',var(--font-serif),Georgia,serif;font-weight:400;font-size:calc(48px * var(--sc-header,1));line-height:1.05;letter-spacing:-.02em;color:var(--ink);filter:blur(5px);opacity:0;transition:opacity .45s ease;pointer-events:none;-webkit-mask-image:radial-gradient(circle 90px at -200px 50%,#000 0%,rgba(0,0,0,.6) 45%,transparent 75%);mask-image:radial-gradient(circle 90px at -200px 50%,#000 0%,rgba(0,0,0,.6) 45%,transparent 75%);">Hey, I'm Jessica Li.</div>
-            </div>
+            <div style="font-family:'Instrument Serif',var(--font-serif),Georgia,serif;font-weight:400;font-size:calc(48px * var(--sc-header,1));line-height:1.05;letter-spacing:-.02em;color:var(--ink);">Hey, I'm Jessica Li.</div>
           </div>
           <div data-heroline="" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:4px 6px;font-family:var(--font-sans);font-size:clamp(14px,1.35vw,17px);line-height:1.5;letter-spacing:.005em;color:var(--ink);width:100%;margin:0;">
             <span style="opacity:.62;">I'm a</span>
@@ -1805,63 +1802,6 @@ class Component extends DCLogic {
     ];
   }
 
-  kickerMove(e){
-    if (this.prefersReduced()) return;
-    const wrap = e.currentTarget;
-    const blur = wrap.querySelector('[data-kickerblur]');
-    if (!blur) return;
-    // Animation state lives on the wrap element itself, not on `this` — the
-    // page has multiple data-kickerwrap elements (hero heading, footer CTA),
-    // and sharing this state across all of them let moving from one onto
-    // another overwrite the shared target mid-animation: the first
-    // element's loop kept running against its own DOM node but chasing the
-    // second element's local coordinates, leaving a stuck, mispositioned
-    // mask hole behind as a visible trace.
-    clearTimeout(wrap._kickerLeaveT);
-    const r = wrap.getBoundingClientRect();
-    wrap._kTx = e.clientX - r.left;
-    wrap._kTy = e.clientY - r.top;
-    if (wrap._kx == null){ wrap._kx = wrap._kTx; wrap._ky = wrap._kTy; }
-    blur.style.opacity = '1';
-    if (wrap._kRaf) return;
-    const BLEED = 100; // must match data-kickerblur's negative inset
-    const loop = () => {
-      wrap._kx += (wrap._kTx - wrap._kx) * 0.12;
-      wrap._ky += (wrap._kTy - wrap._ky) * 0.12;
-      const m = `radial-gradient(circle 95px at ${wrap._kx + BLEED}px ${wrap._ky + BLEED}px,#000 0%,rgba(0,0,0,.55) 45%,transparent 78%)`;
-      blur.style.webkitMaskImage = m; blur.style.maskImage = m;
-      const inv = `radial-gradient(circle 95px at ${wrap._kx}px ${wrap._ky}px,transparent 0%,rgba(0,0,0,.45) 45%,#000 78%)`;
-      const sharp = wrap.querySelector('[data-herokicker]');
-      if (sharp){ sharp.style.webkitMaskImage = inv; sharp.style.maskImage = inv; }
-      const done = Math.abs(wrap._kTx - wrap._kx) < .4 && Math.abs(wrap._kTy - wrap._ky) < .4;
-      wrap._kRaf = done ? null : requestAnimationFrame(loop);
-    };
-    wrap._kRaf = requestAnimationFrame(loop);
-  }
-  kickerLeave(e){
-    const wrap = e.currentTarget;
-    const blur = wrap.querySelector('[data-kickerblur]');
-    const sharp = wrap.querySelector('[data-herokicker]');
-    if (blur) blur.style.opacity = '0';
-    // kickerMove's rAF loop eases the mask hole toward the cursor over
-    // several frames; leaving mid-ease used to leave that loop running with
-    // wrap._kx/_ky nulled out below, so it kept computing frames from a
-    // stale/zeroed position and kept repainting the sharp text's mask well
-    // after the pointer was gone — a hole sliding across the headline with
-    // no cursor there. Cancel it before resetting state.
-    if (wrap._kRaf){ cancelAnimationFrame(wrap._kRaf); wrap._kRaf = null; }
-    // The blur fades out over .45s (see [data-kickerblur]'s opacity
-    // transition), but clearing the sharp text's mask immediately used to
-    // snap it back to fully visible right away — for that .45s window the
-    // still-fading blur then sat on top of the now-crisp text, showing as
-    // a lightened ghost trace right where the cursor left. Keep the hole
-    // in place until the blur underneath has actually finished fading.
-    clearTimeout(wrap._kickerLeaveT);
-    wrap._kickerLeaveT = setTimeout(() => {
-      if (sharp){ sharp.style.webkitMaskImage = 'none'; sharp.style.maskImage = 'none'; }
-    }, 460);
-    wrap._kx = null; wrap._ky = null;
-  }
   tapChip(e){
     const chip = e.currentTarget;
     const exp = chip.querySelector('[data-chipexp]');
@@ -3964,8 +3904,6 @@ class Component extends DCLogic {
     const activeFlick = pgItems[this.state.flickFocus || 0] || pgItems[0];
     return {
       tapChip: (e) => this.tapChip(e),
-      kickerMove: (e) => this.kickerMove(e),
-      kickerLeave: (e) => this.kickerLeave(e),
       rootRef: this.rootRef,
       glowRef: this.glowRef,
       pgItems,
