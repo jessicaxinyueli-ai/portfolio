@@ -83,6 +83,14 @@
   @keyframes flickMarquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
   .flick-track{animation:flickMarquee 55s linear infinite;}
   @media (prefers-reduced-motion:reduce){.flick-track{animation:none;}}
+  .trait-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 10px;border-radius:12px;transition:background .2s ease;}
+  .trait-row:hover{background:var(--surface-2);}
+  .trait-label{font-family:var(--font-sans);font-size:14.5px;color:var(--ink);white-space:nowrap;}
+  .trait-controls{display:flex;align-items:center;gap:10px;flex:0 0 auto;}
+  .trait-slider{-webkit-appearance:none;appearance:none;width:110px;height:4px;border-radius:2px;background:linear-gradient(to right, var(--ink) var(--val,50%), var(--line) 0);outline:none;cursor:pointer;}
+  .trait-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:var(--ink);cursor:pointer;box-shadow:0 0 0 3px var(--surface);}
+  .trait-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--ink);border:none;cursor:pointer;box-shadow:0 0 0 3px var(--surface);}
+  .trait-value{font-family:var(--font-sans);font-size:13.5px;color:var(--muted-2);min-width:36px;text-align:right;}
   @keyframes bob{0%{transform:translateY(0) rotate(var(--rot,0deg));}50%{transform:translateY(-7px) rotate(var(--rot,0deg));}100%{transform:translateY(0) rotate(var(--rot,0deg));}}
   .tag{touch-action:none;}
 
@@ -1350,6 +1358,37 @@
           <div style="font-family:var(--font-sans);font-size:16px;line-height:1.5;color:var(--ink-2);display:flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d3453b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg> Ann Arbor, MI · {{ localTime }}</div>
           <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-body,1));line-height:1.7;color:var(--ink-2);margin:6px 0 0;text-wrap:pretty;">Design started as the thing I did instead of the thing I was supposed to be doing. I grew up in Shanghai painting and doing calligraphy, convinced I'd end up an artist, until I found UX and realized I liked problems with constraints better than a blank canvas.</p>
           <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-body,1));line-height:1.7;color:var(--ink-2);margin:14px 0 4px;text-wrap:pretty;">Today I design enterprise tools and AI products, identity software, trade compliance, one civic seed library that won an award, and most of my job turns out to be subtraction. I like the work best when it starts as a mess and ends looking obvious, and the best compliment I get isn't "this looks great," it's "oh, that makes sense."</p>
+          <div data-reveal="" style="border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:6px;margin:10px 0 4px;max-width:360px;">
+            <div style="font-family:var(--font-sans);font-weight:600;font-size:15px;color:var(--ink);padding:10px 10px 8px;border-bottom:1px solid var(--line);margin-bottom:2px;">Settings</div>
+            <div class="trait-row">
+              <span class="trait-label">Curiosity</span>
+              <span class="trait-controls">
+                <input class="trait-slider" type="range" min="0" max="100" value="92" style="--val:92%;">
+                <span class="trait-value">92%</span>
+              </span>
+            </div>
+            <div class="trait-row">
+              <span class="trait-label">Coachability</span>
+              <span class="trait-controls">
+                <input class="trait-slider" type="range" min="0" max="100" value="88" style="--val:88%;">
+                <span class="trait-value">88%</span>
+              </span>
+            </div>
+            <div class="trait-row">
+              <span class="trait-label">Extroversion</span>
+              <span class="trait-controls">
+                <input class="trait-slider" type="range" min="0" max="100" value="65" style="--val:65%;">
+                <span class="trait-value">65%</span>
+              </span>
+            </div>
+            <div class="trait-row">
+              <span class="trait-label">Perfectionism</span>
+              <span class="trait-controls">
+                <input class="trait-slider" type="range" min="0" max="100" value="45" style="--val:45%;">
+                <span class="trait-value">45%</span>
+              </span>
+            </div>
+          </div>
           <div style="font-family:var(--font-sans);font-size:16px;line-height:1.5;color:var(--ink);display:flex;align-items:center;gap:8px;">
             <a href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px;" style-hover="color:var(--accent)">Resume <span style="font-size:.85em;">&#8599;</span></a>
             <span style="color:var(--muted-2);">·</span>
