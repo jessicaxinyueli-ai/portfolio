@@ -427,9 +427,11 @@
   .mode-toggle-btn{width:30px;height:30px;border-radius:50%;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:inherit;padding:0;transition:color .3s ease,background-color .3s ease;}
   .mode-toggle-btn svg{width:16px;height:16px;}
   .mode-toggle-btn:hover{color:var(--accent);}
-  .metric-ring-track{stroke:var(--line);fill:none;}
-  .metric-ring-fill{fill:none;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.3,1.5,.4,1);}
-  @media (prefers-reduced-motion:reduce){.metric-ring-fill{transition:none;}}
+  .metric-item:nth-child(3n+1) .metric-circle{background:var(--surface);}
+  .metric-item:nth-child(3n+2) .metric-circle{background:#e8f0fb;}
+  .metric-item:nth-child(3n+3) .metric-circle{background:#f6ecec;}
+  [data-ambient="night"] .metric-item:nth-child(3n+2) .metric-circle{background:#202a3d;}
+  [data-ambient="night"] .metric-item:nth-child(3n+3) .metric-circle{background:#332229;}
   .flowpath-circle.light{background:#d9e9fb;color:var(--ink);}
   .flowpath-circle.dark{background:var(--ink);color:var(--paper);}
   [data-ambient="night"] .flowpath-circle.light{background:#1f3350;color:var(--ink);}
@@ -1044,17 +1046,18 @@
               <div data-reveal="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:clamp(22px,3vw,34px) clamp(14px,2vw,24px);margin:clamp(30px,4vw,52px) auto;width:calc(100% * var(--sc-media,1));max-width:100%;">
                 <sc-for list="{{ block.metrics }}" as="m" hint-placeholder-count="3">
                   <sc-if value="{{ m.useRing }}">
-                    <div class="metric-item" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(10px,1.4vw,16px);">
-                      <svg class="metric-ringwrap" width="64" height="64" viewBox="0 0 58 58" aria-hidden="true">
-                        <circle class="metric-ring-track" cx="29" cy="29" r="24" stroke-width="5"></circle>
-                        <circle class="metric-ring-fill" cx="29" cy="29" r="24" stroke-width="5" stroke="var(--accent)" transform="rotate(-90 29 29)" stroke-dasharray="150.8" stroke-dashoffset="150.8" data-ring-offset="{{ m.ringOffset }}"></circle>
-                      </svg>
-                      <sc-if value="{{ m.isPureNum }}">
-                        <span class="metric-num" data-count-to="{{ m.countTo }}" data-prefix="{{ m.countPrefix }}" data-suffix="{{ m.countSuffix }}" data-decimals="{{ m.countDecimals }}" style="font-family:var(--font-sans);font-weight:600;font-size:clamp(15px,1.6vw,19px);letter-spacing:-.01em;color:var(--ink);">0{{ m.countSuffix }}</span>
-                      </sc-if>
-                      <sc-if value="{{ m.ringStatic }}">
-                        <span style="font-family:var(--font-sans);font-weight:600;font-size:clamp(13px,1.3vw,15px);line-height:1.3;letter-spacing:-.005em;color:var(--ink);max-width:22ch;">{{ m.ringText }}</span>
-                      </sc-if>
+                    <div class="metric-item" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(14px,1.8vw,20px);">
+                      <div class="metric-ringwrap" aria-hidden="true" style="position:relative;flex:none;width:clamp(84px,9vw,124px);aspect-ratio:1;">
+                        <div class="metric-ring" style="position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(var(--line) 0deg 2.2deg, transparent 2.2deg 9deg);-webkit-mask:radial-gradient(circle,transparent 60%,#000 63%,#000 100%);mask:radial-gradient(circle,transparent 60%,#000 63%,#000 100%);"></div>
+                        <div class="metric-circle" style="position:absolute;width:62%;height:62%;left:34%;top:34%;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                          <sc-if value="{{ m.isPureNum }}">
+                            <span class="metric-num" data-count-to="{{ m.countTo }}" data-prefix="{{ m.countPrefix }}" data-suffix="{{ m.countSuffix }}" data-decimals="{{ m.countDecimals }}" style="font-family:var(--font-sans);font-weight:600;font-size:clamp(14px,1.5vw,19px);letter-spacing:-.01em;color:var(--ink);">0{{ m.countSuffix }}</span>
+                          </sc-if>
+                          <sc-if value="{{ m.ringStatic }}">
+                            <span style="font-family:var(--font-sans);font-weight:600;font-size:clamp(9px,.95vw,12px);line-height:1.2;letter-spacing:-.005em;color:var(--ink);text-align:center;padding:0 8%;">{{ m.ringText }}</span>
+                          </sc-if>
+                        </div>
+                      </div>
                       <div style="min-width:0;">
                         <span style="display:inline-block;font-family:var(--font-sans);font-size:11.5px;font-weight:500;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:4px 12px;margin-bottom:8px;">{{ m.eyebrow }}</span>
                         <p style="font-family:var(--font-sans);font-size:calc(12.5px * var(--sc-cap,1));line-height:1.5;color:var(--muted);margin:0;">{{ m.desc }}</p>
@@ -2021,10 +2024,7 @@ class Component extends DCLogic {
         const countDecimals = isPureNum ? ((pureMatch[2].split('.')[1] || '').length) : 0;
         const useRing = isPureNum || raw.length <= 24;
         const ringStatic = useRing && !isPureNum;
-        const RING_C = 150.8;
-        const ringPct = isPureNum ? Math.max(0, Math.min(100, countTo)) : 100;
-        const ringOffset = (RING_C * (1 - ringPct / 100)).toFixed(1);
-        return { ...m, iconEl: this.metricIcon(m.icon), dir, isUp: dir==='up', isDown: dir==='down', big, tag, bigNum: hasPct, notNum: !hasPct, hasTag: hasPct && !!tag, isPureNum, useRing, ringStatic, useOldCard: !useRing, countPrefix, countTo, countSuffix, countDecimals, ringText: raw, ringOffset };
+        return { ...m, iconEl: this.metricIcon(m.icon), dir, isUp: dir==='up', isDown: dir==='down', big, tag, bigNum: hasPct, notNum: !hasPct, hasTag: hasPct && !!tag, isPureNum, useRing, ringStatic, useOldCard: !useRing, countPrefix, countTo, countSuffix, countDecimals, ringText: raw };
       }); }
       if (b.type==='bars') { o.charts = (b.charts||[]).map(c => ({ ...c, prevW: c.prev + '%', curW: c.cur + '%', prevLabel: c.prev + '%', curLabel: c.cur + '%' })); }
       if (b.type==='statrow') { o.stats = (b.stats||[]).map(s => ({ ...s, iconEl: this.metricIcon(s.icon) })); }
@@ -2717,12 +2717,6 @@ class Component extends DCLogic {
   reveal(el){ if (el.hasAttribute && el.hasAttribute('data-mask')) { el.classList.add('in'); el.style.clipPath='inset(-10% 0 -10% 0)'; el.style.opacity='1'; el.dataset.revealShown='1'; this.animateMetricNums(el); return; } el.style.opacity='1'; el.style.transform='none'; el.style.filter='blur(0px)'; el.dataset.revealShown='1'; this.animateMetricNums(el); }
   animateMetricNums(container){
     if (!container || !container.querySelectorAll) return;
-    const rings = container.querySelectorAll('.metric-ring-fill[data-ring-offset]');
-    rings.forEach(el => {
-      const target = el.dataset.ringOffset;
-      if (target == null) return;
-      requestAnimationFrame(() => { el.style.strokeDashoffset = target; });
-    });
     const nums = container.querySelectorAll('.metric-num[data-count-to]');
     if (!nums.length) return;
     const reduced = this.prefersReduced();
