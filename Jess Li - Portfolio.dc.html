@@ -83,14 +83,67 @@
   @keyframes flickMarquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
   .flick-track{animation:flickMarquee 55s linear infinite;}
   @media (prefers-reduced-motion:reduce){.flick-track{animation:none;}}
-  .trait-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 10px;border-radius:12px;transition:background .2s ease;}
-  .trait-row:hover{background:var(--surface-2);}
-  .trait-label{font-family:var(--font-sans);font-size:14.5px;color:var(--ink);white-space:nowrap;}
-  .trait-controls{display:flex;align-items:center;gap:10px;flex:0 0 auto;}
-  .trait-slider{-webkit-appearance:none;appearance:none;width:110px;height:4px;border-radius:2px;background:linear-gradient(to right, var(--ink) var(--val,50%), var(--line) 0);outline:none;cursor:pointer;}
-  .trait-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:var(--ink);cursor:pointer;box-shadow:0 0 0 3px var(--surface);}
-  .trait-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--ink);border:none;cursor:pointer;box-shadow:0 0 0 3px var(--surface);}
-  .trait-value{font-family:var(--font-sans);font-size:13.5px;color:var(--muted-2);min-width:36px;text-align:right;}
+  /* About page — "Control Center" bento of liquid-glass widgets */
+  .cc-wrap{--cc-muted:#54555b;max-width:1120px;margin:0 auto;width:100%;}
+  [data-ambient="night"] .cc-wrap{--cc-muted:#a0a7b4;}
+  .cc-grid{display:grid;grid-template-columns:1.3fr 1fr;grid-template-rows:auto auto auto;grid-template-areas:"status status" "now toggles" "battery exp";gap:clamp(12px,1.6vw,18px);}
+  @media (max-width:760px){
+    .cc-grid{grid-template-columns:1fr;grid-template-areas:"status" "now" "toggles" "battery" "exp";}
+  }
+  .cc-panel{position:relative;overflow:hidden;border-radius:24px;padding:clamp(18px,2.2vw,26px);background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border:0.5px solid rgba(255,255,255,.6);box-shadow:0 18px 40px -22px rgba(20,20,22,.22),inset 0 1px 0 rgba(255,255,255,.5);opacity:0;transform:scale(.94) translateY(14px);}
+  @supports not (backdrop-filter: blur(1px)){.cc-panel{background:rgba(246,246,244,.94);}}
+  [data-ambient="night"] .cc-panel{background:rgba(30,32,30,.85);border-color:rgba(255,255,255,.14);box-shadow:0 18px 40px -22px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08);}
+  @supports not (backdrop-filter: blur(1px)){[data-ambient="night"] .cc-panel{background:rgba(28,30,28,.96);}}
+  .cc-panel::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.55), transparent 60%);opacity:0;transition:opacity .3s ease;mix-blend-mode:overlay;}
+  [data-ambient="night"] .cc-panel::before{mix-blend-mode:soft-light;background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.22), transparent 60%);}
+  .cc-panel:hover::before{opacity:1;}
+  @media (prefers-reduced-motion:reduce){.cc-panel{opacity:1 !important;transform:none !important;}.cc-panel::before{display:none;}}
+  .cc-status{grid-area:status;display:flex;flex-direction:column;}
+  .cc-now{grid-area:now;}
+  .cc-toggles{grid-area:toggles;}
+  .cc-battery{grid-area:battery;}
+  .cc-exp{grid-area:exp;}
+  .cc-eyebrow{font-family:var(--font-sans);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--cc-muted);margin:0 0 10px;}
+  .cc-name{font-family:var(--font-serif);font-weight:400;font-size:clamp(30px,3.4vw,40px);line-height:1;letter-spacing:-.02em;color:var(--ink);margin:0;}
+  .cc-loc{font-family:var(--font-sans);font-size:14px;color:var(--cc-muted);margin-top:8px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+  .cc-clock{font-family:var(--font-sans);font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;}
+  .cc-avail{margin-top:auto;padding-top:16px;font-family:var(--font-sans);font-size:14px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px;}
+  .cc-avail-dot{width:8px;height:8px;border-radius:50%;background:#2e9941;box-shadow:0 0 0 3px rgba(46,153,65,.22);flex:none;}
+  .cc-eq{display:flex;align-items:flex-end;gap:3px;height:20px;margin-bottom:12px;}
+  .cc-eq span{width:3px;background:var(--ink);border-radius:2px;display:block;animation:ccEq 1s ease-in-out infinite;}
+  .cc-eq span:nth-child(1){animation-delay:0s;height:40%;}
+  .cc-eq span:nth-child(2){animation-delay:.15s;height:100%;}
+  .cc-eq span:nth-child(3){animation-delay:.3s;height:65%;}
+  .cc-eq span:nth-child(4){animation-delay:.45s;height:85%;}
+  @keyframes ccEq{0%,100%{transform:scaleY(.35);}50%{transform:scaleY(1);}}
+  @media (prefers-reduced-motion:reduce){.cc-eq span{animation:none !important;transform:scaleY(.7);}}
+  .cc-song{font-family:var(--font-sans);font-weight:600;font-size:14px;color:var(--ink);}
+  .cc-artist{font-family:var(--font-sans);font-size:12.5px;color:var(--cc-muted);margin-top:2px;}
+  .cc-toggle-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 0;}
+  .cc-toggle-label{font-family:var(--font-sans);font-size:13.5px;color:var(--ink);}
+  .cc-switch{position:relative;width:38px;height:22px;border-radius:12px;background:var(--line);cursor:pointer;flex:none;border:none;padding:0;transition:background .25s ease;}
+  .cc-switch[data-on="true"]{background:#2e9941;}
+  .cc-switch-thumb{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);display:block;}
+  .cc-rings{display:flex;gap:clamp(10px,1.6vw,20px);align-items:center;justify-content:space-around;}
+  .cc-ring-item{display:flex;flex-direction:column;align-items:center;gap:8px;}
+  .cc-ring-label{font-family:var(--font-sans);font-size:11px;line-height:1.35;color:var(--cc-muted);text-align:center;}
+  .cc-ring-track{stroke:var(--line);fill:none;}
+  .cc-ring-fill{fill:none;stroke-linecap:round;transition:stroke-dashoffset 1.3s cubic-bezier(.3,1.5,.4,1);}
+  .cc-ring-fill.cc-infinite{animation:ccPulse 2.4s ease-in-out infinite;}
+  @keyframes ccPulse{0%,100%{opacity:1;}50%{opacity:.55;}}
+  @media (prefers-reduced-motion:reduce){.cc-ring-fill{transition:none;}.cc-ring-fill.cc-infinite{animation:none;}}
+  .cc-exp-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid var(--line);}
+  .cc-exp-row:first-of-type{border-top:none;padding-top:2px;}
+  .cc-exp-role{font-family:var(--font-sans);font-size:12.5px;color:var(--cc-muted);}
+  .cc-exp-co{font-family:var(--font-sans);font-weight:600;font-size:13.5px;color:var(--ink);}
+  .cc-exp-year{font-family:var(--font-sans);font-size:12px;color:var(--cc-muted);white-space:nowrap;}
+  .cc-caption-wrap{text-align:center;margin:clamp(14px,2vw,20px) 0 0;}
+  .cc-caption{display:inline-block;font-family:var(--font-sans);font-size:12px;letter-spacing:.01em;color:var(--cc-muted);background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);border:0.5px solid rgba(255,255,255,.6);border-radius:20px;padding:6px 16px;}
+  @supports not (backdrop-filter: blur(1px)){.cc-caption{background:rgba(246,246,244,.94);}}
+  [data-ambient="night"] .cc-caption{background:rgba(30,32,30,.85);border-color:rgba(255,255,255,.14);}
+  @supports not (backdrop-filter: blur(1px)){[data-ambient="night"] .cc-caption{background:rgba(28,30,28,.96);}}
+  .cc-caption a{color:inherit;text-decoration:underline;text-decoration-color:var(--line);}
+  .cc-caption a:hover{color:var(--accent);}
   @keyframes bob{0%{transform:translateY(0) rotate(var(--rot,0deg));}50%{transform:translateY(-7px) rotate(var(--rot,0deg));}100%{transform:translateY(0) rotate(var(--rot,0deg));}}
   .tag{touch-action:none;}
 
@@ -1366,109 +1419,79 @@
 
   <!-- ================= ABOUT / JOURNAL ================= -->
   <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ true }}">
-  <section data-screen-label="About" style="min-height:100vh;padding:clamp(118px,15vh,176px) clamp(24px,6vw,64px) clamp(28px,3vw,40px);display:flex;flex-direction:column;--font-sans:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;">
-    <div style="max-width:1000px;margin:0 auto;width:100%;flex:1 0 auto;">
-      <div style="display:flex;gap:clamp(28px,5vw,64px);align-items:flex-start;flex-wrap:wrap;">
-        <div style="flex:1 1 340px;min-width:min(100%,300px);display:flex;flex-direction:column;gap:14px;">
-          <div style="font-family:var(--font-sans);font-weight:400;font-size:16px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin-bottom:8px;">About</div>
-          <h1 style="font-family:var(--font-serif);font-weight:400;font-size:45px;line-height:.98;letter-spacing:-.026em;margin:0;">Hi, I'm Jess</h1>
-          <div style="font-family:var(--font-sans);font-size:16px;line-height:1.5;color:var(--ink-2);display:flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d3453b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg> Ann Arbor, MI · {{ localTime }}</div>
-          <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-body,1));line-height:1.7;color:var(--ink-2);margin:6px 0 0;text-wrap:pretty;">Design started as the thing I did instead of the thing I was supposed to be doing. I grew up in Shanghai painting and doing calligraphy, convinced I'd end up an artist, until I found UX and realized I liked problems with constraints better than a blank canvas.</p>
-          <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-body,1));line-height:1.7;color:var(--ink-2);margin:14px 0 4px;text-wrap:pretty;">Today I design enterprise tools and AI products, identity software, trade compliance, one civic seed library that won an award, and most of my job turns out to be subtraction. I like the work best when it starts as a mess and ends looking obvious, and the best compliment I get isn't "this looks great," it's "oh, that makes sense."</p>
-          <div data-reveal="" style="border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:6px;margin:10px 0 4px;max-width:360px;">
-            <div style="font-family:var(--font-sans);font-weight:600;font-size:15px;color:var(--ink);padding:10px 10px 8px;border-bottom:1px solid var(--line);margin-bottom:2px;">Settings</div>
-            <div class="trait-row">
-              <span class="trait-label">Curiosity</span>
-              <span class="trait-controls">
-                <input class="trait-slider" type="range" min="0" max="100" value="92" style="--val:92%;">
-                <span class="trait-value">92%</span>
-              </span>
-            </div>
-            <div class="trait-row">
-              <span class="trait-label">Coachability</span>
-              <span class="trait-controls">
-                <input class="trait-slider" type="range" min="0" max="100" value="88" style="--val:88%;">
-                <span class="trait-value">88%</span>
-              </span>
-            </div>
-            <div class="trait-row">
-              <span class="trait-label">Extroversion</span>
-              <span class="trait-controls">
-                <input class="trait-slider" type="range" min="0" max="100" value="65" style="--val:65%;">
-                <span class="trait-value">65%</span>
-              </span>
-            </div>
-            <div class="trait-row">
-              <span class="trait-label">Perfectionism</span>
-              <span class="trait-controls">
-                <input class="trait-slider" type="range" min="0" max="100" value="45" style="--val:45%;">
-                <span class="trait-value">45%</span>
-              </span>
-            </div>
-          </div>
-          <div style="font-family:var(--font-sans);font-size:16px;line-height:1.5;color:var(--ink);display:flex;align-items:center;gap:8px;">
-            <a href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px;" style-hover="color:var(--accent)">Resume <span style="font-size:.85em;">&#8599;</span></a>
+  <section data-screen-label="About" style="min-height:100vh;padding:clamp(96px,13vh,136px) clamp(20px,5vw,56px) clamp(28px,4vh,56px);display:flex;flex-direction:column;justify-content:center;--font-sans:'Manrope',ui-sans-serif,system-ui,sans-serif;">
+    <div class="cc-wrap">
+      <div class="cc-grid">
+        <div class="cc-panel cc-status" data-ccpanel="">
+          <div class="cc-eyebrow">Status</div>
+          <h1 class="cc-name">Jess</h1>
+          <div class="cc-loc">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d3453b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Ann Arbor, MI</span>
             <span style="color:var(--muted-2);">·</span>
-            <a href="https://www.linkedin.com/in/jessica-li-1219yue" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px;" style-hover="color:var(--accent)">LinkedIn <span style="font-size:.85em;">&#8599;</span></a>
+            <span class="cc-clock">{{ localTime }}</span>
+          </div>
+          <div class="cc-avail"><span class="cc-avail-dot"></span> Open to full-time · Dec 2026</div>
+        </div>
+
+        <div class="cc-panel cc-now" data-ccpanel="">
+          <div class="cc-eyebrow">Now Playing</div>
+          <div class="cc-eq"><span></span><span></span><span></span><span></span></div>
+          <div class="cc-song">All That Matters</div>
+          <div class="cc-artist">Justin Bieber</div>
+        </div>
+
+        <div class="cc-panel cc-toggles" data-ccpanel="">
+          <div class="cc-eyebrow">Settings</div>
+          <div class="cc-toggle-row">
+            <span class="cc-toggle-label">Sweet tooth</span>
+            <button type="button" class="cc-switch" data-on="{{ ccSweetOn }}" onClick="{{ ccToggleSweet }}" aria-label="Sweet tooth" aria-pressed="{{ ccSweetOn }}"><span class="cc-switch-thumb" data-ccthumb="sweet" style="transform:translateX({{ ccSweetX }}px);"></span></button>
+          </div>
+          <div class="cc-toggle-row">
+            <span class="cc-toggle-label">Blank canvas</span>
+            <button type="button" class="cc-switch" data-on="{{ ccCanvasOn }}" onClick="{{ ccToggleCanvas }}" aria-label="Blank canvas" aria-pressed="{{ ccCanvasOn }}"><span class="cc-switch-thumb" data-ccthumb="canvas" style="transform:translateX({{ ccCanvasX }}px);"></span></button>
+          </div>
+          <div class="cc-toggle-row">
+            <span class="cc-toggle-label">Constraints</span>
+            <button type="button" class="cc-switch" data-on="{{ ccConstraintsOn }}" onClick="{{ ccToggleConstraints }}" aria-label="Constraints" aria-pressed="{{ ccConstraintsOn }}"><span class="cc-switch-thumb" data-ccthumb="constraints" style="transform:translateX({{ ccConstraintsX }}px);"></span></button>
+          </div>
+        </div>
+
+        <div class="cc-panel cc-battery" data-ccpanel="">
+          <div class="cc-eyebrow">Battery</div>
+          <div class="cc-rings">
+            <div class="cc-ring-item">
+              <svg width="56" height="56" viewBox="0 0 58 58"><circle class="cc-ring-track" cx="29" cy="29" r="24" stroke-width="5"></circle><circle class="cc-ring-fill" cx="29" cy="29" r="24" stroke-width="5" stroke="var(--ink)" transform="rotate(-90 29 29)" stroke-dasharray="150.8" stroke-dashoffset="{{ ccRingPortfolio }}"></circle></svg>
+              <div class="cc-ring-label">Portfolio<br>100%</div>
+            </div>
+            <div class="cc-ring-item">
+              <svg width="56" height="56" viewBox="0 0 58 58"><circle class="cc-ring-track" cx="29" cy="29" r="24" stroke-width="5"></circle><circle class="cc-ring-fill" cx="29" cy="29" r="24" stroke-width="5" stroke="#d3453b" transform="rotate(-90 29 29)" stroke-dasharray="150.8" stroke-dashoffset="{{ ccRingCoffee }}"></circle></svg>
+              <div class="cc-ring-label">Coffee<br>12%</div>
+            </div>
+            <div class="cc-ring-item">
+              <svg width="56" height="56" viewBox="0 0 58 58"><circle class="cc-ring-track" cx="29" cy="29" r="24" stroke-width="5"></circle><circle class="cc-ring-fill cc-infinite" cx="29" cy="29" r="24" stroke-width="5" stroke="#2e9941" transform="rotate(-90 29 29)" stroke-dasharray="150.8" stroke-dashoffset="0"></circle></svg>
+              <div class="cc-ring-label">Curiosity<br>always charging</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cc-panel cc-exp" data-ccpanel="">
+          <div class="cc-eyebrow">Experience</div>
+          <div class="cc-exp-row">
+            <div><div class="cc-exp-co">SailPoint</div><div class="cc-exp-role">Product Design Intern</div></div>
+            <div class="cc-exp-year">2026</div>
+          </div>
+          <div class="cc-exp-row">
+            <div><div class="cc-exp-co">Copperhill</div><div class="cc-exp-role">Product Design Intern</div></div>
+            <div class="cc-exp-year">2025</div>
+          </div>
+          <div class="cc-exp-row">
+            <div><div class="cc-exp-co">Siemens Energy</div><div class="cc-exp-role">UX &amp; Graphic Design Intern</div></div>
+            <div class="cc-exp-year">2024</div>
           </div>
         </div>
       </div>
-
-      <!-- Flicks — small autoplaying carousel -->
-      <div style="overflow:hidden;margin:clamp(32px,4vw,48px) 0 clamp(40px,5vw,60px);">
-        <div class="flick-track" style="display:flex;gap:10px;width:max-content;">
-          <sc-for list="{{ flickGrid }}" as="it" hint-placeholder-count="12">
-            <div style="width:100px;height:100px;flex:0 0 auto;overflow:hidden;background:var(--surface);">
-              <img src="{{ it.img }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
-            </div>
-          </sc-for>
-          <sc-for list="{{ flickGrid }}" as="it" hint-placeholder-count="12">
-            <div style="width:100px;height:100px;flex:0 0 auto;overflow:hidden;background:var(--surface);">
-              <img src="{{ it.img }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
-            </div>
-          </sc-for>
-        </div>
-      </div>
-
-      <!-- Experience — editorial index, styled like Contents -->
-      <h2 style="font-family:var(--font-sans);font-weight:400;font-size:16px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin:0 0 clamp(28px,3.4vw,40px);">Experience</h2>
-      <div style="border-top:1px solid var(--line);margin:0 0 clamp(56px,7vw,88px);">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:14px 4px;">
-        <span style="font-family:var(--font-sans);font-size:16px;color:var(--ink);">Product Design Intern</span>
-        <span style="display:flex;align-items:baseline;gap:10px;white-space:nowrap;">
-          <span style="font-family:var(--font-sans);font-size:16px;color:var(--ink);">SailPoint</span>
-          <span style="font-family:var(--font-sans);font-size:14px;color:var(--muted-2);">2026</span>
-        </span>
-      </div>
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:14px 4px;">
-        <span style="font-family:var(--font-sans);font-size:16px;color:var(--ink);">Product Design Intern</span>
-        <span style="display:flex;align-items:baseline;gap:10px;white-space:nowrap;">
-          <span style="font-family:var(--font-sans);font-size:16px;color:var(--ink);">Copperhill</span>
-          <span style="font-family:var(--font-sans);font-size:14px;color:var(--muted-2);">2025</span>
-        </span>
-      </div>
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:14px 4px;">
-        <span style="font-family:var(--font-sans);font-size:16px;color:var(--ink);">UX &amp; Graphic Design Intern</span>
-        <span style="display:flex;align-items:baseline;gap:10px;white-space:nowrap;">
-          <span style="font-family:var(--font-sans);font-size:16px;color:var(--ink);">Siemens Energy</span>
-          <span style="font-family:var(--font-sans);font-size:14px;color:var(--muted-2);">2024</span>
-        </span>
-      </div>
-      </div>
-
-      <!-- What I make + philosophy -->
-    </div>
-
-    <!-- Close -->
-    <div class="static-footer" style="margin:clamp(56px,7vw,88px) calc(50% - 50vw) 0;">
-    <div style="max-width:1340px;margin:0 auto;padding:20px clamp(24px,6vw,80px) 8px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;">
-      <div style="font-family:var(--font-sans);font-size:15px;color:var(--ink-2);">That's the end. Or maybe the beginning?</div>
-      <div style="display:flex;align-items:center;gap:22px;font-family:var(--font-sans);font-size:14px;color:var(--ink);">
-        <a href="https://www.linkedin.com/in/jessica-li-1219yue" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;" style-hover="color:var(--accent)">LinkedIn</a>
-        <a href="mailto:jxl@umich.edu" style="color:inherit;text-decoration:none;" style-hover="color:var(--accent)">Email</a>
-        <a href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;" style-hover="color:var(--accent)">Resume</a>
-      </div>
-    </div>
+      <div class="cc-caption-wrap"><span class="cc-caption">the settings panel for me · <a href="assets/jess-li-resume.pdf" target="_blank" rel="noopener">Resume</a> · <a href="https://www.linkedin.com/in/jessica-li-1219yue" target="_blank" rel="noopener">LinkedIn</a></span></div>
     </div>
   </section>
   </sc-if>
@@ -1808,7 +1831,7 @@ class Component extends DCLogic {
       { t:`Happiness can be found even in the darkest of times.`, a:`Harry Potter and the Prisoner of Azkaban, 2004`, note:`Stress has knocked me flat before. What helped was stopping, breathing, and naming one thing I was grateful for. Usually family, friends, or food. A small light, but enough to work by.` }
     ];
     const initRoute = this.resolveRoute(window.location.pathname);
-    this.state = { view:initRoute.view, slug:initRoute.slug, leaf:0, bookScale: this.computeScale(), quoteIdx:0, typed:'', typing:false, opened:false, unlocked:{}, passError:false, bgMode:'plain' };
+    this.state = { view:initRoute.view, slug:initRoute.slug, leaf:0, bookScale: this.computeScale(), quoteIdx:0, typed:'', typing:false, opened:false, unlocked:{}, passError:false, bgMode:'plain', ccToggles: { sweet:true, canvas:false, constraints:true }, ccRingsOn:false };
     // Case studies still in progress require a passphrase before the account opens.
     this.PASSWORDS = { sailpoint: 'sailu2026' };
     this.BLANK_IMG = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
@@ -1846,6 +1869,49 @@ class Component extends DCLogic {
       if (n < full.length) chip._t = setTimeout(step, 26);
     };
     step();
+  }
+  // Loads motion.dev's vanilla-JS "Motion" library once and caches the module
+  // promise — there's no bundler here, so this is a runtime ESM import (same
+  // CDN-script idea as Lenis) rather than a real `import` statement.
+  getMotion(){
+    if (!this._motionP) this._motionP = import('https://cdn.jsdelivr.net/npm/motion/+esm').catch(() => null);
+    return this._motionP;
+  }
+  // About page "Control Center": staggered glass-panel entrance + cursor-follow
+  // specular highlight. Ring fill-on-load is driven by state (ccRingsOn) via a
+  // plain CSS transition; only the entrance and toggle springs use Motion.
+  initControlCenter(){
+    const root = this.rootRef.current;
+    const reduced = this.prefersReduced();
+    clearTimeout(this._ccRingT);
+    this.setState({ ccRingsOn:false });
+    this._ccRingT = setTimeout(() => this.setState({ ccRingsOn:true }), reduced ? 0 : 200);
+    if (!root) return;
+    const panels = root.querySelectorAll('[data-ccpanel]');
+    panels.forEach(panel => {
+      if (panel._ccMoveBound) return;
+      panel._ccMoveBound = true;
+      panel.addEventListener('pointermove', (e) => {
+        if (this.prefersReduced()) return;
+        const r = panel.getBoundingClientRect();
+        panel.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+        panel.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      });
+    });
+    if (reduced) return;
+    this.getMotion().then(m => {
+      if (!m) return;
+      m.animate(panels, { opacity:[0,1], transform:['scale(.94) translateY(14px)','scale(1) translateY(0)'] }, { delay: m.stagger(0.06), type:'spring', bounce:0.22, duration:0.7 });
+    });
+  }
+  ccToggle(key){
+    const toggles = { ...this.state.ccToggles, [key]: !this.state.ccToggles[key] };
+    this.setState({ ccToggles: toggles });
+    if (this.prefersReduced()) return;
+    const root = this.rootRef.current; if (!root) return;
+    const thumb = root.querySelector('[data-ccthumb="' + key + '"]');
+    if (!thumb) return;
+    this.getMotion().then(m => { if (m) m.animate(thumb, { x: toggles[key] ? 18 : 0 }, { type:'spring', stiffness:520, damping:26 }); });
   }
   heroChipVals(){
     const EXP = ['allergic to clutter ◇','open to relocation ✈','shipping fast, iterating faster ➤'];
@@ -2520,7 +2586,7 @@ class Component extends DCLogic {
     this.setupReveals();
     this.syncLeaves();
     if (this.state.view === 'home') { this.bindTrackEyes(); this.initCube(); this.initCarousel(); this._featIdx = 0; this._featSlug = this.PROJECTS[0].slug; this.swapPanel(0); requestAnimationFrame(() => this.setupContentsPreview()); }
-    if (this.state.view === 'about') { this.setState({ opened:false, typed:'', typing:false }); }
+    if (this.state.view === 'about') { this.setState({ opened:false, typed:'', typing:false }); this.initControlCenter(); }
     if (this.state.view === 'work') { this.bindSketchSlider(); requestAnimationFrame(() => this.lockMockScale()); }
     this._prevView = this.state.view;
     this._prevSlug = this.state.slug;
@@ -2564,10 +2630,11 @@ class Component extends DCLogic {
       if (this.state.view !== 'home' && this._cpHide) this._cpHide();
       if (this.state.view === 'work') { this._activeSec = -1; this._scrollyActive = {}; requestAnimationFrame(() => this.trackScroll()); this.coverReveal(); this.bindSketchSlider(); requestAnimationFrame(() => this.lockMockScale()); requestAnimationFrame(() => this.layoutFlowPaths()); }
       if (this.state.view === 'home' && prev.view !== 'home') { this.bindTrackEyes(); this.initCube(); this.initCarousel(); this._featIdx = 0; this._featSlug = this.PROJECTS[0].slug; requestAnimationFrame(() => { this.setupContentsPreview(); }); }
-      if (this.state.view === 'about' && prev.view !== 'about') this.setState({ opened:false, typed:'', typing:false });
+      if (this.state.view === 'about' && prev.view !== 'about') { this.setState({ opened:false, typed:'', typing:false }); this.initControlCenter(); }
     }
   }
   componentWillUnmount(){
+    clearTimeout(this._ccRingT);
     if (this._lenisRaf) cancelAnimationFrame(this._lenisRaf);
     if (this._lenisWait) cancelAnimationFrame(this._lenisWait);
     if (this._lenis) { this._lenis.destroy(); this._lenis = null; }
@@ -4001,6 +4068,11 @@ class Component extends DCLogic {
       hasSkim: !!(cur && this.SKIM[cur.slug]),
       __never: false,
       localTime: this.state.localTime || '',
+      ccSweetOn: this.state.ccToggles.sweet, ccCanvasOn: this.state.ccToggles.canvas, ccConstraintsOn: this.state.ccToggles.constraints,
+      ccSweetX: this.state.ccToggles.sweet ? 18 : 0, ccCanvasX: this.state.ccToggles.canvas ? 18 : 0, ccConstraintsX: this.state.ccToggles.constraints ? 18 : 0,
+      ccToggleSweet: () => this.ccToggle('sweet'), ccToggleCanvas: () => this.ccToggle('canvas'), ccToggleConstraints: () => this.ccToggle('constraints'),
+      ccRingPortfolio: this.state.ccRingsOn ? '0' : '150.8',
+      ccRingCoffee: this.state.ccRingsOn ? '132.7' : '150.8',
       coverSlider: !!cs,
       coverEyebrow: cur ? cur.metaLine : '',
       coverVideoSrc: cur ? (cur.coverVideo||'') : '',
@@ -4014,7 +4086,6 @@ class Component extends DCLogic {
       coverSketchSrc: (cur && cur.slug==='seed-library') ? ((window.__resources&&window.__resources.seedCompareOriginal)||'assets/seed-compare-original.png') : '',
       goHome: () => this.goHome(),
       goWork: () => this.gotoWork(),
-      scrollTop: () => window.scrollTo({ top:0, behavior:'smooth' }),
       panelCTA: () => { const s = this._featSlug || this.PROJECTS[0].slug; this.fadeSwap(() => this.setState({ view:'work', slug:s })); },
       openAbout: () => this.setView('about'),
       nextPage: () => this.nextPage(),
