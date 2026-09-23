@@ -938,6 +938,17 @@
                 <figcaption style="display:flex;gap:14px;font-family:var(--font-sans);font-size:calc(13px * var(--sc-cap,1));line-height:1.6;color:var(--muted-2);margin-top:12px;"><span>{{ block.caption }}</span></figcaption>
               </figure>
             </sc-if>
+            <sc-if value="{{ block.isProtoShowcase }}">
+              <div data-reveal="" style="display:flex;flex-wrap:wrap;align-items:center;gap:clamp(20px,3vw,36px);margin:clamp(28px,3.6vw,44px) 0;border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:clamp(18px,2.4vw,26px);">
+                <button type="button" onClick="{{ block.openZoom }}" aria-label="Expand image" style="flex:1 1 280px;max-width:360px;display:block;padding:0;border:none;background:none;cursor:zoom-in;">
+                  <image-slot id="protoimg-{{ cur.slug }}-{{ block.figNum }}" src="{{ block.img }}" style="width:100%;height:auto;aspect-ratio:{{ block.ratio }};display:block;pointer-events:none;border-radius:10px;overflow:hidden;" shape="rounded" radius="10" fit="cover" placeholder="{{ block.title }}"></image-slot>
+                </button>
+                <div style="flex:1 1 240px;min-width:0;">
+                  <h3 style="font-family:var(--font-serif);font-weight:400;font-size:calc(26px * var(--sc-header,1));line-height:1.15;letter-spacing:-.01em;color:var(--ink);margin:0 0 10px;">{{ block.title }}</h3>
+                  <p style="font-family:var(--font-sans);font-size:calc(14px * var(--sc-cap,1));line-height:1.7;color:var(--ink-2);margin:0;text-wrap:pretty;">{{ block.text }}</p>
+                </div>
+              </div>
+            </sc-if>
             <sc-if value="{{ block.isSplit }}">
               <div data-reveal="" style="display:flex;flex-wrap:wrap;gap:clamp(20px,3vw,40px);margin:clamp(24px,3vw,38px) 0;">
                 <div style="flex:1 1 240px;border-top:2px solid var(--accent);padding-top:16px;">
@@ -1626,15 +1637,15 @@ class Component extends DCLogic {
         {type:'section', eyebrow:'Iterations', heading:`Four screens, four findings`},
         {type:'para', text:`Each major screen changed for a specific reason we uncovered in research and testing.`},
         {type:'tension', label:`Grow and Plant Landing`, text:`The physical identification system stopped making sense once users reached the screen. Capsule color was an important cue in the physical experience, but that connection disappeared digitally. I carried the same color system into an interactive plant map so users could recognize the connection between what they held and what they saw on screen.`},
-        {type:'image', img:(window.__resources&&window.__resources.seedPlantListing)||'assets/seed-plant-listing-prototype.png', ratio:'1.833', caption:`The step-by-step "Grow your own seeds" guide, plus mobile and tablet listing views for a capsule match: Cilantro, Champion Raddish, Wild Yarrow.`},
+        {type:'protoshowcase', title:'Grow Guide & Plant Listing', img:(window.__resources&&window.__resources.seedPlantListing)||'assets/seed-plant-listing-prototype.png', ratio:'1.833', text:`The step-by-step "Grow your own seeds" guide, plus mobile and tablet listing views for a capsule match: Cilantro, Champion Raddish, Wild Yarrow.`},
         {type:'tension', label:`Plant Detail`, text:`Users were not struggling to find information. They were struggling to know what mattered first. Participants encountered watering, light, soil, and timing as one undifferentiated wall of information. I reorganized the page into numbered care steps and added a visual difficulty rating, giving first-time growers one clear action to focus on at a time.`},
         {type:'compare', beforeLabel:'Before', afterLabel:'After', beforeImg:'assets/seed-pdp-before.png', beforeRatio:'0.742', afterImg:'assets/seed-pdp-after.png', afterRatio:'0.742', caption:`Plant Detail: a small cropped photo and care steps mis-numbered with two labelled 5, replaced by a full-width photo and correct numbering.`},
-        {type:'image', img:(window.__resources&&window.__resources.seedPlantDetail)||'assets/seed-plant-detail-prototype.png', ratio:'1.992', caption:`Plant Detail on mobile and desktop: a Grow / About / Conditions / Community tab bar and a Plant / Seed toggle under the hero photo.`},
+        {type:'protoshowcase', title:'Plant Detail', img:(window.__resources&&window.__resources.seedPlantDetail)||'assets/seed-plant-detail-prototype.png', ratio:'1.992', text:`Plant Detail on mobile and desktop: a Grow / About / Conditions / Community tab bar and a Plant / Seed toggle under the hero photo.`},
         {type:'tension', label:`Homepage`, text:`Two calls to action created hesitation instead of helping users get started. The homepage was designed for the 85% of students who had never heard of the Seed Library. When testers hesitated between two actions, I reduced the experience to one clear entry point: Grow your plant!`},
         {type:'compare', beforeLabel:'Before', afterLabel:'After', beforeImg:'assets/seed-home-before.jpg', beforeRatio:'0.6806', afterImg:'assets/seed-home-after.jpg', afterRatio:'0.6806', caption:`Homepage: a dark hero card with Sign Up For Event Alerts as the only action, replaced by a light hero with one action, Grow your plant!`},
-        {type:'image', img:(window.__resources&&window.__resources.seedHome)||'assets/seed-home-prototype.png', ratio:'1.983', caption:`The shipped homepage as a responsive pair. The desktop hero sets its flower cutout beside the copy; the mobile one stacks it below.`},
+        {type:'protoshowcase', title:'Homepage', img:(window.__resources&&window.__resources.seedHome)||'assets/seed-home-prototype.png', ratio:'1.983', text:`The shipped homepage as a responsive pair. The desktop hero sets its flower cutout beside the copy; the mobile one stacks it below.`},
         {type:'tension', label:`Events`, text:`Community mattered to users, but users were not looking for it. 60% of the people we talked to wanted community programming, yet events were buried on a separate page that users had little reason to visit. Instead of adding another competing CTA, I surfaced events across the homepage and plant pages. Attendance indicators such as seat counts added social proof and urgency without interrupting the main experience.`},
-        {type:'image', img:(window.__resources&&window.__resources.seedEvents)||'assets/seed-events-prototype.png', ratio:'1.939', caption:`The Events page: attendance indicators like "34 attending, 8 seats left" doing quiet, compounding work.`},
+        {type:'protoshowcase', title:'Events', img:(window.__resources&&window.__resources.seedEvents)||'assets/seed-events-prototype.png', ratio:'1.939', text:`The Events page: attendance indicators like "34 attending, 8 seats left" doing quiet, compounding work.`},
         {type:'section', eyebrow:'Balancing', heading:`Simplicity could not mean losing information`},
         {type:'para', text:`The homepage taught me an important lesson.`},
         {type:'para', text:`Cutting the experience down to one action removed the hesitation caused by the original two-CTA version. But it also made events and community less visible.`},
@@ -1874,7 +1885,7 @@ class Component extends DCLogic {
       const o = { ...b,
         isSection:b.type==='section', isPara:b.type==='para', isLede:b.type==='lede', isTension:b.type==='tension',
         isQuote:b.type==='quote', isImage:b.type==='image', isSplit:b.type==='split',
-        isList:b.type==='list', isHmw:b.type==='hmwcards', isMetrics:b.type==='metrics', isProcess:b.type==='process', isBars:b.type==='bars', isStatrow:b.type==='statrow', isZoomImg:b.type==='zoomimage', isPair:b.type==='imagepair', isScrolly:b.type==='scrolly', isCarousel:b.type==='carousel', isShot:b.type==='shotnotes', isCompare:b.type==='compare', isDiagram:b.type==='diagram',
+        isList:b.type==='list', isHmw:b.type==='hmwcards', isMetrics:b.type==='metrics', isProcess:b.type==='process', isBars:b.type==='bars', isStatrow:b.type==='statrow', isZoomImg:b.type==='zoomimage', isPair:b.type==='imagepair', isScrolly:b.type==='scrolly', isCarousel:b.type==='carousel', isShot:b.type==='shotnotes', isCompare:b.type==='compare', isDiagram:b.type==='diagram', isProtoShowcase:b.type==='protoshowcase',
         isCardGrid:b.type==='cardgrid', isStepFlow:b.type==='stepflow', isFlowPath:b.type==='flowpath', isVersionCards:b.type==='versioncards', isQuoteGrid:b.type==='quotegrid', isCompareTable:b.type==='comparetable', isStatusCards:b.type==='statuscards',
         quoteLabel: b.type==='quote' ? (b.label || 'Marginalia') : undefined,
         isVideo:b.type==='image'&&!!b.video, isVideoFile:b.type==='image'&&(!!b.videoSrc||!!b.videoSrcs), showVidCtl:!b.noVidControls, notVideo:b.type==='image'&&!b.video&&!b.videoSrc&&!b.videoSrcs,
@@ -1948,6 +1959,7 @@ class Component extends DCLogic {
       if (b.type==='bars') { o.charts = (b.charts||[]).map(c => ({ ...c, prevW: c.prev + '%', curW: c.cur + '%', prevLabel: c.prev + '%', curLabel: c.cur + '%' })); }
       if (b.type==='statrow') { o.stats = (b.stats||[]).map(s => ({ ...s, iconEl: this.metricIcon(s.icon) })); }
       if (b.type==='zoomimage') { fig++; o.figNum = String(fig).padStart(2,'0'); o.img = b.img || this.BLANK_IMG; o.ratio = b.ratio || '1.778'; o.openZoom = () => this.setState({ lightbox: { img: o.img, title:'', label:'Fig. ' + o.figNum, caption: b.caption || '', ratio: o.ratio } }); }
+      if (b.type==='protoshowcase') { fig++; o.figNum = String(fig).padStart(2,'0'); o.img = b.img || this.BLANK_IMG; o.ratio = b.ratio || '1.778'; o.openZoom = () => this.setState({ lightbox: { img: o.img, title:'', label:'Fig. ' + o.figNum, caption: b.text || '', ratio: o.ratio } }); }
       if (b.type==='compare') { o.hasBeforeImg = !!b.beforeImg; o.hasAfterImg = !!b.afterImg; o.beforeImg = b.beforeImg || this.BLANK_IMG; o.afterImg = b.afterImg || this.BLANK_IMG; o.beforeRatio = b.beforeRatio || '5/4'; o.afterRatio = b.afterRatio || '5/4'; }
       if (b.type==='para') { o.lead = firstPara; o.paraClass = firstPara ? 'dropcap' : ''; firstPara = false; }
       if (b.type==='carousel') {
