@@ -2461,7 +2461,7 @@ class Component extends DCLogic {
     const initLenis = () => {
       if (this._lenis || this.prefersReduced()) return;
       if (!window.Lenis) { this._lenisWait = requestAnimationFrame(initLenis); return; }
-      this._lenis = new window.Lenis({ duration: 0.9, easing: (t) => 1 - Math.pow(1 - t, 3), touchMultiplier: 1.5 });
+      this._lenis = new window.Lenis({ duration: 0.6, easing: (t) => 1 - Math.pow(1 - t, 2), touchMultiplier: 1.5 });
       const raf = (time) => { if (this._lenis) { this._lenis.raf(time); this._lenisRaf = requestAnimationFrame(raf); } };
       this._lenisRaf = requestAnimationFrame(raf);
     };
