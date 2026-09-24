@@ -405,7 +405,7 @@
      inverted for dark mode the same way. A ::before layer keeps the filter
      off the section's own text and images. */
   section[data-screen-label="About"]{position:relative;}
-  section[data-screen-label="About"]::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background-repeat:no-repeat;background-image:url("assets/lotus_bg.jpg");background-size:cover;background-position:center;background-attachment:fixed;transition:filter .5s ease;}
+  section[data-screen-label="About"]::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background-repeat:no-repeat;background-image:url("assets/lotus_bg.jpg");background-size:cover;background-position:center;transition:filter .5s ease;}
   [data-ambient="night"] section[data-screen-label="About"]::before{filter:brightness(.35) saturate(1.15);}
   .bg-glow{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity .6s ease;background:radial-gradient(circle 24vmax at var(--gx,50%) var(--gy,50%), var(--glow-c1,rgba(255,255,255,.6)), var(--glow-c2,rgba(255,255,255,0)) 60%);}
   .bg-glow.on{opacity:1;}
