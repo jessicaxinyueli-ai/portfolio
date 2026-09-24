@@ -413,10 +413,10 @@
   /* Home page: the same fixed photo background shows in both light and dark
      mode, inverted for dark instead of swapped out for a different image. */
   .reveal-blobs .bg-layer[data-layer="plain"]{opacity:1;background-repeat:no-repeat;background-image:url("assets/mist_bg.jpg");background-size:cover;background-position:center;background-color:#fbfaf5;animation:none;transition:filter .5s ease;}
-  /* mist_bg.jpg is only 720x1440: on wide screens show it at native size and fade
+  /* mist_bg.jpg is only 720x1440: on wide screens show it ~1.4x native (kept modest, the source is 720px) and fade
      the sides into the page color instead of upscaling it with cover. */
   @media (min-width:721px){
-    .reveal-blobs .bg-layer[data-layer="plain"],section[data-screen-label="About"]::before{inset:0 auto 0 50%;width:720px;margin-left:-360px;background-size:cover;background-position:center top;background-color:transparent;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28%,#000 72%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 28%,#000 72%,transparent 100%);}
+    .reveal-blobs .bg-layer[data-layer="plain"],section[data-screen-label="About"]::before{inset:0 auto 0 50%;width:1000px;margin-left:-500px;background-size:cover;background-position:center top;background-color:transparent;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28%,#000 72%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 28%,#000 72%,transparent 100%);}
   }
   [data-ambient="night"] .reveal-blobs .bg-layer[data-layer="plain"]{filter:invert(1) hue-rotate(180deg);}
   /* Same fixed dappled-photo background as the home page, applied here too,
