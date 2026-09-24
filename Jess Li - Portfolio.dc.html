@@ -84,15 +84,16 @@
   .flick-track{animation:flickMarquee 55s linear infinite;}
   @media (prefers-reduced-motion:reduce){.flick-track{animation:none;}}
   /* About page — "Control Center" bento of liquid-glass widgets */
-  .cc-wrap{--cc-muted:#54555b;max-width:1120px;margin:0 auto;width:100%;}
-  [data-ambient="night"] .cc-wrap{--cc-muted:#a0a7b4;}
+  [data-bg]:has(section[data-screen-label="About"]) [data-navlink]{color:var(--ink) !important;}
+  .cc-wrap{--cc-muted:#2f3036;max-width:1120px;margin:0 auto;width:100%;}
+  [data-ambient="night"] .cc-wrap{--cc-muted:#c4cad6;}
   .cc-grid{display:grid;grid-template-columns:1.3fr 1fr;grid-template-rows:auto auto auto;grid-template-areas:"status status" "now toggles" "battery exp";gap:clamp(12px,1.6vw,18px);}
   @media (max-width:760px){
     .cc-grid{grid-template-columns:1fr;grid-template-areas:"status" "now" "toggles" "battery" "exp";}
   }
-  .cc-panel{position:relative;overflow:hidden;border-radius:32px;padding:clamp(18px,2.2vw,26px);background:linear-gradient(135deg,rgba(255,255,255,.34),rgba(255,255,255,.14));-webkit-backdrop-filter:blur(5px) saturate(1.8) contrast(1.06);backdrop-filter:blur(5px) saturate(1.8) contrast(1.06);backdrop-filter:url(#cc-liquid) blur(5px) saturate(1.8) contrast(1.06);border:1px solid rgba(255,255,255,.5);box-shadow:0 22px 44px -20px rgba(20,20,22,.28),inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -1.5px 1px rgba(255,255,255,.4),inset 3px 3px 8px rgba(255,255,255,.32),inset -3px -4px 12px rgba(255,255,255,.22);opacity:0;transform:scale(.94) translateY(14px);}
+  .cc-panel{position:relative;overflow:hidden;border-radius:28px;padding:clamp(18px,2.2vw,26px);background:linear-gradient(135deg,rgba(255,255,255,.64),rgba(255,255,255,.5));-webkit-backdrop-filter:blur(6px) saturate(1.6);backdrop-filter:blur(6px) saturate(1.6);backdrop-filter:url(#cc-liquid) blur(6px) saturate(1.6);border:1px solid rgba(255,255,255,.7);box-shadow:0 20px 40px -22px rgba(20,30,20,.3),inset 0 1px 1px rgba(255,255,255,.9),inset 0 -1px 1px rgba(255,255,255,.35);opacity:0;transform:scale(.94) translateY(14px);}
   @supports not (backdrop-filter: blur(1px)){.cc-panel{background:rgba(246,246,244,.94);}}
-  [data-ambient="night"] .cc-panel{background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border-color:rgba(255,255,255,.22);box-shadow:0 22px 44px -20px rgba(0,0,0,.55),inset 0 1.5px 1px rgba(255,255,255,.45),inset 0 -1.5px 1px rgba(255,255,255,.14),inset 3px 3px 8px rgba(255,255,255,.1),inset -3px -4px 12px rgba(255,255,255,.06);}
+  [data-ambient="night"] .cc-panel{background:linear-gradient(135deg,rgba(12,16,14,.6),rgba(12,16,14,.42));border-color:rgba(255,255,255,.25);box-shadow:0 20px 40px -22px rgba(0,0,0,.6),inset 0 1px 1px rgba(255,255,255,.4),inset 0 -1px 1px rgba(255,255,255,.12);}
   @supports not (backdrop-filter: blur(1px)){[data-ambient="night"] .cc-panel{background:rgba(28,30,28,.96);}}
   .cc-panel::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.55), transparent 60%);opacity:0;transition:opacity .3s ease;mix-blend-mode:overlay;}
   [data-ambient="night"] .cc-panel::before{mix-blend-mode:soft-light;background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.22), transparent 60%);}
@@ -123,7 +124,8 @@
   @media (prefers-reduced-motion:reduce){.cc-eq span{animation:none !important;transform:scaleY(.7);}}
   .cc-song{font-family:var(--font-sans);font-weight:600;font-size:14px;color:var(--ink);}
   .cc-artist{font-family:var(--font-sans);font-size:12.5px;color:var(--cc-muted);margin-top:2px;}
-  .cc-toggle-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 0;}
+  .cc-toggle-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 8px 7px 16px;margin-top:6px;border-radius:999px;background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.65);}
+  [data-ambient="night"] .cc-toggle-row,[data-ambient="night"] .cc-exp-row{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);}
   .cc-toggle-label{font-family:var(--font-sans);font-size:13.5px;color:var(--ink);}
   .cc-switch{position:relative;width:38px;height:22px;border-radius:12px;background:var(--line);cursor:pointer;flex:none;border:none;padding:0;transition:background .25s ease;}
   .cc-switch[data-on="true"]{background:#2e9941;}
@@ -136,15 +138,14 @@
   .cc-ring-fill.cc-infinite{animation:ccPulse 2.4s ease-in-out infinite;}
   @keyframes ccPulse{0%,100%{opacity:1;}50%{opacity:.55;}}
   @media (prefers-reduced-motion:reduce){.cc-ring-fill{transition:none;}.cc-ring-fill.cc-infinite{animation:none;}}
-  .cc-exp-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid var(--line);}
-  .cc-exp-row:first-of-type{border-top:none;padding-top:2px;}
+  .cc-exp-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;margin-top:6px;border-radius:20px;background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.65);}
   .cc-exp-role{font-family:var(--font-sans);font-size:12.5px;color:var(--cc-muted);}
   .cc-exp-co{font-family:var(--font-sans);font-weight:600;font-size:13.5px;color:var(--ink);}
   .cc-exp-year{font-family:var(--font-sans);font-size:12px;color:var(--cc-muted);white-space:nowrap;}
   .cc-caption-wrap{text-align:center;margin:clamp(14px,2vw,20px) 0 0;}
-  .cc-caption{display:inline-block;font-family:var(--font-sans);font-size:12px;letter-spacing:.01em;color:var(--cc-muted);background:linear-gradient(135deg,rgba(255,255,255,.4),rgba(255,255,255,.18));-webkit-backdrop-filter:blur(5px) saturate(1.8);backdrop-filter:blur(5px) saturate(1.8);border:1px solid rgba(255,255,255,.55);box-shadow:inset 0 1px 1px rgba(255,255,255,.9),inset 0 -1px 1px rgba(255,255,255,.35);border-radius:20px;padding:6px 16px;}
+  .cc-caption{display:inline-block;font-family:var(--font-sans);font-size:12px;letter-spacing:.01em;color:var(--cc-muted);background:linear-gradient(135deg,rgba(255,255,255,.64),rgba(255,255,255,.5));-webkit-backdrop-filter:blur(6px) saturate(1.6);backdrop-filter:blur(6px) saturate(1.6);border:1px solid rgba(255,255,255,.7);box-shadow:inset 0 1px 1px rgba(255,255,255,.9),inset 0 -1px 1px rgba(255,255,255,.35);border-radius:20px;padding:6px 16px;}
   @supports not (backdrop-filter: blur(1px)){.cc-caption{background:rgba(246,246,244,.94);}}
-  [data-ambient="night"] .cc-caption{background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.05));border-color:rgba(255,255,255,.22);}
+  [data-ambient="night"] .cc-caption{background:linear-gradient(135deg,rgba(12,16,14,.6),rgba(12,16,14,.42));border-color:rgba(255,255,255,.25);}
   @supports not (backdrop-filter: blur(1px)){[data-ambient="night"] .cc-caption{background:rgba(28,30,28,.96);}}
   .cc-caption a{color:inherit;text-decoration:underline;text-decoration-color:var(--line);}
   .cc-caption a:hover{color:var(--accent);}
@@ -404,8 +405,8 @@
      inverted for dark mode the same way. A ::before layer keeps the filter
      off the section's own text and images. */
   section[data-screen-label="About"]{position:relative;}
-  section[data-screen-label="About"]::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background-repeat:no-repeat;background-image:url("assets/ref_photo.jpg");background-size:cover;background-position:center;background-attachment:fixed;transition:filter .5s ease;}
-  [data-ambient="night"] section[data-screen-label="About"]::before{filter:invert(1) hue-rotate(180deg);}
+  section[data-screen-label="About"]::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background-repeat:no-repeat;background-image:url("assets/lotus_bg.jpg");background-size:cover;background-position:center;background-attachment:fixed;transition:filter .5s ease;}
+  [data-ambient="night"] section[data-screen-label="About"]::before{filter:brightness(.35) saturate(1.15);}
   .bg-glow{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity .6s ease;background:radial-gradient(circle 24vmax at var(--gx,50%) var(--gy,50%), var(--glow-c1,rgba(255,255,255,.6)), var(--glow-c2,rgba(255,255,255,0)) 60%);}
   .bg-glow.on{opacity:1;}
   [data-ambient="night"]{--glow-c1:rgba(255,255,255,.36);--glow-c2:rgba(255,255,255,0);}
