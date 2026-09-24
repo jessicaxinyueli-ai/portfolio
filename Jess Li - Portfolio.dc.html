@@ -84,13 +84,10 @@
   .flick-track{animation:flickMarquee 55s linear infinite;}
   @media (prefers-reduced-motion:reduce){.flick-track{animation:none;}}
   /* About page — "Control Center" bento of liquid-glass widgets */
-  [data-bg]:has(section[data-screen-label="About"]) [data-navlink]{color:var(--ink) !important;}
-  .cc-wrap{--cc-muted:#2f3036;max-width:1120px;margin:0 auto;width:100%;}
+  [data-bg]:has(section[data-screen-label="About"]) [data-navlink],[data-bg]:has(section[data-screen-label="About"]) .mode-toggle-btn{color:var(--ink) !important;}
+  .cc-wrap{--cc-muted:#2f3036;max-width:520px;margin:0 auto;width:100%;}
   [data-ambient="night"] .cc-wrap{--cc-muted:#c4cad6;}
-  .cc-grid{display:grid;grid-template-columns:1.3fr 1fr;grid-template-rows:auto auto auto;grid-template-areas:"status status" "now toggles" "battery exp";gap:clamp(12px,1.6vw,18px);}
-  @media (max-width:760px){
-    .cc-grid{grid-template-columns:1fr;grid-template-areas:"status" "now" "toggles" "battery" "exp";}
-  }
+  .cc-grid{display:grid;grid-template-columns:1fr;grid-template-areas:"status" "now" "toggles" "battery" "exp";gap:clamp(14px,2vw,20px);}
   .cc-panel{position:relative;overflow:hidden;border-radius:28px;padding:clamp(18px,2.2vw,26px);background:linear-gradient(135deg,rgba(255,255,255,.64),rgba(255,255,255,.5));-webkit-backdrop-filter:blur(6px) saturate(1.6);backdrop-filter:blur(6px) saturate(1.6);backdrop-filter:url(#cc-liquid) blur(6px) saturate(1.6);border:1px solid rgba(255,255,255,.7);box-shadow:0 20px 40px -22px rgba(20,30,20,.3),inset 0 1px 1px rgba(255,255,255,.9),inset 0 -1px 1px rgba(255,255,255,.35);opacity:0;transform:scale(.94) translateY(14px);}
   @supports not (backdrop-filter: blur(1px)){.cc-panel{background:rgba(246,246,244,.94);}}
   [data-ambient="night"] .cc-panel{background:linear-gradient(135deg,rgba(12,16,14,.6),rgba(12,16,14,.42));border-color:rgba(255,255,255,.25);box-shadow:0 20px 40px -22px rgba(0,0,0,.6),inset 0 1px 1px rgba(255,255,255,.4),inset 0 -1px 1px rgba(255,255,255,.12);}
@@ -98,11 +95,9 @@
   .cc-panel::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.55), transparent 60%);opacity:0;transition:opacity .3s ease;mix-blend-mode:overlay;}
   [data-ambient="night"] .cc-panel::before{mix-blend-mode:soft-light;background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.22), transparent 60%);}
   .cc-panel:hover::before{opacity:1;}
-  .cc-panel::after{content:'';position:absolute;z-index:-1;top:-60%;right:-30%;width:75%;height:180%;background:linear-gradient(115deg,rgba(255,255,255,.5) 0%,rgba(255,255,255,.16) 35%,rgba(255,255,255,0) 60%);transform:rotate(14deg);pointer-events:none;mix-blend-mode:overlay;opacity:.65;animation:liquidSheen 10s ease-in-out infinite;will-change:transform;}
-  [data-ambient="night"] .cc-panel::after{mix-blend-mode:soft-light;opacity:.32;}
   .cc-panel:hover{border-color:rgba(255,255,255,.7) !important;box-shadow:0 30px 56px -22px rgba(20,20,22,.32),inset 0 1.5px 1px rgba(255,255,255,1),inset 0 -1.5px 1px rgba(255,255,255,.5),inset 3px 3px 10px rgba(255,255,255,.4),inset -3px -4px 14px rgba(255,255,255,.28) !important;transform:translateY(-3px) !important;}
   [data-ambient="night"] .cc-panel:hover{border-color:rgba(255,255,255,.34) !important;box-shadow:0 30px 56px -22px rgba(0,0,0,.65),inset 0 1.5px 1px rgba(255,255,255,.6),inset 0 -1.5px 1px rgba(255,255,255,.2),inset 3px 3px 10px rgba(255,255,255,.14),inset -3px -4px 14px rgba(255,255,255,.08) !important;}
-  @media (prefers-reduced-motion:reduce){.cc-panel{opacity:1 !important;transform:none !important;}.cc-panel::before{display:none;}.cc-panel::after{animation:none;}.cc-panel:hover{transform:none !important;}}
+  @media (prefers-reduced-motion:reduce){.cc-panel{opacity:1 !important;transform:none !important;}.cc-panel::before{display:none;}.cc-panel:hover{transform:none !important;}}
   .cc-status{grid-area:status;display:flex;flex-direction:column;}
   .cc-now{grid-area:now;}
   .cc-toggles{grid-area:toggles;}
@@ -1422,7 +1417,7 @@
 
   <!-- ================= ABOUT / JOURNAL ================= -->
   <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ true }}">
-  <section data-screen-label="About" style="min-height:100vh;padding:clamp(96px,13vh,136px) clamp(20px,5vw,56px) clamp(28px,4vh,56px);display:flex;flex-direction:column;justify-content:center;--font-sans:'Manrope',ui-sans-serif,system-ui,sans-serif;">
+  <section data-screen-label="About" style="min-height:100vh;padding:clamp(96px,13vh,136px) clamp(20px,5vw,56px) clamp(48px,8vh,96px);display:flex;flex-direction:column;justify-content:flex-start;--font-sans:'Manrope',ui-sans-serif,system-ui,sans-serif;">
     <div class="cc-wrap">
       <div class="cc-grid">
         <div class="cc-panel cc-status" data-ccpanel="">
