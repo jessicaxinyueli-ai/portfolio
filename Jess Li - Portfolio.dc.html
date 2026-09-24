@@ -87,7 +87,7 @@
   [data-bg]:has(section[data-screen-label="About"]) [data-navlink],[data-bg]:has(section[data-screen-label="About"]) .mode-toggle-btn{color:var(--ink) !important;}
   .cc-wrap{--cc-muted:#2f3036;max-width:520px;margin:0 auto;width:100%;}
   [data-ambient="night"] .cc-wrap{--cc-muted:#c4cad6;}
-  .cc-grid{display:grid;grid-template-columns:1fr;grid-template-areas:"status" "now" "toggles" "battery" "exp";gap:clamp(14px,2vw,20px);}
+  .cc-grid{display:grid;grid-template-columns:1fr;grid-template-areas:"status" "photos" "now" "toggles" "battery" "exp";gap:clamp(14px,2vw,20px);}
   .cc-panel{position:relative;overflow:hidden;border-radius:28px;padding:clamp(18px,2.2vw,26px);background:linear-gradient(135deg,rgba(255,255,255,.64),rgba(255,255,255,.5));-webkit-backdrop-filter:blur(6px) saturate(1.6);backdrop-filter:blur(6px) saturate(1.6);backdrop-filter:url(#cc-liquid) blur(6px) saturate(1.6);border:1px solid rgba(255,255,255,.7);box-shadow:0 20px 40px -22px rgba(20,30,20,.3),inset 0 1px 1px rgba(255,255,255,.9),inset 0 -1px 1px rgba(255,255,255,.35);opacity:0;transform:scale(.94) translateY(14px);}
   @supports not (backdrop-filter: blur(1px)){.cc-panel{background:rgba(246,246,244,.94);}}
   [data-ambient="night"] .cc-panel{background:linear-gradient(135deg,rgba(12,16,14,.6),rgba(12,16,14,.42));border-color:rgba(255,255,255,.25);box-shadow:0 20px 40px -22px rgba(0,0,0,.6),inset 0 1px 1px rgba(255,255,255,.4),inset 0 -1px 1px rgba(255,255,255,.12);}
@@ -98,6 +98,16 @@
   .cc-panel:hover{border-color:rgba(255,255,255,.7) !important;box-shadow:0 30px 56px -22px rgba(20,20,22,.32),inset 0 1.5px 1px rgba(255,255,255,1),inset 0 -1.5px 1px rgba(255,255,255,.5),inset 3px 3px 10px rgba(255,255,255,.4),inset -3px -4px 14px rgba(255,255,255,.28) !important;transform:translateY(-3px) !important;}
   [data-ambient="night"] .cc-panel:hover{border-color:rgba(255,255,255,.34) !important;box-shadow:0 30px 56px -22px rgba(0,0,0,.65),inset 0 1.5px 1px rgba(255,255,255,.6),inset 0 -1.5px 1px rgba(255,255,255,.2),inset 3px 3px 10px rgba(255,255,255,.14),inset -3px -4px 14px rgba(255,255,255,.08) !important;}
   @media (prefers-reduced-motion:reduce){.cc-panel{opacity:1 !important;transform:none !important;}.cc-panel::before{display:none;}.cc-panel:hover{transform:none !important;}}
+  .cc-photos{grid-area:photos;padding:0;aspect-ratio:1.1;background:#2a2a2a;border-color:rgba(255,255,255,.55);}
+  .cc-hl-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.04);transition:opacity .9s ease,transform 3.6s ease;user-select:none;}
+  .cc-hl-img.on{opacity:1;transform:scale(1);}
+  .cc-hl-scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 38%,rgba(0,0,0,0) 62%,rgba(0,0,0,.5) 100%);}
+  .cc-hl-head{position:absolute;left:clamp(20px,4vw,30px);top:clamp(18px,3.4vw,26px);color:#fff;font-family:var(--font-sans);text-shadow:0 1px 8px rgba(0,0,0,.3);}
+  .cc-hl-title{font-weight:600;font-size:clamp(22px,3.4vw,28px);letter-spacing:-.01em;line-height:1.1;}
+  .cc-hl-sub{font-weight:500;font-size:13px;margin-top:4px;opacity:.92;font-variant-numeric:tabular-nums;}
+  .cc-hl-pills{position:absolute;right:clamp(14px,3vw,22px);bottom:clamp(14px,3vw,22px);display:flex;gap:10px;}
+  .cc-hl-pill{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;border-radius:999px;color:#fff;font-family:var(--font-sans);font-weight:500;font-size:16px;background:rgba(48,28,14,.42);-webkit-backdrop-filter:blur(10px) saturate(1.4);backdrop-filter:blur(10px) saturate(1.4);border:1px solid rgba(255,225,195,.55);box-shadow:inset 0 1px 1px rgba(255,235,215,.35);}
+  .cc-hl-more{padding:0 16px;}
   .cc-status{grid-area:status;display:flex;flex-direction:column;}
   .cc-now{grid-area:now;}
   .cc-toggles{grid-area:toggles;}
@@ -1432,6 +1442,16 @@
           <div class="cc-avail"><span class="cc-avail-dot"></span> Open to full-time · Dec 2026</div>
         </div>
 
+        <div class="cc-panel cc-photos" data-ccpanel="" data-cchl="">
+          <img class="cc-hl-img" src="assets/highlights/street.jpg" alt="" draggable="false"><img class="cc-hl-img" src="assets/highlights/pastry.jpg" alt="" draggable="false"><img class="cc-hl-img" src="assets/highlights/drink.jpg" alt="" draggable="false"><img class="cc-hl-img" src="assets/highlights/plate.jpg" alt="" draggable="false"><img class="cc-hl-img" src="assets/highlights/dog.jpg" alt="" draggable="false"><img class="cc-hl-img" src="assets/highlights/lawn.jpg" alt="" draggable="false">
+          <div class="cc-hl-scrim" aria-hidden="true"></div>
+          <div class="cc-hl-head"><div class="cc-hl-title">Highlights</div><div class="cc-hl-sub" data-cchl-count="">1 of 6</div></div>
+          <div class="cc-hl-pills">
+            <span class="cc-hl-pill cc-hl-more">+5</span>
+            <span class="cc-hl-pill"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm2.5 4.2a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 0 0 0-3.4ZM5 18h14v-2.6l-3.6-4.2-3.7 4.3-2.1-2.3L5 16.7V18Z"></path></svg>Photos</span>
+          </div>
+        </div>
+
         <div class="cc-panel cc-now" data-ccpanel="">
           <div class="cc-eyebrow">Now Playing</div>
           <div class="cc-eq"><span></span><span></span><span></span><span></span></div>
@@ -1885,6 +1905,7 @@ class Component extends DCLogic {
     this.setState({ ccRingsOn:false });
     this._ccRingT = setTimeout(() => this.setState({ ccRingsOn:true }), reduced ? 0 : 200);
     if (!root) return;
+    this.startHighlights();
     const panels = root.querySelectorAll('[data-ccpanel]');
     panels.forEach(panel => {
       if (panel._ccMoveBound) return;
@@ -1901,6 +1922,30 @@ class Component extends DCLogic {
       if (!m) return;
       m.animate(panels, { opacity:[0,1], transform:['scale(.94) translateY(14px)','scale(1) translateY(0)'] }, { delay: m.stagger(0.06), type:'spring', bounce:0.22, duration:0.7 });
     });
+  }
+  // About "Highlights" card: crossfades through the photos in a fresh random
+  // order each visit. The interval stops itself once the card leaves the DOM.
+  startHighlights(){
+    clearInterval(this._hlT);
+    const card = this.rootRef.current && this.rootRef.current.querySelector('[data-cchl]');
+    if (!card) return;
+    const imgs = Array.from(card.querySelectorAll('.cc-hl-img'));
+    const count = card.querySelector('[data-cchl-count]');
+    if (!imgs.length) return;
+    const order = imgs.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+    let k = 0;
+    const show = () => {
+      imgs.forEach((im, i) => im.classList.toggle('on', i === order[k]));
+      if (count) count.textContent = (k + 1) + ' of ' + imgs.length;
+    };
+    show();
+    if (this.prefersReduced()) return;
+    this._hlT = setInterval(() => {
+      if (!card.isConnected) { clearInterval(this._hlT); return; }
+      k = (k + 1) % order.length;
+      show();
+    }, 3200);
   }
   ccToggle(key){
     const toggles = { ...this.state.ccToggles, [key]: !this.state.ccToggles[key] };
@@ -2633,6 +2678,7 @@ class Component extends DCLogic {
   }
   componentWillUnmount(){
     clearTimeout(this._ccRingT);
+    clearInterval(this._hlT);
     if (this._lenisRaf) cancelAnimationFrame(this._lenisRaf);
     if (this._lenisWait) cancelAnimationFrame(this._lenisWait);
     if (this._lenis) { this._lenis.destroy(); this._lenis = null; }
