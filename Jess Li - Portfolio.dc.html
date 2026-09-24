@@ -412,7 +412,7 @@
   .bg-layer[data-layer="night"]{background-image:radial-gradient(46% 52% at 18% 20%, rgba(64,84,140,.38), transparent 68%),radial-gradient(46% 52% at 80% 14%, rgba(46,58,92,.42), transparent 70%),radial-gradient(52% 56% at 24% 80%, rgba(70,66,110,.34), transparent 70%),radial-gradient(50% 54% at 84% 82%, rgba(40,52,74,.42), transparent 70%),radial-gradient(46% 50% at 52% 50%, rgba(54,64,90,.30), transparent 70%);background-size:200% 200%,220% 200%,210% 220%,205% 210%,230% 230%;background-position:0% 0%,100% 0%,0% 100%,100% 100%,50% 50%;}
   /* Home page: the same fixed photo background shows in both light and dark
      mode, inverted for dark instead of swapped out for a different image. */
-  .reveal-blobs .bg-layer[data-layer="plain"]{opacity:1;background-repeat:no-repeat;background-image:url("assets/mist_bg.jpg");background-size:cover;background-position:center;background-color:#fbfaf5;background-attachment:fixed;transition:filter .5s ease;}
+  .reveal-blobs .bg-layer[data-layer="plain"]{opacity:1;background-repeat:no-repeat;background-image:url("assets/mist_bg.jpg");background-size:cover;background-position:center;background-color:#fbfaf5;animation:none;transition:filter .5s ease;}
   [data-ambient="night"] .reveal-blobs .bg-layer[data-layer="plain"]{filter:invert(1) hue-rotate(180deg);}
   /* Same fixed dappled-photo background as the home page, applied here too,
      inverted for dark mode the same way. A ::before layer keeps the filter
@@ -420,7 +420,7 @@
   section[data-screen-label="About"]{position:relative;}
   section[data-screen-label="About"]::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background-repeat:no-repeat;background-image:url("assets/mist_bg.jpg");background-size:cover;background-position:center;transition:filter .5s ease;}
   [data-ambient="night"] section[data-screen-label="About"]::before{filter:brightness(.35) saturate(1.15);}
-  .bg-glow{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity .6s ease;background:radial-gradient(circle 24vmax at var(--gx,50%) var(--gy,50%), var(--glow-c1,rgba(255,255,255,.6)), var(--glow-c2,rgba(255,255,255,0)) 60%);}
+  .bg-glow{display:none !important;position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity .6s ease;background:radial-gradient(circle 24vmax at var(--gx,50%) var(--gy,50%), var(--glow-c1,rgba(255,255,255,.6)), var(--glow-c2,rgba(255,255,255,0)) 60%);}
   .bg-glow.on{opacity:1;}
   [data-ambient="night"]{--glow-c1:rgba(255,255,255,.36);--glow-c2:rgba(255,255,255,0);}
   [data-ambient="night"] .grain{mix-blend-mode:overlay;opacity:.09;}
@@ -469,7 +469,7 @@
   .work-sticky-tag{font-family:var(--font-sans);font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2);background:transparent;border:1px solid var(--line);border-radius:999px;padding:5px 12px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box;}
 
   .reveal-content{position:relative;z-index:2;background:var(--color-paper);}
-  .reveal-content > .reveal-blobs{position:fixed;inset:0;z-index:-1;pointer-events:none;background-color:var(--color-paper);background-image:radial-gradient(circle 24vmax at var(--gx,50%) var(--gy,50%), var(--glow-c1,transparent), var(--glow-c2,transparent));background-repeat:no-repeat;}
+  .reveal-content > .reveal-blobs{position:fixed;inset:0;z-index:-1;pointer-events:none;background-color:var(--color-paper);background-repeat:no-repeat;}
   .reveal-footer{position:relative;z-index:4;background:transparent;}
   .static-footer{background:transparent;}
   @keyframes sparkle{0%,100%{opacity:.35;transform:scale(.92) rotate(0deg);}45%{opacity:1;transform:scale(1.18) rotate(90deg);}70%{opacity:.5;transform:scale(1) rotate(120deg);}}
