@@ -373,8 +373,15 @@
   /* Image gains slight depth on hover — calm, no tilt/scale */
   .feat-figure image-slot{display:block;box-shadow:0 1px 0 rgba(20,20,22,0);transition:box-shadow .55s cubic-bezier(.2,.7,.2,1),transform .55s cubic-bezier(.2,.7,.2,1);}
   .feat-figure.entry-imgwrap:hover image-slot{box-shadow:0 26px 60px rgba(20,20,22,.14);transform:translateY(-3px);}
-  .feat-figure.entry-imgwrap .feat-cover{transition:filter .45s cubic-bezier(.2,.7,.2,1);}
-  .feat-figure.entry-imgwrap:hover .feat-cover{filter:blur(3px) saturate(.94);}
+  /* Hover: a progressive (transparent -> strong) blur rises over the bottom of the
+     cover and the supporting text sits on it. Always shown on touch screens. */
+  .feat-blur{position:absolute;left:0;right:0;bottom:0;height:64%;opacity:0;transition:opacity .45s cubic-bezier(.2,.7,.2,1);pointer-events:none;z-index:2;}
+  .feat-figure:hover .feat-blur{opacity:1;}
+  @media (hover:none){.feat-blur{opacity:1;}}
+  .feat-blur-bg{position:absolute;inset:0;-webkit-backdrop-filter:blur(22px) saturate(1.2);backdrop-filter:blur(22px) saturate(1.2);background:linear-gradient(to top,rgba(10,12,16,.66) 0%,rgba(10,12,16,.3) 55%,rgba(10,12,16,0) 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 60%);mask-image:linear-gradient(to bottom,transparent 0,#000 60%);}
+  .feat-blur-text{position:absolute;left:clamp(16px,2.4vw,28px);right:clamp(16px,2.4vw,28px);bottom:clamp(16px,2.4vw,26px);display:flex;flex-direction:column;align-items:flex-start;gap:14px;color:#fff;font-family:var(--font-sans);}
+  .feat-blur-text p{margin:0;font-size:clamp(14px,1.25vw,16px);line-height:1.55;max-width:56ch;text-wrap:pretty;}
+  .feat-blur-btn{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 16px;border-radius:999px;font-size:14px;font-weight:500;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);}
   /* Masked image entrance (bottom-up wipe), reuses [data-mask] engine on figures */
   /* Liquid glass card: hover lifts the card and brightens the rim. */
   .feat-sticky{--muted-2:#2f3036;--ink-2:#2f3036;--muted:#2f3036;border-radius:32px;background:linear-gradient(135deg,rgba(255,255,255,.64),rgba(255,255,255,.5));-webkit-backdrop-filter:blur(5px) saturate(1.8) contrast(1.06);backdrop-filter:blur(5px) saturate(1.8) contrast(1.06);backdrop-filter:url(#cc-liquid) blur(5px) saturate(1.8) contrast(1.06);border:1px solid rgba(255,255,255,.5);box-shadow:0 22px 44px -20px rgba(20,20,22,.28),inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -1.5px 1px rgba(255,255,255,.4),inset 3px 3px 8px rgba(255,255,255,.32),inset -3px -4px 12px rgba(255,255,255,.22);}
@@ -587,11 +594,9 @@
                     <div style="font-family:var(--font-sans);font-size:13px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">{{ project.metaLine }}</div>
                     <div style="font-family:var(--font-serif);font-weight:400;font-size:clamp(24px,2.4vw,32px);line-height:1.12;letter-spacing:-.015em;color:var(--ink);">{{ project.title }}</div>
                   </div>
-                  <p style="font-family:var(--font-sans);font-size:16px;line-height:1.55;color:var(--ink-2);margin:0;text-wrap:pretty;">{{ project.overview }}</p>
-                  <button onClick="{{ project.openImg }}" style="align-self:flex-start;margin-top:2px;font-family:var(--font-sans);font-size:14px;color:var(--ink);background:none;border:1px solid var(--line);border-radius:20px;padding:9px 16px;cursor:{{ project.coverCursor }};display:inline-flex;align-items:center;gap:6px;" style-hover="border-color:var(--accent);color:var(--accent);">Read more ↗</button>
                 </figcaption>
                 <figure class="entry-imgwrap feat-figure" data-cover-label="{{ project.coverLabel }}" onClick="{{ project.openImg }}" style="margin:0;cursor:{{ project.coverCursor }};flex:3 1 460px;order:2;">
-                  <div class="feat-cover" style="position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--surface);border-radius:6px;">
+                  <div class="feat-cover" style="position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--surface);border-radius:20px;">
                     <sc-if value="{{ project.fullImg }}" hint-placeholder-val="{{ false }}">
                       <img data-lazysrc="{{ project.fullImg }}" alt="{{ project.title }} — cover image" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:var(--surface);">
                     </sc-if>
@@ -606,6 +611,7 @@
                         <image-slot id="home-{{ project.slug }}" style="width:100%;height:100%;display:block;" shape="rect" fit="cover" placeholder="{{ project.title }} — cover image"></image-slot>
                       </sc-if>
                     </div>
+                    <div class="feat-blur"><div class="feat-blur-bg"></div><div class="feat-blur-text"><p>{{ project.overview }}</p><span class="feat-blur-btn">Read more ↗</span></div></div>
                   </div>
                 </figure>
               </div>
