@@ -331,6 +331,7 @@
   .feat-cover{clip-path:inset(0 round 20px);isolation:isolate;}
   .feat-blur{position:absolute;left:0;right:0;bottom:0;height:42%;opacity:0;transition:opacity .15s ease-out;pointer-events:none;z-index:2;will-change:opacity;}
   .feat-figure:hover .feat-blur{opacity:1;}
+  .flick-photo:hover .feat-blur{opacity:1;}
   @media (hover:none){.feat-blur{opacity:1;}}
   .feat-blur-bg{position:absolute;inset:0;-webkit-backdrop-filter:blur(20px) saturate(1.3);backdrop-filter:blur(20px) saturate(1.3);background:linear-gradient(to top,rgba(10,12,16,.42) 0%,rgba(10,12,16,.14) 60%,rgba(10,12,16,0) 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 55%);mask-image:linear-gradient(to bottom,transparent 0,#000 55%);}
   .feat-blur-text{position:absolute;left:clamp(16px,2.4vw,28px);right:clamp(16px,2.4vw,28px);bottom:clamp(16px,2.4vw,26px);display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-family:var(--font-sans);}
@@ -1427,20 +1428,17 @@
         </div>
       </div>
 
-      <!-- Flicks — small autoplaying carousel -->
-      <div style="overflow:hidden;margin:clamp(32px,4vw,48px) 0 clamp(40px,5vw,60px);">
-        <div class="flick-track" style="display:flex;gap:10px;width:max-content;">
-          <sc-for list="{{ flickGrid }}" as="it" hint-placeholder-count="12">
-            <div style="width:100px;height:100px;flex:0 0 auto;overflow:hidden;background:var(--surface);">
-              <img src="{{ it.img }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+      <!-- Flicks — 3x3 grid of snapshots, same hover-blur treatment as case-study covers -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:clamp(32px,4vw,48px) 0 clamp(40px,5vw,60px);max-width:520px;">
+        <sc-for list="{{ flickGrid }}" as="it" hint-placeholder-count="9">
+          <figure class="flick-photo" style="margin:0;width:100%;aspect-ratio:1;">
+            <div class="feat-cover" style="position:relative;width:100%;height:100%;overflow:hidden;background:var(--surface);border-radius:12px;">
+              <img src="{{ it.img }}" alt="" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;">
+              <div class="feat-blur"><div class="feat-blur-bg"></div></div>
             </div>
-          </sc-for>
-          <sc-for list="{{ flickGrid }}" as="it" hint-placeholder-count="12">
-            <div style="width:100px;height:100px;flex:0 0 auto;overflow:hidden;background:var(--surface);">
-              <img src="{{ it.img }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
-            </div>
-          </sc-for>
-        </div>
+          </figure>
+        </sc-for>
+      </div>
       </div>
 
       <!-- Experience — editorial index, styled like Contents -->
@@ -1822,6 +1820,12 @@ class Component extends DCLogic {
     this.state = { view:initRoute.view, slug:initRoute.slug, leaf:0, bookScale: this.computeScale(), quoteIdx:0, typed:'', typing:false, opened:false, unlocked:{}, passError:false, bgMode:'plain' };
     // Case studies still in progress require a passphrase before the account opens.
     this.PASSWORDS = { sailpoint: 'sailu2026' };
+    // About page "Flicks" 3x3 grid — a handful of personal snapshots, unrelated to work.
+    this.ABOUT_PHOTOS = [
+      'assets/highlights2/cocktail.jpg', 'assets/highlights2/painting.jpg', 'assets/highlights2/dinner-menu.jpg',
+      'assets/highlights2/hk-taxi.jpg', 'assets/highlights2/vases.jpg', 'assets/highlights2/sculpture.jpg',
+      'assets/highlights2/headdress.jpg', 'assets/highlights2/ocean-window.jpg', 'assets/highlights2/blue-vase.jpg'
+    ];
     this.BLANK_IMG = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     // Auto-carousel phrases that finish the sentence "…a Product Designer —"
     this.PHRASES = [
@@ -3948,7 +3952,7 @@ class Component extends DCLogic {
       globeSpots: pgItems.map((p, i) => ({ i, title: p.title, coord: this.fmtCoord(p.loc[0], p.loc[1]), active: (this.state.flickFocus || 0) === i, focus: () => this.focusGlobe(i) })),
       flickActiveImg: activeFlick.img,
       flickActiveImgEl2: React.createElement('img', { src: activeFlick.img, alt: activeFlick.title, style: { width:'100%', height:'100%', objectFit:'cover', display:'block' } }),
-      flickGrid: pgItems.map((p, i) => ({ num: p.num, img: p.img, title: p.title, focus: () => this.setState({ flickFocus: i }) })),
+      flickGrid: this.ABOUT_PHOTOS.map(img => ({ img })),
       flickActiveImgEl: React.createElement('img', { src: (pgItems[this.state.flickFocus || 0] || pgItems[0]).img, alt: (pgItems[this.state.flickFocus || 0] || pgItems[0]).title, style: { width:'100%', height:'100%', objectFit:'cover', display:'block' } }),
       flickActiveTitle: (pgItems[this.state.flickFocus || 0] || pgItems[0]).title,
       flickActiveNum: (pgItems[this.state.flickFocus || 0] || pgItems[0]).num,
