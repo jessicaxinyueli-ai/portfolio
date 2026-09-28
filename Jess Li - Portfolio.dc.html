@@ -451,7 +451,7 @@
     <div class="nav-right" style="display:flex;align-items:center;gap:clamp(18px,3vw,38px);">
       <sc-if value="{{ showCaseNav }}">
         <div class="navset navset-toc" style="display:flex;gap:clamp(18px,3vw,38px);align-items:center;font-family:var(--font-sans);font-size:16px;letter-spacing:.01em;color:#96969c;">
-          <button class="back-to-work" onClick="{{ goWork }}" style="background:none;border:1px solid var(--line);border-radius:20px;cursor:pointer;color:var(--ink);padding:8px 16px;font-family:var(--font-sans);font-size:13px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;" style-hover="border-color:var(--accent);color:var(--accent)">← Back to Work</button>
+          <button class="back-to-top" onClick="{{ scrollTop }}" style="background:none;border:1px solid var(--line);border-radius:20px;cursor:pointer;color:var(--ink);padding:8px 16px;font-family:var(--font-sans);font-size:13px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;" style-hover="border-color:var(--accent);color:var(--accent)">↑ Back to top</button>
           <div class="toc-label" style="font-family:var(--font-sans);font-size:13px;letter-spacing:.02em;color:var(--muted-2);">Contents</div>
           <nav class="toc-list" style="display:flex;flex-direction:column;">
             <sc-for list="{{ toc }}" as="t" hint-placeholder-count="6">
