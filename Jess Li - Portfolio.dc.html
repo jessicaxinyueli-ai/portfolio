@@ -239,9 +239,9 @@
      list, theme toggle anchored to the bottom) instead of a top bar. Page
      content shifts right by --nav-w so nothing sits under it. Needs
      !important since the base layout above is set via inline style. */
-  :root{--nav-w:200px;}
+  :root{--nav-w:280px;}
   @media (min-width:860px){
-    [data-nav]{position:fixed !important;top:0 !important;left:0 !important;right:auto !important;bottom:0 !important;width:var(--nav-w);flex-direction:column !important;align-items:flex-start !important;justify-content:flex-start !important;gap:clamp(28px,4vh,44px) !important;padding:clamp(28px,5vh,48px) clamp(20px,3vw,30px) clamp(24px,4vh,36px) !important;box-sizing:border-box;border-bottom:none !important;overflow-y:auto;}
+    [data-nav]{position:fixed !important;top:0 !important;left:0 !important;right:auto !important;bottom:0 !important;width:var(--nav-w);flex-direction:column !important;align-items:flex-start !important;justify-content:flex-start !important;gap:clamp(28px,4vh,44px) !important;padding:clamp(100px,15vh,160px) clamp(20px,3vw,30px) clamp(24px,4vh,36px) !important;box-sizing:border-box;border-bottom:none !important;overflow-y:auto;}
     [data-nav].scrolled{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;box-shadow:none !important;}
     [data-nav] .nav-right{flex:1 !important;display:flex !important;flex-direction:column !important;align-items:flex-start !important;gap:clamp(20px,3vh,28px) !important;min-height:0;}
     [data-nav] .navset,[data-nav] .navset-toc{flex-direction:column !important;align-items:flex-start !important;gap:clamp(10px,1.6vh,16px) !important;}
@@ -555,7 +555,7 @@
   <section data-screen-label="Home" style="--font-sans:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;">
     <div class="reveal-content" data-reveal-content="">
     <div class="reveal-blobs" aria-hidden="true"></div>
-    <header style="position:relative;max-width:1340px;margin:0 auto;padding:clamp(84px,11vh,120px) clamp(24px,6vw,80px) clamp(32px,5vh,64px);overflow:hidden;height:100svh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;">
+    <header style="position:relative;max-width:1340px;margin:0 auto;padding:clamp(100px,15vh,160px) clamp(24px,6vw,80px) clamp(32px,5vh,64px);overflow:hidden;height:100svh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;">
 
       <div class="hero-grid" style="position:relative;z-index:1;display:flex;align-items:center;">
         <div class="hero-copy" style="flex:1 1 100%;min-width:0;width:100%;margin:0;text-align:left;">
