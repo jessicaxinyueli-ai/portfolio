@@ -226,9 +226,21 @@
   }
 
   /* ===== INTERACTION LAYER ===== */
-  /* Navbar: transparent at top, frosted on scroll */
+  /* Navbar: transparent at top, frosted on scroll (mobile top-bar layout). */
   [data-nav]{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-bottom:1px solid transparent;transition:background .45s ease, backdrop-filter .45s ease, border-color .45s ease, box-shadow .45s ease;will-change:backdrop-filter;}
   [data-nav].scrolled{background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);border-bottom-color:var(--line);box-shadow:0 1px 0 rgba(20,20,22,.02);}
+  /* >=860px: nav becomes a fixed left sidebar (logo, then a vertical link
+     list, theme toggle anchored to the bottom) instead of a top bar. Page
+     content shifts right by --nav-w so nothing sits under it. Needs
+     !important since the base layout above is set via inline style. */
+  :root{--nav-w:200px;}
+  @media (min-width:860px){
+    [data-nav]{position:fixed !important;top:0 !important;left:0 !important;right:auto !important;bottom:0 !important;width:var(--nav-w);flex-direction:column !important;align-items:flex-start !important;justify-content:flex-start !important;gap:clamp(28px,4vh,44px) !important;padding:clamp(28px,5vh,48px) clamp(20px,3vw,30px) clamp(24px,4vh,36px) !important;box-sizing:border-box;border-bottom:none !important;overflow-y:auto;}
+    [data-nav].scrolled{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;box-shadow:none !important;}
+    [data-nav] .navset{flex:1 !important;flex-direction:column !important;align-items:flex-start !important;gap:clamp(14px,2vh,20px) !important;}
+    [data-nav] .mode-toggle-btn{margin-top:auto;}
+    [data-bg]{padding-left:var(--nav-w);}
+  }
   /* Nav active indicator */
   [data-navlink]{position:relative;}
 
