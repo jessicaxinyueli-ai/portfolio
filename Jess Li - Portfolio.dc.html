@@ -229,6 +229,12 @@
   /* Navbar: transparent at top, frosted on scroll (mobile top-bar layout). */
   [data-nav]{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-bottom:1px solid transparent;transition:background .45s ease, backdrop-filter .45s ease, border-color .45s ease, box-shadow .45s ease;will-change:backdrop-filter;}
   [data-nav].scrolled{background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);border-bottom-color:var(--line);box-shadow:0 1px 0 rgba(20,20,22,.02);}
+  /* Below 860px the case-study nav is still a top bar, so the full Contents
+     list (often 8+ items) can't run inline — show just "Back to Work" there
+     and save the list for the >=860px sidebar. */
+  @media (max-width:859px){
+    .navset-toc .toc-label,.navset-toc .toc-list{display:none !important;}
+  }
   /* >=860px: nav becomes a fixed left sidebar (logo, then a vertical link
      list, theme toggle anchored to the bottom) instead of a top bar. Page
      content shifts right by --nav-w so nothing sits under it. Needs
@@ -237,8 +243,11 @@
   @media (min-width:860px){
     [data-nav]{position:fixed !important;top:0 !important;left:0 !important;right:auto !important;bottom:0 !important;width:var(--nav-w);flex-direction:column !important;align-items:flex-start !important;justify-content:flex-start !important;gap:clamp(28px,4vh,44px) !important;padding:clamp(28px,5vh,48px) clamp(20px,3vw,30px) clamp(24px,4vh,36px) !important;box-sizing:border-box;border-bottom:none !important;overflow-y:auto;}
     [data-nav].scrolled{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;box-shadow:none !important;}
-    [data-nav] .navset{flex:1 !important;flex-direction:column !important;align-items:flex-start !important;gap:clamp(14px,2vh,20px) !important;}
-    [data-nav] .mode-toggle-btn{margin-top:auto;}
+    [data-nav] .nav-right{flex:1 !important;display:flex !important;flex-direction:column !important;align-items:flex-start !important;gap:clamp(20px,3vh,28px) !important;min-height:0;}
+    [data-nav] .navset,[data-nav] .navset-toc{flex-direction:column !important;align-items:flex-start !important;gap:clamp(10px,1.6vh,16px) !important;}
+    [data-nav] .navset-toc{overflow-y:auto;min-height:0;flex:1 1 auto !important;}
+    [data-nav] .toc-list{gap:0 !important;}
+    [data-nav] .mode-toggle-btn{margin-top:auto;flex:0 0 auto;}
     [data-bg]{padding-left:var(--nav-w);}
   }
   /* Nav active indicator */
@@ -509,10 +518,27 @@
   </svg>
   <nav data-nav="" style="position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:16px clamp(20px,5vw,64px);--font-sans:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;">
     <button class="logo-btn" onClick="{{ goHome }}" aria-label="Home — Jess Li" style="background:none;border:none;cursor:pointer;padding:0;line-height:0;display:flex;align-items:center;"><img class="logo-mark" src="assets/yue-logo.png" alt="悦" style="height:30px;width:auto;display:block;"></button>
-    <div class="navset" style="display:flex;gap:clamp(18px,3vw,38px);align-items:center;font-family:var(--font-sans);font-size:16px;letter-spacing:.01em;color:#96969c;">
-      <button data-navlink="" data-navwork="" onClick="{{ goWork }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:8px 0;" >Work</button>
-      <button data-navlink="" onClick="{{ openAbout }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:8px 0;" >About</button>
-      <a data-navlink="" href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;text-transform:none;letter-spacing:.01em;font-size:16px;padding:8px 0;display:inline-block;" >Resume</a>
+    <div class="nav-right" style="display:flex;align-items:center;gap:clamp(18px,3vw,38px);">
+      <sc-if value="{{ showCaseNav }}">
+        <div class="navset navset-toc" style="display:flex;gap:clamp(18px,3vw,38px);align-items:center;font-family:var(--font-sans);font-size:16px;letter-spacing:.01em;color:#96969c;">
+          <button class="back-to-work" onClick="{{ goWork }}" style="background:none;border:1px solid var(--line);border-radius:20px;cursor:pointer;color:var(--ink);padding:8px 16px;font-family:var(--font-sans);font-size:13px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;" style-hover="border-color:var(--accent);color:var(--accent)">← Back to Work</button>
+          <div class="toc-label" style="font-family:var(--font-sans);font-size:13px;letter-spacing:.02em;color:var(--muted-2);">Contents</div>
+          <nav class="toc-list" style="display:flex;flex-direction:column;">
+            <sc-for list="{{ toc }}" as="t" hint-placeholder-count="6">
+              <button data-tocitem="" onClick="{{ t.go }}" style="background:none;border:none;cursor:pointer;text-align:left;display:flex;align-items:baseline;gap:10px;padding:7px 0;font-family:var(--font-sans);color:var(--muted-2);" style-hover="color:var(--accent)">
+                <span data-toclabel="" style="font-size:13.5px;letter-spacing:.01em;color:var(--muted-2);line-height:1.4;">{{ t.label }}</span>
+              </button>
+            </sc-for>
+          </nav>
+        </div>
+      </sc-if>
+      <sc-if value="{{ showDefaultNav }}">
+        <div class="navset" style="display:flex;gap:clamp(18px,3vw,38px);align-items:center;font-family:var(--font-sans);font-size:16px;letter-spacing:.01em;color:#96969c;">
+          <button data-navlink="" data-navwork="" onClick="{{ goWork }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:8px 0;" >Work</button>
+          <button data-navlink="" onClick="{{ openAbout }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:8px 0;" >About</button>
+          <a data-navlink="" href="assets/jess-li-resume.pdf" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;text-transform:none;letter-spacing:.01em;font-size:16px;padding:8px 0;display:inline-block;" >Resume</a>
+        </div>
+      </sc-if>
       <button type="button" class="mode-toggle-btn" onClick="{{ cycleBgMode }}" aria-label="Change background theme">
         <sc-if value="{{ isPlain }}" hint-placeholder-val="{{ true }}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 3v2.4M12 18.6V21M4.2 12H1.8M22.2 12h-2.4M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M5.6 18.4l1.7-1.7M16.7 7.3l1.7-1.7"></path></svg>
@@ -750,24 +776,8 @@
     <sc-if value="{{ hasCase }}" hint-placeholder-val="{{ false }}">
     <!-- BODY with sticky rail -->
     <div data-article="" style="max-width:1180px;margin:0 auto;padding:clamp(44px,6vw,80px) clamp(24px,6vw,64px) 0;display:flex;flex-wrap:wrap;gap:clamp(30px,5vw,72px);align-items:flex-start;">
-      <!-- STICKY RAIL: contents + progress -->
-      <aside style="flex:0 0 auto;width:216px;position:sticky;top:92px;align-self:flex-start;">
-        <div style="display:flex;gap:16px;">
-          <div style="flex:1;min-width:0;">
-            <div style="font-family:var(--font-sans);font-size:16px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:18px;">
-              <span>Contents</span>
-            </div>
-            <nav style="display:flex;flex-direction:column;">
-              <sc-for list="{{ toc }}" as="t" hint-placeholder-count="6">
-                <button data-tocitem="" onClick="{{ t.go }}" style="background:none;border:none;cursor:pointer;text-align:left;display:flex;align-items:baseline;gap:10px;padding:9px 0;font-family:var(--font-sans);color:var(--muted-2);" style-hover="color:var(--accent)">
-                  <span data-toclabel="" style="font-size:calc(16px * var(--sc-body,1));letter-spacing:.01em;color:var(--muted-2);line-height:1.4;">{{ t.label }}</span>
-                </button>
-              </sc-for>
-            </nav>
-          </div>
-        </div>
-      </aside>
-
+      <!-- Contents now lives in the left nav sidebar (>=860px) alongside a
+           "Back to Work" button; see [data-nav] .navset-toc up top. -->
       <!-- CONTENT COLUMN -->
       <div style="flex:1 1 440px;min-width:0;max-width:700px;">
         <sc-if value="{{ hasSkim }}" hint-placeholder-val="{{ false }}">
@@ -4107,6 +4117,7 @@ class Component extends DCLogic {
       journey: this.JOURNEY.map((j, i) => ({ ...j, i0: i })),
       curNum: cur ? String(mapped.findIndex(p => p.slug === cur.slug) + 1).padStart(2,'0') : '00',
       hasCase: !!cs, noCase: !!cur && !cs,
+      showCaseNav: view === 'work' && !!cs, showDefaultNav: !(view === 'work' && !!cs),
       hasLightbox: !!this.state.lightbox,
       lightboxImgEl: this.state.lightbox ? React.createElement('img', { src: this.state.lightbox.img, alt: this.state.lightbox.title || '', style: { width:'auto', height:'auto', maxWidth:'min(1800px,94vw)', maxHeight:'none', display:'block', boxShadow:'0 30px 80px rgba(0,0,0,.5)' } }) : null,
       lightboxLabel: (this.state.lightbox && this.state.lightbox.label) || '',
