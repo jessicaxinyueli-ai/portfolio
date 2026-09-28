@@ -588,7 +588,7 @@
     <div class="grain" aria-hidden="true"></div></header>
 
     <div id="work">
-      <div style="max-width:1340px;margin:0 auto;padding:clamp(12px,2vw,20px) clamp(24px,6vw,80px) 0;">
+      <div style="max-width:1340px;margin:0 auto;padding:clamp(40px,5vw,72px) clamp(24px,6vw,80px) 0;">
         <div data-focuslist="" style="display:none;">
           <sc-for list="{{ projects }}" as="project" hint-placeholder-count="4">
             <button data-focusrow="" data-slug="{{ project.slug }}" onClick="{{ project.open }}" style="width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--line);cursor:{{ project.coverCursor }};display:flex;align-items:baseline;gap:clamp(12px,2vw,26px);padding:clamp(15px,2vw,23px) 4px;font-family:var(--font-sans);color:var(--ink);" style-hover="color:var(--accent)">
