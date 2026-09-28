@@ -683,7 +683,7 @@
   <section data-screen-label="Case Study" style="--font-sans:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;">
     <!-- PASSWORD GATE -->
     <sc-if value="{{ locked }}" hint-placeholder-val="{{ false }}">
-      <div style="max-width:1180px;margin:0 auto;padding:clamp(104px,13vw,150px) clamp(24px,6vw,64px) 0;">
+      <div style="max-width:1180px;margin:0 auto;padding:clamp(104px,13vw,150px) clamp(40px,8vw,96px) 0;">
         <div style="display:none;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--font-sans);font-size:11px;letter-spacing:.04em;color:var(--muted-2);border-bottom:1px solid var(--line);padding-bottom:13px;margin-bottom:clamp(40px,6vw,60px);">
           <button onClick="{{ goWork }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:0;letter-spacing:.04em;" style-hover="color:var(--accent)">← Index</button>
           <span>Case Study No. {{ curNum }}</span>
@@ -735,7 +735,7 @@
 
     <sc-if value="{{ caseVisible }}" hint-placeholder-val="{{ true }}">
     <!-- COVER -->
-    <div style="max-width:1180px;margin:0 auto;padding:clamp(104px,13vw,150px) clamp(24px,6vw,64px) 0;">
+    <div style="max-width:1180px;margin:0 auto;padding:clamp(104px,13vw,150px) clamp(40px,8vw,96px) 0;">
       <div style="display:none;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--font-sans);font-size:11px;letter-spacing:.04em;color:var(--muted-2);border-bottom:1px solid var(--line);padding-bottom:13px;">
         <button onClick="{{ goWork }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:0;letter-spacing:.04em;" style-hover="color:var(--accent)">← Index</button>
         <span>Case Study No. {{ curNum }}</span>
