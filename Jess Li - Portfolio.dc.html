@@ -418,6 +418,8 @@
   [data-ambient="plain"] .grain{mix-blend-mode:multiply;opacity:.07;}
   .paper-grain{position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;opacity:.16;background-size:170px 170px;background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNzAnIGhlaWdodD0nMTcwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC44NScgbnVtT2N0YXZlcz0nMicgc3RpdGNoVGlsZXM9J3N0aXRjaCcvPjxmZUNvbG9yTWF0cml4IHR5cGU9J3NhdHVyYXRlJyB2YWx1ZXM9JzAnLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWx0ZXI9J3VybCgjbiknLz48L3N2Zz4=");}
   [data-ambient="night"] .logo-mark{filter:invert(1);}
+  .logo-mark{transition:transform .35s cubic-bezier(.2,.7,.2,1);}
+  .logo-btn:hover .logo-mark{transform:rotate(-12deg);}
   [data-ambient="night"] .cube-face{background:var(--ink);border-color:rgba(255,255,255,.1);}
   [data-ambient="night"] .cube-face i,[data-ambient="night"] .cube-face span{color:var(--paper) !important;}
   [data-ambient="night"] .googly-eye{background:var(--paper);}
@@ -494,7 +496,7 @@
     </defs>
   </svg>
   <nav data-nav="" style="position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:16px clamp(20px,5vw,64px);--font-sans:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;">
-    <button onClick="{{ goHome }}" aria-label="Home — Jess Li" style="background:none;border:none;cursor:pointer;padding:0;line-height:0;display:flex;align-items:center;"><img class="logo-mark" src="assets/yue-logo.png" alt="悦" style="height:30px;width:auto;display:block;"></button>
+    <button class="logo-btn" onClick="{{ goHome }}" aria-label="Home — Jess Li" style="background:none;border:none;cursor:pointer;padding:0;line-height:0;display:flex;align-items:center;"><img class="logo-mark" src="assets/yue-logo.png" alt="悦" style="height:30px;width:auto;display:block;"></button>
     <div class="navset" style="display:flex;gap:clamp(18px,3vw,38px);align-items:center;font-family:var(--font-sans);font-size:16px;letter-spacing:.01em;color:#96969c;">
       <button data-navlink="" data-navwork="" onClick="{{ goWork }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:8px 0;" >Work</button>
       <button data-navlink="" onClick="{{ openAbout }}" style="background:none;border:none;cursor:pointer;color:inherit;padding:8px 0;" >About</button>
