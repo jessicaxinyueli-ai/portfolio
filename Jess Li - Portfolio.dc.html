@@ -559,7 +559,7 @@
 
       <div class="hero-grid" style="position:relative;z-index:1;display:flex;align-items:center;">
         <div class="hero-copy" style="flex:1 1 100%;min-width:0;width:100%;margin:0;text-align:left;">
-          <div style="display:flex;align-items:center;justify-content:flex-start;gap:clamp(14px,1.8vw,24px);margin-bottom:clamp(16px,2vw,26px);transition:filter .35s ease;" style-hover="filter:blur(1.8px)">
+          <div class="hero-headrow" style="display:flex;align-items:center;justify-content:flex-start;gap:clamp(14px,1.8vw,24px);margin-bottom:clamp(16px,2vw,26px);transition:filter .35s ease;" style-hover="filter:blur(1.8px)">
             <img src="assets/jess-portrait-hi.jpg" alt="Portrait of Jessica Li" style="width:clamp(64px,7vw,96px);aspect-ratio:1/1;flex:0 0 auto;object-fit:cover;object-position:33% 34%;display:block;">
             <div class="hero-onphoto" style="font-family:'Instrument Serif',var(--font-serif),Georgia,serif;font-weight:400;font-size:calc(48px * var(--sc-header,1));line-height:1.05;letter-spacing:-.02em;">Hey, I'm Jessica Li.</div>
           </div>
@@ -2498,6 +2498,22 @@ class Component extends DCLogic {
       if (this._passInput) { this._passInput.value = ''; this._passInput.focus(); }
     }
   }
+  // Desktop sidebar nav: nudge the logo down so it lines up with the
+  // portrait+name row of the Home hero, instead of sitting flush at the
+  // very top of the sidebar. Recomputed on resize/view change since the
+  // hero row's position shifts with viewport height (it's vertically
+  // centered) and font-load reflow.
+  alignNavLogo(){
+    const root = this.rootRef.current; if (!root) return;
+    const logoBtn = root.querySelector('.logo-btn'); if (!logoBtn) return;
+    logoBtn.style.marginTop = '';
+    if (window.innerWidth < 860 || this.state.view !== 'home') return;
+    const heroRow = root.querySelector('.hero-headrow'); if (!heroRow) return;
+    const heroRect = heroRow.getBoundingClientRect();
+    const logoRect = logoBtn.getBoundingClientRect();
+    const delta = (heroRect.top + heroRect.height / 2) - (logoRect.top + logoRect.height / 2);
+    if (delta > 0) logoBtn.style.marginTop = delta + 'px';
+  }
   gotoWork(){
     const doScroll = () => {
       const root = this.rootRef.current;
@@ -2607,7 +2623,7 @@ class Component extends DCLogic {
       else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); this.prevPage(); }
     };
     window.addEventListener('keydown', this._key);
-    this._rs = () => { this.setState({ bookScale: this.computeScale() }); this.layoutFlowPaths(); };
+    this._rs = () => { this.setState({ bookScale: this.computeScale() }); this.layoutFlowPaths(); this.alignNavLogo(); };
     window.addEventListener('resize', this._rs);
     requestAnimationFrame(() => this.layoutFlowPaths());
     this._scroll = () => { if (this._st) return; this._st = requestAnimationFrame(() => { this._st = null; this.trackScroll(); }); };
@@ -2648,7 +2664,7 @@ class Component extends DCLogic {
     this.initCursor();
     this.setupReveals();
     this.syncLeaves();
-    if (this.state.view === 'home') { this.bindTrackEyes(); this.initCube(); this.initCarousel(); this._featIdx = 0; this._featSlug = this.PROJECTS[0].slug; this.swapPanel(0); requestAnimationFrame(() => this.setupContentsPreview()); }
+    if (this.state.view === 'home') { this.bindTrackEyes(); this.initCube(); this.initCarousel(); this._featIdx = 0; this._featSlug = this.PROJECTS[0].slug; this.swapPanel(0); requestAnimationFrame(() => this.setupContentsPreview()); requestAnimationFrame(() => this.alignNavLogo()); }
     if (this.state.view === 'about') { this.setState({ opened:false, typed:'', typing:false }); this.initControlCenter(); }
     if (this.state.view === 'work') { this.bindSketchSlider(); requestAnimationFrame(() => this.lockMockScale()); }
     this._prevView = this.state.view;
@@ -2672,6 +2688,7 @@ class Component extends DCLogic {
     this.applyAccent();
     this.resolveLazyImgs();
     requestAnimationFrame(() => this.applyOverrides());
+    requestAnimationFrame(() => this.alignNavLogo());
     // NOTE: the host passes prevProps (not prevState) to componentDidUpdate,
     // so view/slug changes are tracked manually on the instance.
     const prev = { view: this._prevView, slug: this._prevSlug };
