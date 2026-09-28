@@ -348,6 +348,10 @@
     75%{background-position:22% 70%,82% 40%,72% 22%,30% 82%,56% 44%;}
     100%{background-position:0% 0%,100% 0%,0% 100%,100% 100%,50% 50%;}
   }
+  /* Default (plain) mode: hero text sits directly on the canopy photo, so it's
+     white there instead of the site's usual dark ink. Untouched in night mode. */
+  .hero-onphoto{color:#fff;}
+  [data-ambient="night"] .hero-onphoto{color:var(--ink);}
   @media (max-width:860px){
     .hero-grid{flex-direction:column-reverse;align-items:flex-start;gap:clamp(30px,7vw,52px);}
     .hero-copy,.hero-cube-wrap{flex:1 1 100%;width:100%;}
@@ -535,9 +539,9 @@
         <div class="hero-copy" style="flex:1 1 100%;min-width:0;width:100%;margin:0;text-align:left;">
           <div style="display:flex;align-items:center;justify-content:flex-start;gap:clamp(14px,1.8vw,24px);margin-bottom:clamp(16px,2vw,26px);transition:filter .35s ease;" style-hover="filter:blur(1.8px)">
             <img src="assets/jess-portrait-hi.jpg" alt="Portrait of Jessica Li" style="width:clamp(64px,7vw,96px);aspect-ratio:1/1;flex:0 0 auto;object-fit:cover;object-position:33% 34%;display:block;">
-            <div style="font-family:'Instrument Serif',var(--font-serif),Georgia,serif;font-weight:400;font-size:calc(48px * var(--sc-header,1));line-height:1.05;letter-spacing:-.02em;color:var(--ink);">Hey, I'm Jessica Li.</div>
+            <div class="hero-onphoto" style="font-family:'Instrument Serif',var(--font-serif),Georgia,serif;font-weight:400;font-size:calc(48px * var(--sc-header,1));line-height:1.05;letter-spacing:-.02em;">Hey, I'm Jessica Li.</div>
           </div>
-          <div data-heroline="" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:4px 6px;font-family:var(--font-sans);font-size:clamp(14px,1.35vw,17px);line-height:1.5;letter-spacing:.005em;color:var(--ink);width:100%;margin:0;">
+          <div data-heroline="" class="hero-onphoto" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:4px 6px;font-family:var(--font-sans);font-size:clamp(14px,1.35vw,17px);line-height:1.5;letter-spacing:.005em;width:100%;margin:0;">
             <span style="opacity:.62;">I'm a</span>
             <span onClick="{{ tapChip }}" data-exptext="working AI native on B2B softwares" style="display:inline-flex;align-items:center;gap:5px;border-radius:7px;padding:3px 0;cursor:pointer;white-space:nowrap;" title="click to expand">
               <span data-lab="" style="transition:filter .35s ease,opacity .35s ease;font-weight:500;" style-hover="filter:blur(1.6px);opacity:.72;">product designer</span>
