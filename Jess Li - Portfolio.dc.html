@@ -418,8 +418,11 @@
      old photo background. Two nested layers per blob so the slow ambient
      drift (keyframes, on the inner .mesh-blob) and the cursor lean (JS,
      transform on the outer .mesh-outer) don't fight over the same property. */
-  .mesh-bg{position:absolute;inset:0;overflow:hidden;background-color:#faf9f6;}
+  .mesh-bg{position:absolute;inset:0;overflow:hidden;background-color:#fff;}
   [data-ambient="night"] .mesh-bg{opacity:0;}
+  .mesh-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .8s ease;}
+  .mesh-canvas.on{opacity:1;}
+  .mesh-canvas.on ~ .mesh-outer{display:none;}
   .mesh-outer{position:absolute;width:62vmax;height:62vmax;will-change:transform;transform:translate3d(0,0,0);}
   .mesh-blob{position:absolute;inset:0;border-radius:50%;filter:blur(70px);opacity:.62;will-change:transform;}
   .mesh-o1{top:-16%;left:-14%;}
@@ -540,6 +543,7 @@
     <div class="reveal-content" data-reveal-content="">
     <div class="reveal-blobs" aria-hidden="true">
       <div class="mesh-bg" data-meshbg="">
+        <canvas class="mesh-canvas" data-meshcanvas=""></canvas>
         <div class="mesh-outer mesh-o1"><div class="mesh-blob mesh-b1"></div></div>
         <div class="mesh-outer mesh-o2"><div class="mesh-blob mesh-b2"></div></div>
         <div class="mesh-outer mesh-o3"><div class="mesh-blob mesh-b3"></div></div>
@@ -3389,12 +3393,91 @@ class Component extends DCLogic {
       });
     }
   }
-  // Cursor-reactive gradient mesh (home background): the ambient drift is a
-  // plain CSS animation on each .mesh-blob; this only owns the small lean
-  // toward the pointer, applied as a separate transform on the wrapping
-  // .mesh-outer via rAF + lerp so it eases rather than snapping to the cursor.
-  // Mouse only (spec: touch should keep drifting, not track touches) and a
-  // no-op under prefers-reduced-motion (spec: static there).
+  // Cursor-reactive gradient mesh (home background). Two implementations
+  // sharing one mouse-lerp loop:
+  //  - WebGL (primary): a simplex-noise fragment shader, adapted from the
+  //    pasted Velaris component. It's plain canvas+gl calls, not a React
+  //    component -- this project is one static .dc.html file with no
+  //    bundler/JSX pipeline (same constraint as the earlier Framer Motion
+  //    ask), so there's no separate .tsx to hand back. The shader itself
+  //    ports over almost verbatim; only the React wrapper doesn't apply.
+  //  - CSS blobs (fallback): the .mesh-outer/.mesh-blob markup already in
+  //    the page, used automatically if WebGL init/compile fails for any
+  //    reason -- the canvas just never gets its "on" class, so the CSS
+  //    layer underneath (which paints regardless) stays visible.
+  // Mouse only (touch keeps drifting, not tracked) and a no-op loop under
+  // prefers-reduced-motion: the CSS blobs are already static via the
+  // @media(prefers-reduced-motion) rule, and we skip starting GL entirely.
+  initMeshGL(canvas){
+    const MESH_VERT = `attribute vec2 position;varying vec2 vUv;void main(){vUv=position*0.5+0.5;gl_Position=vec4(position,0.0,1.0);}`;
+    const MESH_FRAG = `precision highp float;varying vec2 vUv;
+uniform vec2 u_resolution;uniform float u_time;uniform vec2 u_mouse;
+uniform vec3 u_colors[4];uniform vec3 u_bg;
+vec3 permute(vec3 x){return mod(((x*34.0)+1.0)*x,289.0);}
+float snoise(vec2 v){
+  const vec4 C=vec4(0.211324865405187,0.366025403784439,-0.577350269189626,0.024390243902439);
+  vec2 i=floor(v+dot(v,C.yy));vec2 x0=v-i+dot(i,C.xx);
+  vec2 i1=(x0.x>x0.y)?vec2(1.0,0.0):vec2(0.0,1.0);
+  vec4 x12=x0.xyxy+C.xxzz;x12.xy-=i1;i=mod(i,289.0);
+  vec3 p=permute(permute(i.y+vec3(0.0,i1.y,1.0))+i.x+vec3(0.0,i1.x,1.0));
+  vec3 m=max(0.5-vec3(dot(x0,x0),dot(x12.xy,x12.xy),dot(x12.zw,x12.zw)),0.0);
+  m=m*m;m=m*m;
+  vec3 x=2.0*fract(p*C.www)-1.0;vec3 h=abs(x)-0.5;vec3 ox=floor(x+0.5);vec3 a0=x-ox;
+  m*=1.79284291400159-0.85373472095314*(a0*a0+h*h);
+  vec3 g;g.x=a0.x*x0.x+h.x*x0.y;g.yz=a0.yz*x12.xz+h.yz*x12.yw;
+  return 130.0*dot(m,g);
+}
+void main(){
+  vec2 uv=vUv;float ratio=u_resolution.x/u_resolution.y;
+  vec2 p=uv-0.5;p.x*=ratio;
+  p+=u_mouse*0.05;
+  float t=u_time*0.06;
+  float n1=snoise(p*0.32+vec2(t*0.2,-t*0.3));
+  float n2=snoise(p*0.42+vec2(-t*0.15,t*0.25)+n1*0.2);
+  float n3=snoise(p*0.55+vec2(t*0.1,-t*0.2)+n2*0.16);
+  vec3 col=u_bg;
+  col=mix(col,u_colors[0],smoothstep(-0.1,0.7,n1)*0.5);
+  col=mix(col,u_colors[1],smoothstep(0.0,0.75,n2)*0.42);
+  col=mix(col,u_colors[2],smoothstep(-0.15,0.65,n3)*0.4);
+  col=mix(col,u_colors[3],smoothstep(0.1,0.8,n1*n2)*0.34);
+  gl_FragColor=vec4(col,1.0);
+}`;
+    let gl;
+    try { gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); } catch(e) { return false; }
+    if (!gl) return false;
+    const mkShader = (type, src) => {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src); gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) return null;
+      return s;
+    };
+    const vs = mkShader(gl.VERTEX_SHADER, MESH_VERT);
+    const fs = mkShader(gl.FRAGMENT_SHADER, MESH_FRAG);
+    if (!vs || !fs) return false;
+    const program = gl.createProgram();
+    gl.attachShader(program, vs); gl.attachShader(program, fs); gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return false;
+    gl.useProgram(program);
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+    const posLoc = gl.getAttribLocation(program, 'position');
+    gl.enableVertexAttribArray(posLoc);
+    gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+    const locs = {
+      res: gl.getUniformLocation(program, 'u_resolution'),
+      time: gl.getUniformLocation(program, 'u_time'),
+      mouse: gl.getUniformLocation(program, 'u_mouse'),
+      colors: gl.getUniformLocation(program, 'u_colors'),
+      bg: gl.getUniformLocation(program, 'u_bg'),
+    };
+    const colors = ['#F4C9D7', '#FBE6ED', '#B9D7C3', '#DCEBDD'].flatMap((h) => this.hexToRgb01(h));
+    const bg = this.hexToRgb01('#FFFFFF');
+    this._meshGl = gl; this._meshProgram = program; this._meshLocs = locs;
+    this._meshColors = colors; this._meshBg = bg; this._meshCanvas = canvas;
+    return true;
+  }
+  hexToRgb01(hex){ const h = hex.replace('#',''); return [parseInt(h.slice(0,2),16)/255, parseInt(h.slice(2,4),16)/255, parseInt(h.slice(4,6),16)/255]; }
   initMeshBg(){
     if (this._meshBound) return;
     this._meshBound = true;
@@ -3407,13 +3490,32 @@ class Component extends DCLogic {
     window.addEventListener('pointermove', this._meshMove);
     if (this.prefersReduced()) return;
     const depths = [14, 20, -16, 18];
+    let glReady = false;
+    const root = this.rootRef.current;
+    const canvas = root && root.querySelector('[data-meshcanvas]');
+    if (canvas) { try { glReady = this.initMeshGL(canvas); } catch(e) { glReady = false; } }
+    if (glReady) canvas.classList.add('on');
+    const start = performance.now();
     const loop = () => {
       this._meshRaf = requestAnimationFrame(loop);
       const root = this.rootRef.current;
       const mesh = root && root.querySelector('[data-meshbg]');
       if (!mesh || this.state.view !== 'home') return;
-      this._meshX += (this._meshTX - this._meshX) * 0.06;
-      this._meshY += (this._meshTY - this._meshY) * 0.06;
+      this._meshX += (this._meshTX - this._meshX) * 0.05;
+      this._meshY += (this._meshTY - this._meshY) * 0.05;
+      if (glReady && this._meshGl) {
+        const gl = this._meshGl, canvas = this._meshCanvas, locs = this._meshLocs;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = Math.round(canvas.clientWidth * dpr), h = Math.round(canvas.clientHeight * dpr);
+        if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
+        gl.uniform2f(locs.res, canvas.width, canvas.height);
+        gl.uniform1f(locs.time, (performance.now() - start) * 0.001);
+        gl.uniform2f(locs.mouse, this._meshX, -this._meshY);
+        gl.uniform3fv(locs.colors, this._meshColors);
+        gl.uniform3f(locs.bg, this._meshBg[0], this._meshBg[1], this._meshBg[2]);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        return;
+      }
       const outers = mesh.querySelectorAll('.mesh-outer');
       outers.forEach((el, i) => {
         const d = depths[i] || 16;
