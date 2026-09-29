@@ -549,17 +549,17 @@
                 </figcaption>
                 <figure class="entry-imgwrap feat-figure" data-cover-label="{{ project.coverLabel }}" onClick="{{ project.openImg }}" style="margin:0;cursor:{{ project.coverCursor }};width:100%;order:2;">
                   <div class="feat-cover" style="position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--surface);border-radius:20px;">
-                    <sc-if value="{{ project.fullImg }}" hint-placeholder-val="{{ false }}">
-                      <img data-lazysrc="{{ project.fullImg }}" alt="{{ project.title }} — cover image" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:var(--surface);">
+                    <sc-if value="{{ project.homeFullImg }}" hint-placeholder-val="{{ false }}">
+                      <img data-lazysrc="{{ project.homeFullImg }}" alt="{{ project.title }} — cover image" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:var(--surface);">
                     </sc-if>
                     <div class="feat-cover-track" data-covertrack="" style="position:absolute;left:0;top:0;width:100%;height:100%;will-change:transform;">
-                      <sc-if value="{{ project.coverVideo }}" hint-placeholder-val="{{ false }}">
-                        <video src="{{ project.coverVideo }}" loop="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" preload="auto" style="width:100%;height:100%;object-fit:cover;display:block;background:var(--surface);"></video>
+                      <sc-if value="{{ project.homeCoverVideo }}" hint-placeholder-val="{{ false }}">
+                        <video src="{{ project.homeCoverVideo }}" loop="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" preload="auto" style="width:100%;height:100%;object-fit:cover;display:block;background:var(--surface);"></video>
                       </sc-if>
                       <sc-if value="{{ project.coverImage }}" hint-placeholder-val="{{ false }}">
                         <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,#15356e 0%,#08449a 30%,#484aae 50%,#7a49b2 70%,#b538b0 100%);"><div style="width:74%;aspect-ratio:1753/501;"><image-slot id="cover-{{ project.slug }}" src="{{ project.coverImage }}" style="width:100%;height:100%;display:block;" shape="rect" fit="contain" placeholder="{{ project.title }}"></image-slot></div></div>
                       </sc-if>
-                      <sc-if value="{{ project.noCoverVideo }}" hint-placeholder-val="{{ true }}">
+                      <sc-if value="{{ project.homeNoCoverVideo }}" hint-placeholder-val="{{ true }}">
                         <image-slot id="home-{{ project.slug }}" style="width:100%;height:100%;display:block;" shape="rect" fit="cover" placeholder="{{ project.title }} — cover image"></image-slot>
                       </sc-if>
                     </div>
@@ -3893,6 +3893,13 @@ class Component extends DCLogic {
       coverVideo: (p.slug === 'copperhill' && !p.caseCover) ? ((window.__resources&&window.__resources.copperhillHomeCover)||'assets/copperhill-home-cover.mp4') : (p.slug === 'sailpoint' && !p.caseCover) ? ((window.__resources&&window.__resources.sailpointCaseCover)||'assets/sailpoint-case-cover.mp4') : '',
       fullImg: p.caseCover || '',
       noCoverVideo: p.slug !== 'copperhill' && p.slug !== 'sailpoint' && !p.caseCover,
+      // Home feature card can show different media than the case-study page's
+      // own cover — SailPoint's card uses a static image on Home while the
+      // case-study page itself keeps the video, so these stay independent of
+      // coverVideo/fullImg above (which the case-study page reads from).
+      homeFullImg: p.slug === 'sailpoint' ? 'assets/sailpoint-case-cover-static.jpg' : (p.caseCover || ''),
+      homeCoverVideo: (p.slug === 'copperhill' && !p.caseCover) ? ((window.__resources&&window.__resources.copperhillHomeCover)||'assets/copperhill-home-cover.mp4') : '',
+      homeNoCoverVideo: p.slug !== 'copperhill' && p.slug !== 'sailpoint' && !p.caseCover,
       coverCursor: (p.status === 'Completed' || p.locked) ? 'pointer' : 'default',
       open: () => { if (p.status !== 'Completed' && !p.locked) return; this.transitionToCase(p.slug); },
       openImg: () => { if (p.status !== 'Completed' && !p.locked) return; this.transitionToCase(p.slug); }
@@ -4000,7 +4007,7 @@ class Component extends DCLogic {
       journey: this.JOURNEY.map((j, i) => ({ ...j, i0: i })),
       curNum: cur ? String(mapped.findIndex(p => p.slug === cur.slug) + 1).padStart(2,'0') : '00',
       hasCase: !!cs, noCase: !!cur && !cs,
-      showCaseNav: view === 'work' && !!cs, showDefaultNav: !(view === 'work' && !!cs),
+      showCaseNav: view === 'work' && !!cs && !(cur && cur.locked && !this.state.unlocked[cur.slug]), showDefaultNav: !(view === 'work' && !!cs && !(cur && cur.locked && !this.state.unlocked[cur.slug])),
       hasLightbox: !!this.state.lightbox,
       lightboxImgEl: this.state.lightbox ? React.createElement('img', { src: this.state.lightbox.img, alt: this.state.lightbox.title || '', style: { width:'auto', height:'auto', maxWidth:'min(1800px,94vw)', maxHeight:'none', display:'block', boxShadow:'0 30px 80px rgba(0,0,0,.5)' } }) : null,
       lightboxLabel: (this.state.lightbox && this.state.lightbox.label) || '',
