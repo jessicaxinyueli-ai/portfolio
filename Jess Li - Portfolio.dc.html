@@ -180,6 +180,7 @@
     [data-bg]{padding-left:var(--nav-w);}
     .hero-copy{max-width:760px;}
     .feat-sticky{max-width:760px;}
+    .about-wrap{max-width:760px !important;}
   }
   /* Nav active indicator */
   [data-navlink]{position:relative;}
@@ -335,6 +336,7 @@
   .feat-figure:hover .feat-blur{opacity:1;}
   .flick-photo:hover .feat-blur{opacity:1;}
   .flick-photo .feat-cover{clip-path:none;border-radius:0 !important;}
+  @media (max-width:420px){ .settings-grid{grid-template-columns:repeat(2,1fr) !important;} }
   @media (hover:none){.feat-blur{opacity:1;}}
   .feat-blur-bg{position:absolute;inset:0;-webkit-backdrop-filter:blur(20px) saturate(1.3);backdrop-filter:blur(20px) saturate(1.3);background:linear-gradient(to top,rgba(10,12,16,.42) 0%,rgba(10,12,16,.14) 60%,rgba(10,12,16,0) 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 55%);mask-image:linear-gradient(to bottom,transparent 0,#000 55%);}
   .feat-blur-text{position:absolute;left:clamp(16px,2.4vw,28px);right:clamp(16px,2.4vw,28px);bottom:clamp(16px,2.4vw,26px);display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-family:var(--font-sans);}
@@ -1376,7 +1378,7 @@
   <!-- ================= ABOUT / JOURNAL ================= -->
   <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ true }}">
   <section data-screen-label="About" style="min-height:100vh;padding:clamp(118px,15vh,176px) clamp(24px,6vw,64px) clamp(28px,3vw,40px);display:flex;flex-direction:column;--font-sans:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;">
-    <div style="max-width:1000px;margin:0 auto;width:100%;flex:1 0 auto;">
+    <div class="about-wrap" style="max-width:1000px;margin:0 auto;width:100%;flex:1 0 auto;">
       <div style="display:flex;gap:clamp(28px,5vw,64px);align-items:flex-start;flex-wrap:wrap;">
         <div style="flex:1 1 340px;min-width:min(100%,300px);display:flex;flex-direction:column;gap:14px;">
           <div style="font-family:var(--font-sans);font-weight:400;font-size:16px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin-bottom:8px;">About</div>
@@ -1385,7 +1387,7 @@
           <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-body,1));line-height:1.7;color:var(--ink-2);margin:6px 0 0;text-wrap:pretty;">Design started as the thing I did instead of the thing I was supposed to be doing. I grew up in Shanghai painting and doing calligraphy, convinced I'd end up an artist, until I found UX and realized I liked problems with constraints better than a blank canvas.</p>
           <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-body,1));line-height:1.7;color:var(--ink-2);margin:14px 0 4px;text-wrap:pretty;">Today I design enterprise tools and AI products, identity software, trade compliance, one civic seed library that won an award, and most of my job turns out to be subtraction. I like the work best when it starts as a mess and ends looking obvious, and the best compliment I get isn't "this looks great," it's "oh, that makes sense."</p>
           <div style="font-family:var(--font-sans);font-weight:400;font-size:16px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin:12px 0 4px;">Settings</div>
-          <div data-reveal="" style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,30px) clamp(12px,2vw,20px);margin:0 0 4px;">
+          <div class="settings-grid" data-reveal="" style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,30px) clamp(12px,2vw,20px);margin:0 0 4px;">
             <div class="metric-item" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(10px,1.4vw,14px);">
               <div class="metric-ringwrap" aria-hidden="true" style="position:relative;flex:none;width:clamp(72px,7vw,96px);aspect-ratio:1;">
                 <div class="metric-ring" style="position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(var(--line) 0deg 2.2deg, transparent 2.2deg 9deg);-webkit-mask:radial-gradient(circle,transparent 60%,#000 63%,#000 100%);mask:radial-gradient(circle,transparent 60%,#000 63%,#000 100%);"></div>
@@ -1436,7 +1438,6 @@
             </div>
           </figure>
         </sc-for>
-      </div>
       </div>
 
       <!-- Experience — editorial index, styled like Contents -->
