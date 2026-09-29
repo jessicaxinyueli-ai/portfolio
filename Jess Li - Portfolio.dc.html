@@ -2474,6 +2474,15 @@ class Component extends DCLogic {
 
   componentDidMount(){
     try { document.body.style.background = 'transparent'; } catch(e) {}
+    // A little something for anyone poking around in devtools.
+    try {
+      console.log([
+        '   (\\_/)      (\\_/)      (\\_/)  ',
+        '  =(^.^)=  ~  =(^.^)=  ~  =(^.^)= ',
+        '   (")(")     /(")(")    (")(")/  ',
+        '  ...you found the rabbit. hi!    '
+      ].join('\n'));
+    } catch(e) {}
     // Site-wide smooth/eased scroll (Lenis) — a slight, deliberate lag behind
     // the raw wheel/touch input instead of the browser's instant native
     // scroll. Lenis drives the real window scroll position each frame (not
