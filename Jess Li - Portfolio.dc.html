@@ -168,16 +168,16 @@
      list, theme toggle anchored to the bottom) instead of a top bar. Page
      content shifts right by --nav-w so nothing sits under it. Needs
      !important since the base layout above is set via inline style. */
-  :root{--nav-w:280px;}
+  :root{--nav-w:280px;--nav-offset:24px;}
   @media (min-width:860px){
-    [data-nav]{position:fixed !important;top:0 !important;left:0 !important;right:auto !important;bottom:0 !important;width:var(--nav-w);flex-direction:column !important;align-items:flex-start !important;justify-content:flex-start !important;gap:clamp(28px,4vh,44px) !important;padding:clamp(160px,24vh,260px) clamp(20px,3vw,30px) clamp(24px,4vh,36px) !important;box-sizing:border-box;border-bottom:none !important;overflow-y:auto;}
+    [data-nav]{position:fixed !important;top:0 !important;left:var(--nav-offset) !important;right:auto !important;bottom:0 !important;width:var(--nav-w);flex-direction:column !important;align-items:flex-start !important;justify-content:flex-start !important;gap:clamp(28px,4vh,44px) !important;padding:clamp(160px,24vh,260px) clamp(20px,3vw,30px) clamp(24px,4vh,36px) !important;box-sizing:border-box;border-bottom:none !important;overflow-y:auto;}
     [data-nav].scrolled{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;box-shadow:none !important;}
     [data-nav] .nav-right{flex:1 !important;display:flex !important;flex-direction:column !important;align-items:flex-start !important;gap:clamp(20px,3vh,28px) !important;min-height:0;}
     [data-nav] .navset,[data-nav] .navset-toc{flex-direction:column !important;align-items:flex-start !important;gap:clamp(18px,2.6vh,28px) !important;}
     [data-nav] .navset-toc{overflow-y:auto;min-height:0;flex:1 1 auto !important;}
     [data-nav] .toc-list{gap:0 !important;}
     [data-nav] .mode-toggle-btn{margin-top:auto;flex:0 0 auto;}
-    [data-bg]{padding-left:var(--nav-w);}
+    [data-bg]{padding-left:calc(var(--nav-w) + var(--nav-offset));}
     .hero-copy{max-width:760px;flex:0 1 760px !important;margin:0 auto !important;}
     .feat-sticky{max-width:760px;margin:0 auto !important;}
     .about-wrap{max-width:760px !important;}
