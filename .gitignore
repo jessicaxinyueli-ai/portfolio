@@ -2,3 +2,5 @@ node_modules/
 dist/
 vendor/
 .DS_Store
+scripts/copy-editor/edits.json
+scripts/copy-editor/synced-output.dc.html
