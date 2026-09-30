@@ -498,10 +498,10 @@
       </sc-if>
       <button type="button" class="mode-toggle-btn" onClick="{{ cycleBgMode }}" aria-label="Change background theme">
         <sc-if value="{{ isPlain }}" hint-placeholder-val="{{ true }}">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 3v2.4M12 18.6V21M4.2 12H1.8M22.2 12h-2.4M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M5.6 18.4l1.7-1.7M16.7 7.3l1.7-1.7"></path></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
         </sc-if>
         <sc-if value="{{ isNight }}" hint-placeholder-val="{{ false }}">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M20 14.2A8.2 8.2 0 1 1 9.8 4a6.4 6.4 0 0 0 10.2 10.2z"></path></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg>
         </sc-if>
       </button>
     </div>
@@ -1449,7 +1449,7 @@
         <div style="flex:1 1 306px;min-width:min(100%,270px);display:flex;flex-direction:column;gap:12.6px;">
           <div style="font-family:var(--font-sans);font-weight:400;font-size:14.4px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin-bottom:7.2px;">About</div>
           <h1 style="font-family:var(--font-serif);font-weight:400;font-size:calc(36px * var(--sc-header,1));line-height:.98;letter-spacing:-.026em;margin:0;">Hi, I'm Jess</h1>
-          <div style="font-family:var(--font-sans);font-size:clamp(12.6px,1.215vw,15.3px);line-height:1.5;color:var(--ink-2);display:flex;align-items:center;gap:5.4px;"><svg width="10.8" height="10.8" viewBox="0 0 24 24" fill="none" stroke="#d3453b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg> Ann Arbor, MI · {{ localTime }}</div>
+          <div style="font-family:var(--font-sans);font-size:clamp(12.6px,1.215vw,15.3px);line-height:1.5;color:var(--ink-2);display:flex;align-items:center;gap:5.4px;"><svg width="10.8" height="10.8" viewBox="0 0 24 24" fill="none" stroke="#d3453b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg> Ann Arbor, MI · {{ localTime }}</div>
           <p style="font-family:var(--font-sans);font-size:calc(14.4px * var(--sc-body,1));line-height:1.7;color:var(--ink-2);margin:5.4px 0 0;text-wrap:pretty;">Design started as the thing I did instead of the thing I was supposed to be doing. I grew up in Shanghai painting and doing calligraphy, convinced I'd end up an artist, until I found UX and realized I liked problems with constraints better than a blank canvas.</p>
           <p style="font-family:var(--font-sans);font-size:calc(14.4px * var(--sc-body,1));line-height:1.7;color:var(--ink-2);margin:12.6px 0 3.6px;text-wrap:pretty;">Today I design enterprise tools and AI products, identity software, trade compliance, one civic seed library that won an award, and most of my job turns out to be subtraction. I like the work best when it starts as a mess and ends looking obvious, and the best compliment I get isn't "this looks great," it's "oh, that makes sense."</p>
           <div style="font-family:var(--font-sans);font-weight:400;font-size:14.4px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin:10.8px 0 3.6px;">Settings</div>
@@ -2397,24 +2397,26 @@ class Component extends DCLogic {
     const path = this.routeToPath(this.state.view, this.state.slug);
     if (window.location.pathname !== path) history.pushState({ view:this.state.view, slug:this.state.slug }, '', path);
   }
+  // Lucide icons (https://lucide.dev/icons/), inlined as shape descriptors
+  // since a handful need circle/rect/polygon, not just path.
   metricIcon(key){
-    const paths = {
-      expand: 'M8 3H3v5 M3 3l6 6 M16 21h5v-5 M21 21l-6-6',
-      nav: 'M21 3L3 10.5l7 2.5 2.5 7L21 3z',
-      growth: 'M3 17l6-6 4 4 8-8 M15 7h6v6',
-      target: 'M12 3a9 9 0 100 18 9 9 0 000-18z M12 8a4 4 0 100 8 4 4 0 000-8z M12 11.5a.5.5 0 100 1 .5.5 0 000-1z',
-      clock: 'M12 3a9 9 0 100 18 9 9 0 000-18z M12 7v5l3.5 2',
-      check: 'M20 6L9 17l-5-5',
-      lock: 'M6 10V7a6 6 0 0112 0v3 M4 10h16v11H4z',
-      layers: 'M12 3l9 5-9 5-9-5 9-5z M3 13l9 5 9-5',
-      eye: 'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z M12 9a3 3 0 100 6 3 3 0 000-6z',
-      message: 'M4 5h16v11H9l-5 4v-4H4z',
-      user: 'M12 12a4 4 0 100-8 4 4 0 000 8z M4 21c0-4 3.6-6 8-6s8 2 8 6',
-      chart: 'M4 20V11 M10 20V4 M16 20v-7 M4 20h16'
+    const icons = {
+      expand: [['path',{d:'M8 3H5a2 2 0 0 0-2 2v3'}],['path',{d:'M21 8V5a2 2 0 0 0-2-2h-3'}],['path',{d:'M3 16v3a2 2 0 0 0 2 2h3'}],['path',{d:'M16 21h3a2 2 0 0 0 2-2v-3'}]], // maximize
+      nav: [['polygon',{points:'3 11 22 2 13 21 11 13 3 11'}]], // navigation
+      growth: [['path',{d:'M16 7h6v6'}],['path',{d:'m22 7-8.5 8.5-5-5L2 17'}]], // trending-up
+      target: [['circle',{cx:12,cy:12,r:10}],['circle',{cx:12,cy:12,r:6}],['circle',{cx:12,cy:12,r:2}]],
+      clock: [['circle',{cx:12,cy:12,r:10}],['path',{d:'M12 6v6l4 2'}]],
+      check: [['path',{d:'M20 6 9 17l-5-5'}]],
+      lock: [['rect',{width:18,height:11,x:3,y:11,rx:2,ry:2}],['path',{d:'M7 11V7a5 5 0 0 1 10 0v4'}]],
+      layers: [['path',{d:'M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z'}],['path',{d:'M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12'}],['path',{d:'M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17'}]],
+      eye: [['path',{d:'M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0'}],['circle',{cx:12,cy:12,r:3}]],
+      message: [['path',{d:'M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z'}]], // message-square
+      user: [['path',{d:'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2'}],['circle',{cx:12,cy:7,r:4}]],
+      chart: [['path',{d:'M5 21v-6'}],['path',{d:'M12 21V3'}],['path',{d:'M19 21V9'}]] // chart-no-axes-column
     };
-    const d = paths[key] || paths.growth;
+    const shapes = icons[key] || icons.growth;
     return React.createElement('svg', { width: 26, height: 26, viewBox: '0 0 24 24', fill: 'none', stroke: 'var(--muted-2)', strokeWidth: 1.4, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': 'true' },
-      d.split(' M').map((seg, i) => React.createElement('path', { key: i, d: (i === 0 ? seg : 'M' + seg) })));
+      shapes.map(([tag, props], i) => React.createElement(tag, { key: i, ...props })));
   }
   // Segmented tick-bar for a percentage metric: N ticks fill proportionally,
   // colored by direction (green = growth, red = decrease). Purely decorative.
@@ -4052,8 +4054,8 @@ class Component extends DCLogic {
       nightActiveClass: this.state.bgMode === 'night' ? 'active' : '',
       cycleBgMode: () => this.cycleBgMode(),
       setModePlain: () => this.setBgMode('plain'),
-      vidToggle: (e) => { const w = e.currentTarget.closest('[data-videowrap]'); if (!w) return; const v = w.querySelector('video'); const b = w.querySelector('[data-vidpause]'); if (!v) return; if (v.paused) { v.play(); if (b) b.innerHTML = '<svg width="12" height="13" viewBox="0 0 9 10" fill="currentColor" aria-hidden="true"><rect x="0" y="0" width="3" height="10" rx="0.5"></rect><rect x="6" y="0" width="3" height="10" rx="0.5"></rect></svg>'; } else { v.pause(); if (b) b.innerHTML = '<svg width="13" height="13" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M1 0.6l8 4.4-8 4.4z"></path></svg>'; } },
-      vidRestart: (e) => { const w = e.currentTarget.closest('[data-videowrap]'); if (!w) return; const v = w.querySelector('video'); const b = w.querySelector('[data-vidpause]'); if (!v) return; v.currentTime = 0; v.play(); if (b) b.innerHTML = '<svg width="12" height="13" viewBox="0 0 9 10" fill="currentColor" aria-hidden="true"><rect x="0" y="0" width="3" height="10" rx="0.5"></rect><rect x="6" y="0" width="3" height="10" rx="0.5"></rect></svg>'; },
+      vidToggle: (e) => { const w = e.currentTarget.closest('[data-videowrap]'); if (!w) return; const v = w.querySelector('video'); const b = w.querySelector('[data-vidpause]'); if (!v) return; if (v.paused) { v.play(); if (b) b.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><rect x="14" y="3" width="5" height="18" rx="1"></rect><rect x="5" y="3" width="5" height="18" rx="1"></rect></svg>'; } else { v.pause(); if (b) b.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg>'; } },
+      vidRestart: (e) => { const w = e.currentTarget.closest('[data-videowrap]'); if (!w) return; const v = w.querySelector('video'); const b = w.querySelector('[data-vidpause]'); if (!v) return; v.currentTime = 0; v.play(); if (b) b.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><rect x="14" y="3" width="5" height="18" rx="1"></rect><rect x="5" y="3" width="5" height="18" rx="1"></rect></svg>'; },
       setModeNight: () => this.setBgMode('night'),
       typedQuote: this.state.typed,
       fullQuote: this.QUOTES[this.state.quoteIdx].t,
