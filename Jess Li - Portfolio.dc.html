@@ -678,21 +678,27 @@
             </sc-for>
           </div>
         </div>
-        <div style="border:1px solid var(--line);border-radius:14px;padding:clamp(28px,3.4vw,38px);margin-bottom:clamp(70px,9vw,110px);background:var(--surface);">
-          <div style="font-family:var(--font-sans);font-size:12px;letter-spacing:.04em;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:10px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-            Full case study, password protected
-          </div>
-          <p style="font-family:var(--font-sans);font-size:calc(16px * var(--sc-body,1));line-height:1.75;color:var(--ink-2);margin:0 0 clamp(28px,4vw,38px);max-width:52ch;">The full account, including research findings and design decisions, needs a password to open. Enter the passphrase below, or reach out and I'll gladly share it.</p>
-          <form onSubmit="{{ submitPass }}" style="display:flex;flex-direction:column;gap:16px;">
-            <div style="display:flex;flex-wrap:wrap;gap:12px;">
-              <input ref="{{ passRef }}" class="pass-input" type="password" aria-label="Passphrase" placeholder="Passphrase" autocomplete="off" style="flex:1 1 220px;min-width:0;font-family:var(--font-sans);font-size:14px;color:var(--ink);background:transparent;border:none;border-bottom:1px solid var(--ink);padding:12px 2px;outline:none;">
-              <button type="submit" style="flex:0 0 auto;font-family:var(--font-sans);font-size:12px;letter-spacing:.03em;color:var(--paper);background:var(--ink);border:none;border-radius:999px;padding:14px 28px;cursor:pointer;" style-hover="background:var(--accent)">Unlock →</button>
+        <div style="margin-bottom:clamp(70px,9vw,110px);">
+          <div style="font-family:var(--font-sans);font-size:12px;letter-spacing:.04em;color:var(--muted-2);margin-bottom:12px;">Want the full story?</div>
+          <div style="font-family:var(--font-sans);font-weight:600;font-size:calc(19px * var(--sc-sub,1));line-height:1.4;color:var(--ink);margin-bottom:clamp(24px,3.2vw,34px);">Reach out via <a href="mailto:jxl@umich.edu" style="color:inherit;text-decoration:underline;" style-hover="color:var(--accent)">email</a> or <a href="https://www.linkedin.com/in/jessica-li-1219yue" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;" style-hover="color:var(--accent)">LinkedIn</a> for a walkthrough</div>
+          <div style="border-top:1px solid var(--line);padding-top:clamp(24px,3.2vw,34px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px;">
+            <div style="display:flex;align-items:flex-start;gap:12px;max-width:380px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;margin-top:2px;"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              <div>
+                <div style="font-family:var(--font-sans);font-weight:600;font-size:16px;color:var(--ink);">Enter password to unlock more</div>
+                <div style="font-family:var(--font-sans);font-size:14px;color:var(--ink-2);margin-top:4px;">Reach out to jxl@umich.edu for details.</div>
+              </div>
             </div>
-            <sc-if value="{{ passError }}" hint-placeholder-val="{{ false }}">
-              <div style="font-family:var(--font-sans);font-size:12px;letter-spacing:.02em;color:var(--accent);">That passphrase didn't match. Try again, or <a href="mailto:jxl@umich.edu" style="color:inherit;text-decoration:underline;">email me</a>.</div>
-            </sc-if>
-          </form>
+            <form onSubmit="{{ submitPass }}" style="display:flex;flex-direction:column;gap:8px;flex:0 0 auto;">
+              <div style="display:flex;align-items:center;background:var(--surface);border-radius:999px;padding:5px 5px 5px 18px;gap:8px;">
+                <input ref="{{ passRef }}" class="pass-input" type="password" aria-label="Passphrase" placeholder="Enter password" autocomplete="off" style="flex:1 1 auto;min-width:120px;font-family:var(--font-sans);font-size:14px;color:var(--ink);background:transparent;border:none;outline:none;">
+                <button type="submit" style="flex:0 0 auto;font-family:var(--font-sans);font-size:13px;letter-spacing:.02em;color:var(--paper);background:var(--ink);border:none;border-radius:999px;padding:10px 20px;cursor:pointer;" style-hover="background:var(--accent)">Send</button>
+              </div>
+              <sc-if value="{{ passError }}" hint-placeholder-val="{{ false }}">
+                <div style="font-family:var(--font-sans);font-size:12px;letter-spacing:.02em;color:var(--accent);padding-left:4px;">That passphrase didn't match. Try again, or <a href="mailto:jxl@umich.edu" style="color:inherit;text-decoration:underline;">email me</a>.</div>
+              </sc-if>
+            </form>
+          </div>
         </div>
         </div>
       </div>
