@@ -383,6 +383,12 @@
   [data-ambient="plain"]{--glow-c1:rgba(20,20,22,.055);--glow-c2:rgba(20,20,22,0);--color-paper:#ffffff;--color-ink-2:#6b6c74;--color-muted:#76767d;--color-muted-2:#82828a;}
   @media (prefers-reduced-motion:reduce){ .bg-layer{animation:none !important;} .bg-glow{display:none !important;} }
 
+  /* Running rabbit — a little ascii easter egg on the About page. */
+  .ascii-rabbit-track{position:relative;width:100%;height:56px;overflow:hidden;margin:clamp(32px,4vw,48px) 0;}
+  .ascii-rabbit{position:absolute;top:0;left:-20%;white-space:pre;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.15;color:var(--muted-2);animation:rabbit-run 6s linear infinite;}
+  @keyframes rabbit-run{ 0%{left:-20%;} 100%{left:110%;} }
+  @media (prefers-reduced-motion:reduce){ .ascii-rabbit{animation:none !important;left:8%;} }
+
   /* ===== Ambient mode selector ===== */
   .mode-toggle-btn{width:30px;height:30px;border-radius:50%;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:inherit;padding:0;transition:color .3s ease,background-color .3s ease;}
   .mode-toggle-btn svg{width:16px;height:16px;}
@@ -1448,6 +1454,13 @@
         </sc-for>
       </div>
 
+      <!-- Running rabbit — ascii easter egg -->
+      <div class="ascii-rabbit-track">
+        <pre class="ascii-rabbit">   (\_/)
+   ( •.•)
+  o(  ")(")</pre>
+      </div>
+
       <!-- Experience — editorial index, styled like Contents -->
       <h2 style="font-family:var(--font-sans);font-weight:400;font-size:16px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin:0 0 clamp(28px,3.4vw,40px);">Experience</h2>
       <div style="border-top:1px solid var(--line);margin:0 0 clamp(56px,7vw,88px);">
@@ -2474,15 +2487,6 @@ class Component extends DCLogic {
 
   componentDidMount(){
     try { document.body.style.background = 'transparent'; } catch(e) {}
-    // A little something for anyone poking around in devtools.
-    try {
-      console.log([
-        '   (\\_/)      (\\_/)      (\\_/)  ',
-        '  =(^.^)=  ~  =(^.^)=  ~  =(^.^)= ',
-        '   (")(")     /(")(")    (")(")/  ',
-        '  ...you found the rabbit. hi!    '
-      ].join('\n'));
-    } catch(e) {}
     // Site-wide smooth/eased scroll (Lenis) — a slight, deliberate lag behind
     // the raw wheel/touch input instead of the browser's instant native
     // scroll. Lenis drives the real window scroll position each frame (not
