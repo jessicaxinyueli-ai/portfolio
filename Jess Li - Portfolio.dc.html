@@ -1368,7 +1368,7 @@
     </sc-if>
 
     <sc-if value="{{ noCase }}" hint-placeholder-val="{{ true }}">
-      <div style="max-width:1180px;margin:0 auto;padding:0 clamp(24px,6vw,64px);">
+      <div style="max-width:1180px;margin:0 auto;padding:0 clamp(40px,8vw,96px);">
         <div data-reveal="" style="margin-top:clamp(48px,7vw,90px);padding:clamp(48px,8vw,100px) clamp(28px,5vw,60px);text-align:center;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);">
           <div style="font-family:var(--font-sans);font-size:12px;letter-spacing:.04em;color:var(--accent);margin-bottom:22px;">In progress — no. {{ curNum }}</div>
           <h2 style="font-family:var(--font-serif);font-weight:400;font-size:45px;line-height:1.0;margin:0 0 24px;letter-spacing:-.02em;">This account is still being written.</h2>
@@ -1379,7 +1379,7 @@
     </sc-if>
 
     <!-- NEXT / footer -->
-    <div style="max-width:1180px;margin:clamp(56px,8vw,120px) auto 0;padding:0 clamp(24px,6vw,64px) clamp(60px,8vw,110px);">
+    <div style="max-width:1180px;margin:clamp(56px,8vw,120px) auto 0;padding:0 clamp(40px,8vw,96px) clamp(60px,8vw,110px);">
       <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px;padding-top:26px;border-top:1px solid var(--ink);">
         <button onClick="{{ next.open }}" style="background:none;border:none;cursor:pointer;font-family:var(--font-serif);font-weight:400;font-size:45px;line-height:.94;letter-spacing:-.022em;color:var(--ink);padding:0;text-align:left;transition:filter .3s ease;" style-hover="filter:blur(1.6px)">{{ next.title }}</button>
         <button onClick="{{ scrollTop }}" style="background:none;border:1px solid var(--line);border-radius:20px;cursor:pointer;font-family:var(--font-sans);font-size:12px;letter-spacing:.02em;color:var(--ink);padding:9px 16px;" style-hover="border-color:var(--accent);color:var(--accent)">Back to top</button>
