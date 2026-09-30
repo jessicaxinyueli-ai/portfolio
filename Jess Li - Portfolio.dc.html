@@ -696,7 +696,7 @@
         <p style="font-family:var(--font-sans);font-size:calc(18px * var(--sc-sub,1));line-height:1.6;color:var(--ink-2);margin:0;text-wrap:pretty;">{{ cur.overview }}</p>
       </div>
       <!-- COVER PLATE: same media as the landing cover -->
-      <figure data-velo="0.8" style="margin:clamp(32px,4.5vw,52px) 0 0;">
+      <figure data-velo="0.8" style="margin:clamp(32px,4.5vw,52px) 0 0;overflow:hidden;">
         <div data-coveranim="" style="position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;border-radius:3px;background:var(--surface);">
           <sc-if value="{{ hasCoverImg }}" hint-placeholder-val="{{ false }}">
             <img data-lazysrc="{{ coverImgSrc }}" alt="{{ cur.title }} — cover" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:var(--surface);">
