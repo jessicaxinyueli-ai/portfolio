@@ -2332,7 +2332,7 @@ class Component extends DCLogic {
     const slug = this.PATH_SLUG[p];
     if (slug) {
       const proj = this.PROJECTS.find(pr => pr.slug === slug);
-      if (proj && (proj.status === 'Completed' || proj.locked)) return { view:'work', slug };
+      if (proj && (proj.available !== false || proj.locked)) return { view:'work', slug };
     }
     return { view:'home', slug:null };
   }
@@ -3903,9 +3903,9 @@ class Component extends DCLogic {
       idx: i + 1,
       i0: i,
       coverRatio,
-      isWip: p.status !== 'Completed',
-      coverLabel: (p.status === 'Completed' || p.locked) ? 'View' : 'Building!',
-      statusShort: p.status !== 'Completed' ? 'WIP' : 'Done',
+      isWip: p.available === false,
+      coverLabel: (p.available !== false || p.locked) ? 'View' : 'Building!',
+      statusShort: p.available === false ? 'WIP' : 'Done',
       hasCase: !!this.CASE[p.slug],
       ctaLabel: this.CASE[p.slug] ? 'Read case study' : 'View progress',
       imgOrder: 1,
@@ -3924,9 +3924,9 @@ class Component extends DCLogic {
       homeCoverScale: p.slug === 'sailpoint' ? 1.08 : 1,
       homeNoCoverVideo: p.slug !== 'copperhill' && p.slug !== 'sailpoint' && !p.caseCover,
       noPublicVideo: !p.publicVideo,
-      coverCursor: (p.status === 'Completed' || p.locked) ? 'pointer' : 'default',
-      open: () => { if (p.status !== 'Completed' && !p.locked) return; this.transitionToCase(p.slug); },
-      openImg: () => { if (p.status !== 'Completed' && !p.locked) return; this.transitionToCase(p.slug); }
+      coverCursor: (p.available !== false || p.locked) ? 'pointer' : 'default',
+      open: () => { if (p.available === false && !p.locked) return; this.transitionToCase(p.slug); },
+      openImg: () => { if (p.available === false && !p.locked) return; this.transitionToCase(p.slug); }
     }));
     const cur = mapped.find(p => p.slug === slug) || null;
     const cs = cur ? this.CASE[cur.slug] : null;
