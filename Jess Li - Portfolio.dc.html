@@ -348,6 +348,18 @@
   .next-grid-container{container-type:inline-size;}
   .next-grid{display:grid;grid-template-columns:1fr;gap:clamp(24px,3vw,40px);}
   @container (min-width:480px){ .next-grid{grid-template-columns:repeat(2,1fr);} }
+  /* Case-study body "cardgrid" and "metrics" blocks: same fixed-column-count
+     problem as the letterhead grid above, but these templates are reused
+     across case studies with varying item counts (2-4), so the column count
+     can't be hardcoded — it's read off each block via data-cols and capped
+     there, never guessed from how many minmax() tracks WOULD fit. */
+  .cardgrid-container, .bodymetrics-container{container-type:inline-size;}
+  .cardgrid-grid, .bodymetrics-grid{display:grid;grid-template-columns:1fr;}
+  @container (min-width:434px){ .cardgrid-grid[data-cols="2"],.cardgrid-grid[data-cols="3"]{grid-template-columns:repeat(2,1fr);} }
+  @container (min-width:658px){ .cardgrid-grid[data-cols="3"]{grid-template-columns:repeat(3,1fr);} }
+  @container (min-width:394px){ .bodymetrics-grid[data-cols="2"],.bodymetrics-grid[data-cols="3"],.bodymetrics-grid[data-cols="4"]{grid-template-columns:repeat(2,1fr);} }
+  @container (min-width:598px){ .bodymetrics-grid[data-cols="3"],.bodymetrics-grid[data-cols="4"]{grid-template-columns:repeat(3,1fr);} }
+  @container (min-width:802px){ .bodymetrics-grid[data-cols="4"]{grid-template-columns:repeat(4,1fr);} }
   .feat-blur{position:absolute;left:0;right:0;bottom:0;height:42%;opacity:0;transition:opacity .15s ease-out;pointer-events:none;z-index:2;will-change:opacity;}
   .feat-figure:hover .feat-blur{opacity:1;}
   .flick-photo:hover .feat-blur{opacity:1;}
@@ -834,13 +846,15 @@
               </blockquote>
             </sc-if>
             <sc-if value="{{ block.isCardGrid }}">
-              <div data-reveal="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:clamp(14px,1.8vw,22px);margin:clamp(24px,3vw,38px) 0;">
-                <sc-for list="{{ block.items }}" as="c" hint-placeholder-count="4">
-                  <div style="border:1px solid var(--line);border-radius:12px;padding:clamp(18px,2vw,24px);background:var(--surface);">
-                    <div style="font-family:var(--font-sans);font-weight:600;font-size:calc(14px * var(--sc-body,1));letter-spacing:.02em;color:var(--ink);margin:0 0 8px;">{{ c.label }}</div>
-                    <div style="font-family:var(--font-sans);font-weight:400;font-size:calc(13px * var(--sc-cap,1));line-height:1.55;color:var(--ink-2);white-space:pre-line;">{{ c.text }}</div>
-                  </div>
-                </sc-for>
+              <div class="cardgrid-container" data-reveal="" style="margin:clamp(24px,3vw,38px) 0;">
+                <div class="cardgrid-grid" data-cols="{{ block.itemCount }}" style="gap:clamp(14px,1.8vw,22px);">
+                  <sc-for list="{{ block.items }}" as="c" hint-placeholder-count="4">
+                    <div style="border:1px solid var(--line);border-radius:12px;padding:clamp(18px,2vw,24px);background:var(--surface);">
+                      <div style="font-family:var(--font-sans);font-weight:600;font-size:calc(14px * var(--sc-body,1));letter-spacing:.02em;color:var(--ink);margin:0 0 8px;">{{ c.label }}</div>
+                      <div style="font-family:var(--font-sans);font-weight:400;font-size:calc(13px * var(--sc-cap,1));line-height:1.55;color:var(--ink-2);white-space:pre-line;">{{ c.text }}</div>
+                    </div>
+                  </sc-for>
+                </div>
               </div>
             </sc-if>
             <sc-if value="{{ block.isStepFlow }}">
@@ -1034,7 +1048,8 @@
               </div>
             </sc-if>
             <sc-if value="{{ block.isMetrics }}">
-              <div data-reveal="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:clamp(22px,3vw,34px) clamp(14px,2vw,24px);margin:clamp(30px,4vw,52px) auto;width:calc(100% * var(--sc-media,1));max-width:100%;">
+              <div class="bodymetrics-container" data-reveal="" style="margin:clamp(30px,4vw,52px) auto;width:calc(100% * var(--sc-media,1));max-width:100%;">
+                <div class="bodymetrics-grid" data-cols="{{ block.itemCount }}" style="gap:clamp(22px,3vw,34px) clamp(14px,2vw,24px);">
                 <sc-for list="{{ block.metrics }}" as="m" hint-placeholder-count="3">
                   <sc-if value="{{ m.useRing }}">
                     <div class="metric-item" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(14px,1.8vw,20px);">
@@ -1077,6 +1092,7 @@
                     </div>
                   </sc-if>
                 </sc-for>
+                </div>
               </div>
             </sc-if>
             <sc-if value="{{ block.isBars }}">
@@ -2009,6 +2025,7 @@ class Component extends DCLogic {
         });
         o.svgHeight = items.length * ROW_H;
       }
+      if (b.type==='cardgrid') { o.itemCount = (b.items||[]).length; }
       if (b.type==='statuscards') { o.items = (b.items||[]).map(s => { const err = s.tone==='error'; return { ...s, isError:err, isSuccess:!err, hasActions:Array.isArray(s.actions)&&s.actions.length>0, borderColor: err?'#e3b0aa':'#a9d4b3', bgColor: err?'#fbeeec':'#eaf5ec', iconBg: err?'rgba(192,57,43,.12)':'rgba(31,122,61,.12)', actions:(s.actions||[]).map(a => ({ ...a, isPrimary:a.variant==='primary', isLink:a.variant==='link', isDefault:!a.variant||a.variant==='default' })) }; }); }
       if (b.type==='compare') { o.hasBeforeMockEndpoint = b.beforeMock==='endpointOptOut'; }
       if (b.type==='image') { fig++; o.figNum = String(fig).padStart(2,'0'); o.hasImg = !!b.img; o.img = b.img || this.BLANK_IMG; o.ratio = b.ratio || '1.778'; o.videos = (b.videoSrcs || (b.videoSrc ? [b.videoSrc] : [])).map(s => ({src:s})); o.videoMaxW = b.videoMaxW || (o.videos.length ? '360px' : '100%'); o.needsSlot = !b.video && !b.videoSrc && !b.videoSrcs && !b.img; o.hasNotes = Array.isArray(b.notes) && b.notes.length>0; o.openFig = () => this.setState({ lightbox: { img: o.img, title:'', label:'Fig. ' + o.figNum, caption: b.caption || '', ratio: o.ratio } }); }
@@ -2027,7 +2044,7 @@ class Component extends DCLogic {
         o.startT=sp.badge||'Start'; o.startT2=sp.title||''; o.startA=sp.descA||''; o.startB=sp.descB||'';
         o.endT=ep.badge||'Done'; o.endT2=ep.title||''; o.endA=ep.descA||''; o.endB=ep.descB||'';
       }
-      if (b.type==='metrics') { o.metrics = (b.metrics||[]).map(m => {
+      if (b.type==='metrics') { o.itemCount = (b.metrics||[]).length; o.metrics = (b.metrics||[]).map(m => {
         const dir = m.dir || 'up';
         const raw = String(m.value).trim();
         const pcts = raw.match(/\d[\d.]*%/g);
