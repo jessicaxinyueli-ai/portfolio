@@ -478,7 +478,6 @@
     <div class="nav-right" style="display:flex;align-items:center;gap:clamp(16.2px,2.7vw,34.2px);">
       <sc-if value="{{ showCaseNav }}">
         <div class="navset navset-toc" style="display:flex;gap:clamp(16.2px,2.7vw,34.2px);align-items:center;font-family:var(--font-sans);font-size:14.4px;letter-spacing:.01em;color:#96969c;">
-          <button class="back-to-top" onClick="{{ scrollTop }}" style="background:none;border:1px solid var(--line);border-radius:18px;cursor:pointer;color:var(--ink);padding:7.2px 14.4px;font-family:var(--font-sans);font-size:11.7px;display:inline-flex;align-items:center;gap:5.4px;white-space:nowrap;" style-hover="border-color:var(--accent);color:var(--accent)">↑ Back to top</button>
           <div class="toc-label" style="font-family:var(--font-sans);font-size:11.7px;letter-spacing:.02em;color:var(--muted-2);">Contents</div>
           <nav class="toc-list" style="display:flex;flex-direction:column;">
             <sc-for list="{{ toc }}" as="t" hint-placeholder-count="6">
