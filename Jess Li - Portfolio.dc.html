@@ -332,6 +332,17 @@
   /* Hover: a progressive (transparent -> strong) blur rises over the bottom of the
      cover and the supporting text sits on it. Always shown on touch screens. */
   .feat-cover{clip-path:inset(0 round 20px);isolation:isolate;}
+  /* Case-study letterhead metadata (Role/Timeline/Team/Status): a fixed
+     2-or-4-column grid instead of repeat(auto-fit,minmax(...,1fr)), which
+     computed phantom empty tracks at wide container widths (auto-fit sizes
+     for however many 150px tracks WOULD fit, not for the 4 real items,
+     leaving a collapsed-but-gap-taking track after Status). Queries the
+     grid's own rendered width via a container, not the viewport, so it
+     stays correct regardless of the sidebar/gutter math at any breakpoint.
+  */
+  .meta-grid-container{container-type:inline-size;}
+  .meta-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+  @container (min-width:640px){ .meta-grid{grid-template-columns:repeat(4,1fr);} }
   .feat-blur{position:absolute;left:0;right:0;bottom:0;height:42%;opacity:0;transition:opacity .15s ease-out;pointer-events:none;z-index:2;will-change:opacity;}
   .feat-figure:hover .feat-blur{opacity:1;}
   .flick-photo:hover .feat-blur{opacity:1;}
@@ -710,11 +721,13 @@
         </div>
       </figure>
       <!-- letterhead metadata -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;margin:clamp(40px,5vw,60px) 0 clamp(30px,4vw,44px);font-family:var(--font-sans);">
-        <div style="padding:0;"><div style="font-size:16px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">Role</div><div style="font-size:16px;color:var(--ink);">{{ cur.role }}</div></div>
-        <div style="padding:0;"><div style="font-size:16px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">Timeline</div><div style="font-size:16px;color:var(--ink);">{{ cur.timeline }}</div></div>
-        <div style="padding:0;"><div style="font-size:16px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">Team</div><div style="font-size:16px;color:var(--ink);">{{ cur.team }}</div></div>
-        <div style="padding:0;"><div style="font-size:16px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">Status</div><div style="font-size:16px;color:var(--ink);">{{ cur.statusDisplay }}</div></div>
+      <div class="meta-grid-container">
+        <div class="meta-grid" style="margin:clamp(40px,5vw,60px) 0 clamp(30px,4vw,44px);font-family:var(--font-sans);">
+          <div style="padding:0;"><div style="font-size:16px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">Role</div><div style="font-size:16px;color:var(--ink);">{{ cur.role }}</div></div>
+          <div style="padding:0;"><div style="font-size:16px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">Timeline</div><div style="font-size:16px;color:var(--ink);">{{ cur.timeline }}</div></div>
+          <div style="padding:0;"><div style="font-size:16px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">Team</div><div style="font-size:16px;color:var(--ink);">{{ cur.team }}</div></div>
+          <div style="padding:0;"><div style="font-size:16px;letter-spacing:.02em;color:var(--muted-2);margin-bottom:8px;">Status</div><div style="font-size:16px;color:var(--ink);">{{ cur.statusDisplay }}</div></div>
+        </div>
       </div>
     </div>
 
