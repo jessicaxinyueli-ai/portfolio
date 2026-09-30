@@ -834,11 +834,11 @@
               </blockquote>
             </sc-if>
             <sc-if value="{{ block.isCardGrid }}">
-              <div data-reveal="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(189px,1fr));gap:clamp(12.6px,1.62vw,19.8px);margin:clamp(21.6px,2.7vw,34.2px) 0;">
+              <div data-reveal="" style="display:flex;flex-direction:column;gap:clamp(14.4px,1.98vw,19.8px);margin:clamp(21.6px,2.7vw,34.2px) 0;">
                 <sc-for list="{{ block.items }}" as="c" hint-placeholder-count="4">
-                  <div style="border:1px solid var(--line);border-radius:10.8px;padding:clamp(16.2px,1.8vw,21.6px);background:var(--surface);">
-                    <div style="font-family:var(--font-sans);font-weight:600;font-size:calc(12.6px * var(--sc-body,1));letter-spacing:.02em;color:var(--ink);margin:0 0 7.2px;">{{ c.label }}</div>
-                    <div style="font-family:var(--font-sans);font-weight:400;font-size:calc(11.7px * var(--sc-cap,1));line-height:1.55;color:var(--ink-2);white-space:pre-line;">{{ c.text }}</div>
+                  <div style="border:1px solid var(--line);border-radius:12.6px;padding:clamp(19.8px,2.7vw,27px);">
+                    <div style="font-family:var(--font-serif);font-weight:400;font-size:18px;line-height:1.25;letter-spacing:-.01em;color:var(--ink);">{{ c.label }}</div>
+                    <p style="font-family:var(--font-sans);font-size:calc(13.5px * var(--sc-body,1));line-height:1.65;color:var(--ink-2);margin:9px 0 0;white-space:pre-line;">{{ c.text }}</p>
                   </div>
                 </sc-for>
               </div>
