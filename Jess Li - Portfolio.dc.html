@@ -187,8 +187,11 @@
        sidebar-reduced remainder, which drifted right of center as screens
        got narrower (and the max-width containers had less room to breathe,
        pinning them visually flush against the sidebar instead of floating
-       centered). */
-    [data-bg]{padding-left:calc(var(--nav-w) + var(--nav-offset));padding-right:calc(var(--nav-w) + var(--nav-offset));}
+       centered). The mirrored amount tapers off as the viewport narrows
+       -- clamped so the content column always keeps at least 540px of
+       room rather than getting squeezed to an uncomfortably thin column
+       on tablet/small-laptop widths just above the 860px breakpoint. */
+    [data-bg]{padding-left:calc(var(--nav-w) + var(--nav-offset));padding-right:clamp(0px, calc(100vw - var(--nav-w) - var(--nav-offset) - 540px), calc(var(--nav-w) + var(--nav-offset)));}
     .hero-copy{max-width:684px;flex:0 1 684px !important;margin:0 auto !important;}
     .feat-sticky{max-width:684px;margin:0 auto !important;}
     .about-wrap{max-width:684px !important;}
