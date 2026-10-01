@@ -986,15 +986,11 @@
               </figure>
             </sc-if>
             <sc-if value="{{ block.isProtoShowcase }}">
-              <div data-reveal="" style="display:flex;flex-wrap:wrap;align-items:center;gap:clamp(18px,2.7vw,32.4px);margin:clamp(25.2px,3.24vw,39.6px) 0;border:1px solid var(--line);border-radius:14.4px;background:var(--surface);padding:clamp(16.2px,2.16vw,23.4px);">
-                <button type="button" onClick="{{ block.openZoom }}" aria-label="Expand image" style="flex:1 1 252px;max-width:324px;display:block;padding:0;border:none;background:none;cursor:zoom-in;">
-                  <image-slot id="protoimg-{{ cur.slug }}-{{ block.figNum }}" src="{{ block.img }}" style="width:100%;height:auto;aspect-ratio:{{ block.ratio }};display:block;pointer-events:none;border-radius:9px;overflow:hidden;" shape="rounded" radius="10" fit="cover" placeholder="{{ block.title }}"></image-slot>
+              <figure data-reveal="" style="margin:clamp(27px,3.6vw,46.8px) auto;width:calc(100% * var(--sc-media,1));max-width:100%;">
+                <button type="button" onClick="{{ block.openZoom }}" aria-label="Expand image" style="position:relative;display:block;width:100%;padding:0;border:none;background:none;cursor:zoom-in;">
+                  <image-slot id="protoimg-{{ cur.slug }}-{{ block.figNum }}" src="{{ block.img }}" style="width:100%;height:auto;aspect-ratio:{{ block.ratio }};display:block;pointer-events:none;border-radius:10.8px;overflow:hidden;" shape="rounded" radius="10" fit="cover" placeholder="{{ block.title }}"></image-slot>
                 </button>
-                <div style="flex:1 1 216px;min-width:0;">
-                  <h3 style="font-family:var(--font-serif);font-weight:400;font-size:calc(23.4px * var(--sc-header,1));line-height:1.15;letter-spacing:-.01em;color:var(--ink);margin:0 0 9px;">{{ block.title }}</h3>
-                  <p style="font-family:var(--font-sans);font-size:calc(12.6px * var(--sc-cap,1));line-height:1.7;color:var(--ink-2);margin:0;text-wrap:pretty;">{{ block.text }}</p>
-                </div>
-              </div>
+              </figure>
             </sc-if>
             <sc-if value="{{ block.isSplit }}">
               <div data-reveal="" style="display:flex;flex-wrap:wrap;gap:clamp(18px,2.7vw,36px);margin:clamp(21.6px,2.7vw,34.2px) 0;">
