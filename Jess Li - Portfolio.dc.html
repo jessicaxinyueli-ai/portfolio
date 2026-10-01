@@ -177,7 +177,14 @@
     [data-nav] .navset-toc{overflow-y:auto;min-height:0;flex:1 1 auto !important;}
     [data-nav] .toc-list{gap:0 !important;}
     [data-nav] .mode-toggle-btn{margin-top:auto;flex:0 0 auto;}
-    [data-bg]{padding-left:calc(var(--nav-w) + var(--nav-offset));}
+    /* Mirror the sidebar's reserved width on the right so every centered
+       container below (hero copy, case-study reading column, About) centers
+       on the true viewport midpoint instead of the midpoint of the
+       sidebar-reduced remainder, which drifted right of center as screens
+       got narrower (and the max-width containers had less room to breathe,
+       pinning them visually flush against the sidebar instead of floating
+       centered). */
+    [data-bg]{padding-left:calc(var(--nav-w) + var(--nav-offset));padding-right:calc(var(--nav-w) + var(--nav-offset));}
     .hero-copy{max-width:684px;flex:0 1 684px !important;margin:0 auto !important;}
     .feat-sticky{max-width:684px;margin:0 auto !important;}
     .about-wrap{max-width:684px !important;}
@@ -348,6 +355,11 @@
   .next-grid-container{container-type:inline-size;}
   .next-grid{display:grid;grid-template-columns:1fr;gap:clamp(21.6px,2.7vw,36px);}
   @container (min-width:480px){ .next-grid{grid-template-columns:repeat(2,1fr);} }
+  /* Flowpath step cards (Copperhill): same container-query approach, a
+     fixed 6 items laid out 2x3 instead of the old zigzag/SVG-arrow diagram. */
+  .flowpath-grid-container{container-type:inline-size;}
+  .flowpath-grid{display:grid;grid-template-columns:1fr;gap:clamp(14.4px,1.98vw,19.8px);}
+  @container (min-width:480px){ .flowpath-grid{grid-template-columns:repeat(2,1fr);} }
   .feat-blur{position:absolute;left:0;right:0;bottom:0;height:42%;opacity:0;transition:opacity .15s ease-out;pointer-events:none;z-index:2;will-change:opacity;}
   .feat-figure:hover .feat-blur{opacity:1;}
   .flick-photo:hover .feat-blur{opacity:1;}
@@ -414,15 +426,6 @@
   .metric-item:nth-child(3n+3) .metric-circle{background:#f6ecec;}
   [data-ambient="night"] .metric-item:nth-child(3n+2) .metric-circle{background:#202a3d;}
   [data-ambient="night"] .metric-item:nth-child(3n+3) .metric-circle{background:#332229;}
-  .flowpath-circle.light{background:#d9e9fb;color:var(--ink);}
-  .flowpath-circle.dark{background:var(--ink);color:var(--paper);}
-  [data-ambient="night"] .flowpath-circle.light{background:#1f3350;color:var(--ink);}
-  @media (max-width:640px){
-    .flowpath-wrap{height:auto !important;overflow:visible !important;}
-    .flowpath-wrap .flowpath-canvas{position:static !important;width:100% !important;height:auto !important;transform:none !important;}
-    .flowpath-wrap svg{display:none;}
-    .flowpath-wrap .flowpath-row{position:static !important;left:0 !important;top:0 !important;width:100% !important;max-width:none !important;margin-bottom:19.8px;}
-  }
   [data-globe-active="true"]{border-color:var(--accent) !important;color:var(--accent) !important;background:color-mix(in srgb, var(--accent) 9%, transparent) !important;}
   @media (max-width:760px){ .globe-map{grid-template-columns:1fr !important;} }
   /* Selected Work: stacked rows on mobile, a sticky swap-panel on desktop.
@@ -862,29 +865,15 @@
               </div>
             </sc-if>
             <sc-if value="{{ block.isFlowPath }}">
-              <div class="flowpath-wrap" data-reveal="" data-fp-h="{{ block.svgHeight }}" style="position:relative;width:100%;margin:clamp(25.2px,3.24vw,39.6px) 0;overflow:hidden;">
-                <div class="flowpath-canvas" style="position:absolute;top:0;left:0;width:630px;height:{{ block.svgHeight }}px;transform-origin:top left;">
-                <svg viewBox="0 0 700 {{ block.svgHeight }}" width="700" height="{{ block.svgHeight }}" style="position:absolute;top:0;left:0;overflow:visible;" aria-hidden="true">
-                  <defs>
-                    <marker id="flowpath-dot" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="6" markerHeight="6">
-                      <circle cx="4" cy="4" r="3.6" fill="var(--ink)"></circle>
-                    </marker>
-                  </defs>
+              <div class="flowpath-grid-container" data-reveal="" style="margin:clamp(25.2px,3.24vw,39.6px) 0;">
+                <div class="flowpath-grid">
                   <sc-for list="{{ block.items }}" as="it" hint-placeholder-count="6">
-                    <sc-if value="{{ it.pathD }}">
-                      <path d="{{ it.pathD }}" fill="none" stroke="var(--ink)" stroke-width="1.4" marker-start="url(#flowpath-dot)" marker-end="url(#flowpath-dot)"></path>
-                    </sc-if>
-                  </sc-for>
-                </svg>
-                <sc-for list="{{ block.items }}" as="it" hint-placeholder-count="6">
-                  <div class="flowpath-row" style="position:absolute;left:{{ it.indent }}px;top:{{ it.top }}px;width:342px;box-sizing:border-box;border:1px solid var(--line);border-radius:12.6px;background:var(--surface);padding:19.8px 21.6px;box-shadow:0 9px 25.2px -18px rgba(20,20,22,.18);">
-                    <div style="display:flex;align-items:center;gap:10.8px;margin-bottom:10.8px;">
-                      <div class="flowpath-circle {{ it.circleClass }}" style="flex:none;width:32.4px;height:32.4px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-sans);font-weight:600;font-size:12.6px;">{{ it.num }}</div>
-                      <div style="font-family:var(--font-sans);font-weight:600;font-size:calc(13.5px * var(--sc-body,1));color:var(--ink);">{{ it.label }}</div>
+                    <div style="border:1px solid var(--line);border-radius:12.6px;padding:clamp(19.8px,2.7vw,27px);">
+                      <div style="font-family:var(--font-sans);font-size:calc(10.8px * var(--sc-cap,1));letter-spacing:.06em;color:var(--accent);margin-bottom:9px;">{{ it.num }}</div>
+                      <div style="font-family:var(--font-serif);font-weight:400;font-size:18px;line-height:1.25;letter-spacing:-.01em;color:var(--ink);">{{ it.label }}</div>
+                      <p style="font-family:var(--font-sans);font-size:calc(13.5px * var(--sc-body,1));line-height:1.65;color:var(--ink-2);margin:9px 0 0;">{{ it.text }}</p>
                     </div>
-                    <div style="font-family:var(--font-sans);font-size:calc(11.7px * var(--sc-cap,1));line-height:1.5;color:var(--muted);">{{ it.text }}</div>
-                  </div>
-                </sc-for>
+                  </sc-for>
                 </div>
               </div>
             </sc-if>
@@ -1980,35 +1969,6 @@ class Component extends DCLogic {
         hasNote:b.type==='para'&&!!b.note&&(this.props.showMarginNotes!==false) };
       if (b.type==='section') { sec++; o.secNum = String(sec).padStart(2,'0'); o.anchor = 'sec-' + sec; firstPara = true; }
       if (b.type==='stepflow') { o.items = (b.items||[]).map((s,i) => ({ ...s, needsArrow: i>0 })); }
-      if (b.type==='flowpath') {
-        const ROW_H = 210, INDENT = 320, CARD_W = 380, CARD_H = 114;
-        const items = b.items || [];
-        o.items = items.map((it, i) => {
-          const indent = (i % 2 === 0) ? 0 : INDENT;
-          const cx = indent + CARD_W / 2, cBottom = i * ROW_H + CARD_H;
-          let pathD = '';
-          if (i < items.length - 1) {
-            const nextIndent = ((i + 1) % 2 === 0) ? 0 : INDENT;
-            const ncx = nextIndent + CARD_W / 2, ncTop = (i + 1) * ROW_H;
-            const y1 = cBottom + 4, y2 = ncTop - 4;
-            const ym = (y1 + y2) / 2;
-            const r = Math.min(28, Math.abs(y2 - y1) / 2, Math.abs(ncx - cx) / 2);
-            const dir = ncx > cx ? 1 : (ncx < cx ? -1 : 0);
-            if (dir === 0) {
-              pathD = 'M ' + cx + ' ' + y1 + ' L ' + ncx + ' ' + y2;
-            } else {
-              pathD = 'M ' + cx + ' ' + y1
-                + ' L ' + cx + ' ' + (ym - r)
-                + ' Q ' + cx + ' ' + ym + ' ' + (cx + r * dir) + ' ' + ym
-                + ' L ' + (ncx - r * dir) + ' ' + ym
-                + ' Q ' + ncx + ' ' + ym + ' ' + ncx + ' ' + (ym + r)
-                + ' L ' + ncx + ' ' + y2;
-            }
-          }
-          return { ...it, circleClass: (i % 2 === 0) ? 'light' : 'dark', indent, top: i * ROW_H, pathD };
-        });
-        o.svgHeight = items.length * ROW_H;
-      }
       if (b.type==='statuscards') { o.items = (b.items||[]).map(s => { const err = s.tone==='error'; return { ...s, isError:err, isSuccess:!err, hasActions:Array.isArray(s.actions)&&s.actions.length>0, borderColor: err?'#e3b0aa':'#a9d4b3', bgColor: err?'#fbeeec':'#eaf5ec', iconBg: err?'rgba(192,57,43,.12)':'rgba(31,122,61,.12)', actions:(s.actions||[]).map(a => ({ ...a, isPrimary:a.variant==='primary', isLink:a.variant==='link', isDefault:!a.variant||a.variant==='default' })) }; }); }
       if (b.type==='compare') { o.hasBeforeMockEndpoint = b.beforeMock==='endpointOptOut'; }
       if (b.type==='image') { fig++; o.figNum = String(fig).padStart(2,'0'); o.hasImg = !!b.img; o.img = b.img || this.BLANK_IMG; o.ratio = b.ratio || '1.778'; o.videos = (b.videoSrcs || (b.videoSrc ? [b.videoSrc] : [])).map(s => ({src:s})); o.videoMaxW = b.videoMaxW || (o.videos.length ? '360px' : '100%'); o.needsSlot = !b.video && !b.videoSrc && !b.videoSrcs && !b.img; o.hasNotes = Array.isArray(b.notes) && b.notes.length>0; o.openFig = () => this.setState({ lightbox: { img: o.img, title:'', label:'Fig. ' + o.figNum, caption: b.caption || '', ratio: o.ratio } }); }
@@ -2579,9 +2539,8 @@ class Component extends DCLogic {
       else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); this.prevPage(); }
     };
     window.addEventListener('keydown', this._key);
-    this._rs = () => { this.setState({ bookScale: this.computeScale() }); this.layoutFlowPaths(); };
+    this._rs = () => { this.setState({ bookScale: this.computeScale() }); };
     window.addEventListener('resize', this._rs);
-    requestAnimationFrame(() => this.layoutFlowPaths());
     this._scroll = () => { if (this._st) return; this._st = requestAnimationFrame(() => { this._st = null; this.trackScroll(); }); };
     window.addEventListener('scroll', this._scroll, { passive:true });
     // Cover pan/fade must recompute every frame while scrolling, independent of
@@ -2663,7 +2622,7 @@ class Component extends DCLogic {
       requestAnimationFrame(() => this.checkVideoPlayback());
       if (this.state.view === 'about') { this.syncLeaves(); this._jIdx = -1; requestAnimationFrame(() => { this.syncLeaves(); this.updateJourneyWheel(); }); }
       if (this.state.view !== 'home' && this._cpHide) this._cpHide();
-      if (this.state.view === 'work') { this._activeSec = -1; this._scrollyActive = {}; requestAnimationFrame(() => this.trackScroll()); this.coverReveal(); this.bindSketchSlider(); requestAnimationFrame(() => this.lockMockScale()); requestAnimationFrame(() => this.layoutFlowPaths()); }
+      if (this.state.view === 'work') { this._activeSec = -1; this._scrollyActive = {}; requestAnimationFrame(() => this.trackScroll()); this.coverReveal(); this.bindSketchSlider(); requestAnimationFrame(() => this.lockMockScale()); }
       if (this.state.view === 'home' && prev.view !== 'home') { this.bindTrackEyes(); this.initCube(); this.initCarousel(); this._featIdx = 0; this._featSlug = this.PROJECTS[0].slug; requestAnimationFrame(() => { this.setupContentsPreview(); }); }
       if (this.state.view === 'about' && prev.view !== 'about') this.setState({ opened:false, typed:'', typing:false });
     }
@@ -3097,20 +3056,6 @@ class Component extends DCLogic {
   // Scales each flowpath diagram's fixed-700px design canvas down to fit
   // its actual available width, instead of relying on a breakpoint guess —
   // works at any container width down to the mobile fallback threshold.
-  layoutFlowPaths(){
-    const root = this.rootRef.current; if (!root) return;
-    root.querySelectorAll('.flowpath-wrap').forEach(wrap => {
-      const canvas = wrap.querySelector('.flowpath-canvas');
-      if (!canvas) return;
-      if (window.innerWidth <= 640) { canvas.style.transform = ''; wrap.style.height = ''; return; }
-      const designH = parseFloat(wrap.getAttribute('data-fp-h')) || canvas.offsetHeight;
-      const availW = wrap.getBoundingClientRect().width;
-      if (!availW) return;
-      const scale = Math.min(1, availW / 700);
-      canvas.style.transform = 'scale(' + scale.toFixed(4) + ')';
-      wrap.style.height = Math.round(designH * scale) + 'px';
-    });
-  }
   lockMockScale(){
     const root = this.rootRef.current; if (!root) return;
     if (!this._mockObservers) this._mockObservers = [];
