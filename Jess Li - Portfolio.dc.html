@@ -135,8 +135,6 @@
   /* Case study: sticky contents rail collapses to a static top bar on tablet/mobile */
   @media (max-width:820px){
     [data-article]{flex-direction:column;}
-    [data-article] > aside{position:static!important;width:100%!important;top:auto!important;margin-bottom:7.2px;}
-    [data-article] > aside nav{flex-direction:row!important;flex-wrap:wrap;gap:3.6px 16.2px;}
     [data-article] > div{max-width:100%!important;}
     .scrolly-pin{position:static!important;}
     .scrolly-text{min-height:0!important;}
@@ -761,7 +759,7 @@
       <!-- Contents now lives in the left nav sidebar (>=860px) alongside a
            "Back to Work" button; see [data-nav] .navset-toc up top. -->
       <!-- CONTENT COLUMN -->
-      <div style="flex:1 1 396px;min-width:0;max-width:630px;">
+      <div style="width:100%;min-width:0;">
         <sc-if value="{{ hasSkim }}" hint-placeholder-val="{{ false }}">
           <div data-reveal="" style="border-top:1px solid var(--ink);border-bottom:1px solid var(--line);padding:clamp(21.6px,3.06vw,34.2px) 0;margin:0 0 clamp(27px,3.6vw,39.6px);">
             <div style="font-family:var(--font-sans);font-size:14.4px;letter-spacing:.02em;color:var(--accent);margin-bottom:clamp(14.4px,1.8vw,19.8px);">TL;DR</div>
