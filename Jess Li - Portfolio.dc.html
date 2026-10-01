@@ -849,6 +849,9 @@
               <div data-reveal="" style="display:flex;flex-direction:column;gap:clamp(14.4px,1.98vw,19.8px);margin:clamp(21.6px,2.7vw,34.2px) 0;">
                 <sc-for list="{{ block.items }}" as="c" hint-placeholder-count="4">
                   <div style="border:1px solid var(--line);border-radius:12.6px;padding:clamp(19.8px,2.7vw,27px);">
+                    <sc-if value="{{ c.hasIcon }}">
+                      <div style="margin-bottom:12.6px;">{{ c.iconEl }}</div>
+                    </sc-if>
                     <div style="font-family:var(--font-serif);font-weight:400;font-size:18px;line-height:1.25;letter-spacing:-.01em;color:var(--ink);">{{ c.label }}</div>
                     <p style="font-family:var(--font-sans);font-size:calc(13.5px * var(--sc-body,1));line-height:1.65;color:var(--ink-2);margin:9px 0 0;white-space:pre-line;">{{ c.text }}</p>
                   </div>
@@ -1668,8 +1671,8 @@ class Component extends DCLogic {
         {type:'section', eyebrow:'Calibrating Risk', heading:`The stakes of each decision set how much control the admin kept`},
         {type:'para', text:`That same idea, matching the interface to what's actually at risk, carried into automation itself. Not every AI decision lands with the same weight, so I calibrated how much the admin had to do based on how costly a wrong answer would be.`},
         {type:'cardgrid', items:[
-          {label:'Lower Risk', text:`AI recommends\n→ Admin can adjust`},
-          {label:'Higher Risk', text:`AI recommends\n→ Admin reviews\n→ Admin explicitly activates`}
+          {label:'Lower Risk', text:`AI recommends\n→ Admin can adjust`, icon:'check'},
+          {label:'Higher Risk', text:`AI recommends\n→ Admin reviews\n→ Admin explicitly activates`, icon:'lock'}
         ]},
         {type:'para', text:`For low-stakes configuration, the AI could make the call and let the admin correct it afterward. Provisioning was different. Because it directly changes who can access what, I made it explicitly opt-in, so nothing activates until the admin approves it. That added a step for every admin, and I accepted the cost, since a slower setup is easier to forgive than a wrong access change. Then two customers asked for exactly that behavior, unprompted, which told me the line I'd drawn between "AI can decide" and "AI can only suggest" sat right where they felt exposed.`},
         {type:'para', text:`Control wasn't only about gating what the AI could do. It was also about never locking what the AI produced. Even where the AI recommended a full account and entitlement schema, the admin could open it up and change it directly, adding attributes the AI hadn't surfaced and previewing the data before committing to any of it. The recommendation was always a draft, never a final answer.`},
@@ -1789,9 +1792,9 @@ class Component extends DCLogic {
         {type:'para', text:`I identified this while shadowing the Ops team. Rather than treating the initial feature request as the problem definition, I mapped the workflow I observed and translated it into requirements with my PM.`},
         {type:'para', text:`Three recurring pain points shaped the project:`},
         {type:'cardgrid', items:[
-          {label:'Questions left the platform', text:`Supplier outreach happened in Outlook, breaking traceability.`},
-          {label:'Open questions were hard to scan', text:`Analysts had to open rows individually to understand what needed attention.`},
-          {label:'Common questions were repeatedly recreated', text:`The same requests were typed again across different parts.`}
+          {label:'Questions left the platform', text:`Supplier outreach happened in Outlook, breaking traceability.`, icon:'message'},
+          {label:'Open questions were hard to scan', text:`Analysts had to open rows individually to understand what needed attention.`, icon:'eye'},
+          {label:'Common questions were repeatedly recreated', text:`The same requests were typed again across different parts.`, icon:'layers'}
         ]},
         {type:'para', text:`This narrowed the project to one central question:`},
         {type:'quote', label:'The Design Question', text:`How might we keep supplier clarification inside the workflow analysts already use?`},
@@ -1815,9 +1818,9 @@ class Component extends DCLogic {
         {type:'para', text:`That solved the original problem of repetitive typing, but also introduced a second benefit.`},
         {type:'para', text:`Autocomplete would help an experienced analyst type a known question faster. The question bank could also help a newer analyst understand what questions were commonly worth asking.`},
         {type:'cardgrid', items:[
-          {label:'Constraint', text:`Autocomplete was out of scope`},
-          {label:'Design response', text:`Reusable question library`},
-          {label:'Result', text:`Faster input plus better question discovery`}
+          {label:'Constraint', text:`Autocomplete was out of scope`, icon:'lock'},
+          {label:'Design response', text:`Reusable question library`, icon:'layers'},
+          {label:'Result', text:`Faster input plus better question discovery`, icon:'growth'}
         ]},
         {type:'para', text:`Analysts could also apply several questions across multiple parts in one action, reducing repeated setup even further.`},
         {type:'shotnotes', img:(window.__resources&&window.__resources.qaAddQuestions)||'assets/qa-add-questions-clean.jpg', ratio:'0.652', caption:`The Add Questions modal: pre-defined questions applied across several parts at once, with attachments.`, notes:[{text:`Pre-defined questions, pick a common ask instead of retyping it`, topPct:24},{text:`Add several questions at once, across multiple parts`, topPct:50}]},
@@ -2002,6 +2005,7 @@ class Component extends DCLogic {
         hasNote:b.type==='para'&&!!b.note&&(this.props.showMarginNotes!==false) };
       if (b.type==='section') { sec++; o.secNum = String(sec).padStart(2,'0'); o.anchor = 'sec-' + sec; firstPara = true; }
       if (b.type==='stepflow') { o.items = (b.items||[]).map((s,i) => ({ ...s, needsArrow: i>0 })); }
+      if (b.type==='cardgrid') { o.items = (b.items||[]).map(c => ({ ...c, hasIcon: !!c.icon, iconEl: c.icon ? this.metricIcon(c.icon) : null })); }
       if (b.type==='statuscards') { o.items = (b.items||[]).map(s => { const err = s.tone==='error'; return { ...s, isError:err, isSuccess:!err, hasActions:Array.isArray(s.actions)&&s.actions.length>0, borderColor: err?'#e3b0aa':'#a9d4b3', bgColor: err?'#fbeeec':'#eaf5ec', iconBg: err?'rgba(192,57,43,.12)':'rgba(31,122,61,.12)', actions:(s.actions||[]).map(a => ({ ...a, isPrimary:a.variant==='primary', isLink:a.variant==='link', isDefault:!a.variant||a.variant==='default' })) }; }); }
       if (b.type==='compare') { o.hasBeforeMockEndpoint = b.beforeMock==='endpointOptOut'; }
       if (b.type==='image') { fig++; o.figNum = String(fig).padStart(2,'0'); o.hasImg = !!b.img; o.img = b.img || this.BLANK_IMG; o.ratio = b.ratio || '1.778'; o.videos = (b.videoSrcs || (b.videoSrc ? [b.videoSrc] : [])).map(s => ({src:s})); o.videoMaxW = b.videoMaxW || (o.videos.length ? '360px' : '100%'); o.needsSlot = !b.video && !b.videoSrc && !b.videoSrcs && !b.img; o.hasNotes = Array.isArray(b.notes) && b.notes.length>0; o.openFig = () => this.setState({ lightbox: { img: o.img, title:'', label:'Fig. ' + o.figNum, caption: b.caption || '', ratio: o.ratio } }); }
