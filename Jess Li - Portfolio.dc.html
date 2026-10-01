@@ -1286,9 +1286,6 @@
                             <div style="position:absolute;inset:0;background:color-mix(in srgb, var(--surface) 30%, transparent);"></div>
                           </div>
                         </sc-if>
-                        <sc-if value="{{ bgslide.bgGradient }}" hint-placeholder-val="{{ false }}">
-                          <div aria-hidden="true" style="position:absolute;inset:0;overflow:hidden;z-index:0;opacity:{{ bgslide.op }};transition:opacity .45s ease;background:radial-gradient(120% 120% at 15% 10%, #e3f2e6 0%, #a9d9bb 28%, #5fab7c 58%, #2f6b4f 85%, #204f3a 100%);"></div>
-                        </sc-if>
                       </sc-if>
                     </sc-for>
                     <sc-for list="{{ block.slides }}" as="slide" hint-placeholder-count="4">
@@ -1736,9 +1733,9 @@ class Component extends DCLogic {
             (window.__resources&&window.__resources.seedPersonaPrimary)||'assets/seed-persona-primary.png',
             (window.__resources&&window.__resources.seedPersonaSecondary)||'assets/seed-persona-secondary.png'
           ]},
-          {label:'Storyboards', title:'Storyboards', text:`Storyboards walked each persona through the existing flow start to finish, panel by panel. Both stories ended the same way regardless of who was walking through them, standing at the machine, seeds in hand, no idea what they'd gotten, which is what made identification the priority over anything else.`, img:'assets/seed-storyboards.png', bgGradient:true},
-          {label:'Crazy 8s', title:'Crazy 8s', text:`Eight rapid concepts each, physical and digital, forced volume before judgment before a single final screen existed. One sketch cut the envelope dispenser outright instead of trying to clarify it, and that's the idea that survived into the shipped redesign.`, img:'assets/seed-crazy8s.png', bgGradient:true},
-          {label:'Ideation', title:'Ideation', text:`Every research finding got turned into a How Might We before anyone reached for a solution. Identification and community kept surfacing as the two problems no concept was allowed to skip, which is why they became the redesign's actual spine.`, img:'assets/seed-ideation-board.png', bgGradient:true}
+          {label:'Storyboards', title:'Storyboards', text:`Storyboards walked each persona through the existing flow start to finish, panel by panel. Both stories ended the same way regardless of who was walking through them, standing at the machine, seeds in hand, no idea what they'd gotten, which is what made identification the priority over anything else.`, img:'assets/seed-storyboards.png', bgImgSrc:(window.__resources&&window.__resources.seedPersonaPrimary)||'assets/seed-persona-primary.png'},
+          {label:'Crazy 8s', title:'Crazy 8s', text:`Eight rapid concepts each, physical and digital, forced volume before judgment before a single final screen existed. One sketch cut the envelope dispenser outright instead of trying to clarify it, and that's the idea that survived into the shipped redesign.`, img:'assets/seed-crazy8s.png', bgImgSrc:(window.__resources&&window.__resources.seedPersonaPrimary)||'assets/seed-persona-primary.png'},
+          {label:'Ideation', title:'Ideation', text:`Every research finding got turned into a How Might We before anyone reached for a solution. Identification and community kept surfacing as the two problems no concept was allowed to skip, which is why they became the redesign's actual spine.`, img:'assets/seed-ideation-board.png', bgImgSrc:(window.__resources&&window.__resources.seedPersonaPrimary)||'assets/seed-persona-primary.png'}
         ]},
         {type:'section', eyebrow:'Iterations', heading:`Four screens, four findings`},
         {type:'para', text:`Each major screen changed for a specific reason we uncovered in research and testing.`},
@@ -2052,7 +2049,7 @@ class Component extends DCLogic {
         o.frameRatio = b.ratio || '1.6';
         o.slides = sl.map((s, i) => ({ ...s, i, active: i === active, op: i === active ? 1 : 0,
           hasVideo: !!s.video,
-          bgImg: (s.video || s.bgGradient) ? '' : ((s.images && s.images[0]) || s.img || ''),
+          bgImg: s.video ? '' : (s.bgImgSrc || (s.images && s.images[0]) || s.img || ''),
           imgs: s.video ? [] : (s.images || [s.img]).map((src, k) => ({ src: src || '', hasSrc: !!src, noSrc: !src, key: i + '-' + k,
             open: () => this.setState({ lightbox: { img: src || '', title: s.title || '', label: s.label || '', caption: s.text || '', ratio: b.ratio || '1.6' } }) })) }));
         const as = sl[active] || {};
