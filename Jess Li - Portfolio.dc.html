@@ -1278,9 +1278,19 @@
                 <div style="position:relative;border:1px solid var(--line);border-radius:3.6px;background:var(--surface);overflow:hidden;">
                   <span style="position:absolute;top:12.6px;right:16.2px;z-index:4;font-family:var(--font-sans);font-size:11.7px;letter-spacing:.02em;color:var(--muted-2);background:var(--paper);border:1px solid var(--line);border-radius:2.7px;padding:4.5px 10.8px;">{{ block.activeLabel }}</span>
                   <div style="position:relative;width:100%;aspect-ratio:{{ block.frameRatio }};display:flex;align-items:center;justify-content:center;padding:clamp(25.2px,3.06vw,43.2px);">
+                    <sc-for list="{{ block.slides }}" as="bgslide" hint-placeholder-count="4">
+                      <sc-if value="{{ bgslide.active }}" hint-placeholder-val="{{ true }}">
+                        <sc-if value="{{ bgslide.bgImg }}">
+                          <div aria-hidden="true" style="position:absolute;inset:0;overflow:hidden;z-index:0;opacity:{{ bgslide.op }};transition:opacity .45s ease;">
+                            <img src="{{ bgslide.bgImg }}" alt="" style="position:absolute;top:-15%;left:-15%;width:130%;height:130%;object-fit:cover;filter:blur(54px) saturate(1.4) brightness(1.08);transform:scale(1.05);">
+                            <div style="position:absolute;inset:0;background:color-mix(in srgb, var(--surface) 30%, transparent);"></div>
+                          </div>
+                        </sc-if>
+                      </sc-if>
+                    </sc-for>
                     <sc-for list="{{ block.slides }}" as="slide" hint-placeholder-count="4">
                       <sc-if value="{{ slide.active }}" hint-placeholder-val="{{ true }}">
-                        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:clamp(10.8px,1.44vw,19.8px);opacity:{{ slide.op }};transition:opacity .45s ease;">
+                        <div style="position:relative;z-index:1;width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:clamp(10.8px,1.44vw,19.8px);opacity:{{ slide.op }};transition:opacity .45s ease;">
                           <sc-if value="{{ slide.hasVideo }}">
                             <video src="{{ slide.video }}" autoplay="{{ true }}" loop="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" preload="auto" style="max-width:100%;max-height:100%;height:100%;width:auto;display:block;border-radius:5.4px;"></video>
                           </sc-if>
@@ -2039,6 +2049,7 @@ class Component extends DCLogic {
         o.frameRatio = b.ratio || '1.6';
         o.slides = sl.map((s, i) => ({ ...s, i, active: i === active, op: i === active ? 1 : 0,
           hasVideo: !!s.video,
+          bgImg: s.video ? '' : ((s.images && s.images[0]) || s.img || ''),
           imgs: s.video ? [] : (s.images || [s.img]).map((src, k) => ({ src: src || '', hasSrc: !!src, noSrc: !src, key: i + '-' + k,
             open: () => this.setState({ lightbox: { img: src || '', title: s.title || '', label: s.label || '', caption: s.text || '', ratio: b.ratio || '1.6' } }) })) }));
         const as = sl[active] || {};
