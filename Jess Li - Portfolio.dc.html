@@ -48,6 +48,10 @@
 <script src="https://cdn.jsdelivr.net/npm/motion@11.11.17/dist/motion.js"></script>
 <link rel="stylesheet" href="tokens.css">
 <style>
+  /* Self-hosted (not a CDN) -- Lastik Free, swapped in site-wide for
+     Instrument Serif as of 2026-10-01 (--font-serif/--font-display on the
+     root [data-bg]). Instrument Serif stays as the CSS fallback. */
+  @font-face{font-family:'Lastik Free';src:url('assets/fonts/LastikFree.woff2') format('woff2'),url('assets/fonts/LastikFree.woff') format('woff');font-weight:400;font-style:normal;font-display:swap;}
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{background:var(--paper);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
@@ -463,7 +467,7 @@
   <script defer src="/_vercel/insights/script.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
 </helmet>
-<div ref="{{ rootRef }}" data-bg="" data-ambient="{{ bgMode }}" style="--accent:#000000;--paper:var(--color-paper);--paper2:var(--color-surface-2);--ink:var(--color-ink);--ink-2:var(--color-ink-2);--grey:var(--color-muted-2);--line:var(--color-line);--surface:var(--color-surface);--surface-2:var(--color-surface-2);--muted:var(--color-muted);--muted-2:var(--color-muted-2);--sel:var(--color-selection);--sel-ink:var(--color-selection-ink);--ok:var(--color-success);--warn:var(--color-warning);--err:var(--color-error);--font-serif:'Instrument Serif',Georgia,serif;--font-display:'Instrument Serif',Georgia,serif;--font-sans:'Manrope',ui-sans-serif,system-ui,sans-serif;min-height:90vh;font-family:var(--font-sans);font-weight:400;color:var(--color-ink);">
+<div ref="{{ rootRef }}" data-bg="" data-ambient="{{ bgMode }}" style="--accent:#000000;--paper:var(--color-paper);--paper2:var(--color-surface-2);--ink:var(--color-ink);--ink-2:var(--color-ink-2);--grey:var(--color-muted-2);--line:var(--color-line);--surface:var(--color-surface);--surface-2:var(--color-surface-2);--muted:var(--color-muted);--muted-2:var(--color-muted-2);--sel:var(--color-selection);--sel-ink:var(--color-selection-ink);--ok:var(--color-success);--warn:var(--color-warning);--err:var(--color-error);--font-serif:'Lastik Free','Instrument Serif',Georgia,serif;--font-display:'Lastik Free','Instrument Serif',Georgia,serif;--font-sans:'Manrope',ui-sans-serif,system-ui,sans-serif;min-height:90vh;font-family:var(--font-sans);font-weight:400;color:var(--color-ink);">
   <sc-if value="{{ siteIntroActive }}">
     <div aria-hidden="true" style="position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;background:#ffffff;opacity:{{ siteIntroOverlayOpacity }};transition:opacity .7s ease;">
       <video src="assets/intro-loader.mp4" autoplay="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" onEnded="{{ endSiteIntro }}" style="width:min(42vw,300px);height:auto;aspect-ratio:1/1;display:block;"></video>
@@ -524,7 +528,7 @@
         <div class="hero-copy" style="flex:1 1 100%;min-width:0;width:100%;margin:0;text-align:left;">
           <div style="display:flex;align-items:center;justify-content:flex-start;gap:clamp(12.6px,1.62vw,21.6px);margin-bottom:clamp(14.4px,1.8vw,23.4px);transition:filter .35s ease;" style-hover="filter:blur(1.8px)">
             <img src="assets/jess-portrait-hi.jpg" alt="Portrait of Jessica Li" style="width:clamp(57.6px,6.3vw,86.4px);aspect-ratio:1/1;flex:0 0 auto;object-fit:cover;object-position:33% 34%;display:block;">
-            <div class="hero-onphoto" style="font-family:'Instrument Serif',var(--font-serif),Georgia,serif;font-weight:400;font-size:calc(36px * var(--sc-header,1));line-height:1.05;letter-spacing:-.02em;">Hey, I'm Jessica Li.</div>
+            <div class="hero-onphoto" style="font-family:var(--font-serif,'Instrument Serif'),Georgia,serif;font-weight:400;font-size:calc(36px * var(--sc-header,1));line-height:1.05;letter-spacing:-.02em;">Hey, I'm Jessica Li.</div>
           </div>
           <div data-heroline="" class="hero-onphoto" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:3.6px 5.4px;font-family:var(--font-sans);font-size:clamp(12.6px,1.215vw,15.3px);line-height:1.5;letter-spacing:.005em;width:100%;margin:0;">
             <span style="opacity:.62;">I'm a</span>
@@ -1130,7 +1134,7 @@
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(12.6px,1.8vw,23.4px);align-items:start;">
                   <div style="position:relative;">
                     <div style="text-align:center;margin-bottom:clamp(12.6px,1.8vw,18px);">
-                      <div style="font-family:'Instrument Serif',var(--font-serif),Georgia,serif;font-weight:400;font-size:clamp(13.5px,1.26vw,17.1px);line-height:1;letter-spacing:-.005em;color:var(--ink);margin-bottom:7.2px;">{{ block.beforeLabel }}</div>
+                      <div style="font-family:var(--font-serif,'Instrument Serif'),Georgia,serif;font-weight:400;font-size:clamp(13.5px,1.26vw,17.1px);line-height:1;letter-spacing:-.005em;color:var(--ink);margin-bottom:7.2px;">{{ block.beforeLabel }}</div>
                       <div style="width:18px;height:18px;border-radius:50%;background:#d3453b;display:inline-flex;align-items:center;justify-content:center;">
                         <svg width="8.1" height="8.1" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"></path></svg>
                       </div>
@@ -1192,7 +1196,7 @@
                   </div>
                   <div>
                     <div style="text-align:center;margin-bottom:clamp(12.6px,1.8vw,18px);">
-                      <div style="font-family:'Instrument Serif',var(--font-serif),Georgia,serif;font-weight:400;font-size:clamp(13.5px,1.26vw,17.1px);line-height:1;letter-spacing:-.005em;color:var(--ink);margin-bottom:7.2px;">{{ block.afterLabel }}</div>
+                      <div style="font-family:var(--font-serif,'Instrument Serif'),Georgia,serif;font-weight:400;font-size:clamp(13.5px,1.26vw,17.1px);line-height:1;letter-spacing:-.005em;color:var(--ink);margin-bottom:7.2px;">{{ block.afterLabel }}</div>
                       <div style="width:18px;height:18px;border-radius:50%;background:#3a8a3f;display:inline-flex;align-items:center;justify-content:center;">
                         <svg width="9" height="7.2" viewBox="0 0 15 12" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l4.5 4.5L14 1.5"></path></svg>
                       </div>
@@ -2120,7 +2124,7 @@ class Component extends DCLogic {
         ph.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#171b22;';
         const t = document.createElement('div');
         t.textContent = p.title;
-        t.style.cssText = "font-family:'Instrument Serif',Georgia,serif;font-size:34px;color:#f4f4f2;letter-spacing:-.01em;text-align:center;padding:0 18px;";
+        t.style.cssText = "font-family:'Lastik Free','Instrument Serif',Georgia,serif;font-size:34px;color:#f4f4f2;letter-spacing:-.01em;text-align:center;padding:0 18px;";
         ph.appendChild(t); slide.appendChild(ph);
       }
       wrap.appendChild(slide);
