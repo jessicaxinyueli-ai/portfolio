@@ -486,7 +486,6 @@
     <div class="nav-right" style="display:flex;align-items:center;gap:clamp(16.2px,2.7vw,34.2px);">
       <sc-if value="{{ showCaseNav }}">
         <div class="navset navset-toc" style="display:flex;gap:clamp(16.2px,2.7vw,34.2px);align-items:center;font-family:var(--font-sans);font-size:14.4px;letter-spacing:.01em;color:#96969c;">
-          <div class="toc-label" style="font-family:var(--font-sans);font-size:11.7px;letter-spacing:.02em;color:var(--muted-2);">Contents</div>
           <nav class="toc-list" style="display:flex;flex-direction:column;">
             <sc-for list="{{ toc }}" as="t" hint-placeholder-count="6">
               <button data-tocitem="" onClick="{{ t.go }}" style="background:none;border:none;cursor:pointer;text-align:left;display:flex;align-items:baseline;gap:9px;padding:9px 0;font-family:var(--font-sans);color:var(--muted-2);" style-hover="color:var(--accent)">
@@ -711,6 +710,7 @@
     </sc-if>
 
     <sc-if value="{{ caseVisible }}" hint-placeholder-val="{{ true }}">
+    <div style="filter:{{ comingSoonFilter }};pointer-events:{{ comingSoonPE }};transition:filter .3s ease;" aria-hidden="{{ showComingSoon }}">
     <!-- COVER -->
     <div style="max-width:1062px;margin:0 auto;padding:clamp(93.6px,11.7vw,135px) clamp(36px,7.2vw,86.4px) 0;">
       <div style="display:none;justify-content:space-between;flex-wrap:wrap;gap:9px;font-family:var(--font-sans);font-size:9.9px;letter-spacing:.04em;color:var(--muted-2);border-bottom:1px solid var(--line);padding-bottom:11.7px;">
@@ -1426,6 +1426,24 @@
         </div>
       </div>
     </div>
+    </div>
+    <sc-if value="{{ showComingSoon }}" hint-placeholder-val="{{ false }}">
+      <div style="position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;padding:clamp(21.6px,5.4vw,57.6px);background:color-mix(in srgb, var(--paper) 42%, transparent);">
+        <div style="max-width:342px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:clamp(14.4px,1.8vw,19.8px);">
+          <div style="font-family:var(--font-serif);font-weight:400;font-size:calc(32.4px * var(--sc-header,1));line-height:1;letter-spacing:-.02em;color:var(--ink);">Coming Soon</div>
+          <p style="font-family:var(--font-sans);font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:0;">This case study is still being written up.</p>
+          <form onSubmit="{{ submitPass }}" style="display:flex;flex-direction:column;gap:7.2px;width:100%;">
+            <div style="display:flex;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:899.1px;padding:4.5px 4.5px 4.5px 16.2px;gap:7.2px;">
+              <input ref="{{ passRef }}" class="pass-input" type="password" aria-label="Passphrase" placeholder="Enter password" autocomplete="off" style="flex:1 1 auto;min-width:0;font-family:var(--font-sans);font-size:12.6px;color:var(--ink);background:transparent;border:none;outline:none;">
+              <button type="submit" style="flex:0 0 auto;font-family:var(--font-sans);font-size:11.7px;letter-spacing:.02em;color:var(--paper);background:var(--ink);border:none;border-radius:899.1px;padding:9px 18px;cursor:pointer;" style-hover="background:var(--accent)">Send</button>
+            </div>
+            <sc-if value="{{ passError }}" hint-placeholder-val="{{ false }}">
+              <div style="font-family:var(--font-sans);font-size:10.8px;letter-spacing:.02em;color:var(--accent);">That passphrase didn't match.</div>
+            </sc-if>
+          </form>
+        </div>
+      </div>
+    </sc-if>
     </sc-if>
   </section>
   </sc-if>
@@ -1563,7 +1581,7 @@ class Component extends DCLogic {
       {slug:'sailpoint', date:'May 2026', title:'SailPoint', category:'Product Design, AI, Enterprise UX', role:'Product Design & Research Intern', timeline:'Summer 2026', team:'Solo UX Intern · Figma, Claude Code, Lovable', status:'Beta Testing', locked:true, overview:'Redesigned source configuration with human-in-the-loop AI, cutting setup time by 60%.', publicIntro:[`This summer I worked as the sole UX design intern on SailPoint's identity security team, designing for enterprise administrators who manage access across thousands of applications.`, `The full account walks through the three-iteration redesign, the customer research that reshaped it, and the trust patterns now heading into beta. Inside:`, `The final design is validated with 10 enterprise customers, now in beta with a target of routing 10% of new source configurations through the wizard.`], publicImg:'assets/sailpoint-case-cover-static.jpg', publicVideo:'assets/sailpoint-public-cover.mp4', publicImgCaption:``, takeaways:[{iconD:'M12 3a9 9 0 100 18 9 9 0 000-18z M12 8a4 4 0 100 8 4 4 0 000-8z M12 11.5a.5.5 0 100 1 .5.5 0 000-1z', label:`🎯 Autonomy, calibrated to risk.`, text:`A failed conversational prototype led me to a principle I now apply to any AI feature: match how much the AI decides to the cost of being wrong. It shaped every decision in the product that followed.`}, {iconD:'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z M12 9a3 3 0 100 6 3 3 0 000-6z', label:`🔍 Transparency is not clarity.`, text:`My first inline design showed all of the AI's reasoning at once. In A/B testing, users didn't know where to click or what their actions would lead to. The fix was letting admins choose when to see it.`}, {iconD:'M4 5h16v11H9l-5 4v-4H4z', label:`💬 What customers changed my mind about.`, text:`Ten enterprise customers reshaped decisions I thought were settled, including the single request that redefined what to build next.`}]},
       {slug:'seed-library', date:'Sep 2025', caseCover:'assets/seed-case-cover.png', title:'UM Seed Library', category:'Product Design, User Research, Mobile', role:'Product Designer', timeline:'Aug 2025 to Mar 2026', team:'4-person team, designers, PM, instructor', status:'Client handoff', overview:'Simplified seed lending from 6 steps to 4, reaching 95% task completion.'},
       {slug:'copperhill', date:'Jun 2025', title:'Copperhill', category:'Product Design, Design Systems, B2B', role:'Solo Product Designer', timeline:'Jun to Aug 2025', team:'4 engineers', status:'Completed', statusLabel:'Shipped to beta', overview:'Redesigned an end-to-end supplier Q&A workflow for 2,000+ daily users, reducing out-of-platform work by 95%.'},
-      {slug:'umgpt', date:'Sep 2025', caseCover:'assets/umgpt-case-cover.png', title:'UM GPT', category:'Product Design, AI, Interaction Design', role:'Product Designer', timeline:'Sep — Dec 2025 (course), continued independently after', team:'Solo · Figma, Lovable, Figma Make, Claude', status:'Completed', overview:'Unified a fragmented AI workflow spanning four tools into one experience.'}
+      {slug:'umgpt', date:'Sep 2025', caseCover:'assets/umgpt-case-cover.png', title:'UM GPT', category:'Product Design, AI, Interaction Design', role:'Product Designer', timeline:'Sep — Dec 2025 (course), continued independently after', team:'Solo · Figma, Lovable, Figma Make, Claude', status:'Completed', overview:'Unified a fragmented AI workflow spanning four tools into one experience.', locked:true, comingSoon:true}
     ];
     // Real, shareable URLs for each view. Case-study paths drop the hyphen
     // (seed-library -> /seedlibrary) to match the short slugs people expect.
@@ -1881,7 +1899,7 @@ class Component extends DCLogic {
     const initRoute = this.resolveRoute(window.location.pathname);
     this.state = { view:initRoute.view, slug:initRoute.slug, leaf:0, bookScale: this.computeScale(), quoteIdx:0, typed:'', typing:false, opened:false, unlocked:{}, passError:false, bgMode:'plain', siteIntroActive: !this.prefersReduced(), siteIntroFade:false };
     // Case studies still in progress require a passphrase before the account opens.
-    this.PASSWORDS = { sailpoint: 'sailu2026' };
+    this.PASSWORDS = { sailpoint: 'sailu2026', umgpt: 'umgpt2026' };
     // About page "Flicks" 3x3 grid — a handful of personal snapshots, unrelated to work.
     this.ABOUT_PHOTOS = [
       'assets/highlights2/cocktail.jpg', 'assets/highlights2/painting.jpg', 'assets/highlights2/dinner-menu.jpg',
@@ -3940,6 +3958,11 @@ class Component extends DCLogic {
       openImg: () => { if (p.available === false && !p.locked) return; this.transitionToCase(p.slug); }
     }));
     const cur = mapped.find(p => p.slug === slug) || null;
+    // A "coming soon" case study blurs its real content for everyone except
+    // local dev/preview, so edits/review never need the passphrase; it only
+    // gates the deployed site.
+    const isLocalPreview = /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname);
+    const showComingSoon = !!(cur && cur.locked && cur.comingSoon && !this.state.unlocked[cur.slug] && !isLocalPreview);
     const cs = cur ? this.CASE[cur.slug] : null;
     const blocks = cs ? this.normalize(cs) : [];
     const toc = cs ? this.tocOf(this.normalize(cs)).map(t => ({ ...t, go: () => this.scrollToSection(t.id) })) : [];
@@ -4038,8 +4061,11 @@ class Component extends DCLogic {
       replayQuote: () => this.startTyping(),
       onQuoteActivate: () => this.nextQuote(),
       isHome: view === 'home', isWork: view === 'work', isAbout: view === 'about',
-      locked: !!(cur && cur.locked && !this.state.unlocked[cur.slug]),
-      caseVisible: !!(cur && !(cur.locked && !this.state.unlocked[cur.slug])),
+      locked: !!(cur && cur.locked && !cur.comingSoon && !this.state.unlocked[cur.slug]),
+      caseVisible: !!(cur && (!cur.locked || cur.comingSoon || this.state.unlocked[cur.slug])),
+      showComingSoon,
+      comingSoonFilter: showComingSoon ? 'blur(22px) saturate(.7)' : 'none',
+      comingSoonPE: showComingSoon ? 'none' : 'auto',
       passError: this.state.passError,
       passRef: (el) => { this._passInput = el; },
       submitPass: (e) => { if (e && e.preventDefault) e.preventDefault(); this.tryUnlock(); },
