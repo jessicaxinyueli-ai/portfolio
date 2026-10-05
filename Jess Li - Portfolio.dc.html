@@ -390,7 +390,14 @@
      dark scrim -- two masked backdrop layers (4px + 16px) ramping to the
      bottom edge, with only a faint dark tint so the white pills stay legible
      over light covers. Next-On cards and the About grid keep the shared scrim. */
-  .entry-imgwrap .feat-blur{height:62%;}
+  /* The wrapper itself must NOT carry opacity/will-change: either one makes it a
+     "backdrop root", so the backdrop-filter layers inside would only sample the
+     wrapper's own (empty) contents and the blur silently does nothing in real
+     browsers. Keep the wrapper at full opacity and fade the layers instead. */
+  .entry-imgwrap .feat-blur{height:62%;opacity:1;will-change:auto;transition:none;}
+  .entry-imgwrap .feat-blur-bg::before,.entry-imgwrap .feat-blur-bg::after,.entry-imgwrap .feat-blur-text{opacity:0;transition:opacity .25s ease-out;}
+  .feat-figure:hover .feat-blur-bg::before,.feat-figure:hover .feat-blur-bg::after,.feat-figure:hover .feat-blur-text{opacity:1;}
+  @media (hover:none){.entry-imgwrap .feat-blur-bg::before,.entry-imgwrap .feat-blur-bg::after,.entry-imgwrap .feat-blur-text{opacity:1;}}
   .entry-imgwrap .feat-blur-bg{-webkit-backdrop-filter:none;backdrop-filter:none;background:none;-webkit-mask-image:none;mask-image:none;}
   .entry-imgwrap .feat-blur-bg::before,.entry-imgwrap .feat-blur-bg::after{content:"";position:absolute;inset:0;}
   .entry-imgwrap .feat-blur-bg::before{-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 40%);mask-image:linear-gradient(to bottom,transparent 0%,#000 40%);}
