@@ -810,6 +810,13 @@
               </sc-for>
             </div>
           </div>
+          <sc-if value="{{ hasSkimImg }}" hint-placeholder-val="{{ false }}">
+            <figure data-reveal="" style="margin:0 0 clamp(27px,3.6vw,39.6px);width:100%;">
+              <button type="button" onClick="{{ openSkimImg }}" aria-label="Expand image" style="position:relative;display:block;width:100%;padding:0;border:none;background:none;cursor:zoom-in;">
+                <image-slot id="skimimg-{{ cur.slug }}" src="{{ skimImg }}" style="width:100%;height:auto;aspect-ratio:{{ skimImgRatio }};display:block;pointer-events:none;" shape="rect" fit="contain" placeholder="Overview"></image-slot>
+              </button>
+            </figure>
+          </sc-if>
         </sc-if>
         <sc-for list="{{ blocks }}" as="block" hint-placeholder-count="6">
           <div>
@@ -1633,6 +1640,7 @@ class Component extends DCLogic {
     this.SKIM = {
       'seed-library': {
         body:`85% of students had never heard of a free campus seed library, and 96% of the flows we observed never finished. I led the digital experience and design system, including the homepage and events experience. We cut the physical checkout from six steps to four, redesigned the digital experience around how people actually used the system, and made the Seed Library's free value impossible to miss.`,
+        img:'assets/seed-overview.webp', imgRatio:'1.3928',
         metrics:[
           {dir:'up', value:`83%`, label:`seed identification accuracy`},
           {dir:'up', value:`95%`, label:`task completion`},
@@ -4118,6 +4126,10 @@ class Component extends DCLogic {
       lightboxCaption: (this.state.lightbox && this.state.lightbox.caption) || '',
       closeLightbox: () => this.setState({ lightbox: null }),
       skimBody: (cur && this.SKIM[cur.slug]) ? this.SKIM[cur.slug].body : '',
+      skimImg: (cur && this.SKIM[cur.slug] && this.SKIM[cur.slug].img) || '',
+      skimImgRatio: (cur && this.SKIM[cur.slug] && this.SKIM[cur.slug].imgRatio) || '1.5',
+      hasSkimImg: !!(cur && this.SKIM[cur.slug] && this.SKIM[cur.slug].img),
+      openSkimImg: () => { const sk = cur && this.SKIM[cur.slug]; if (sk && sk.img) this.setState({ lightbox: { img: sk.img, title:'', label:'', caption:'', ratio: sk.imgRatio || '1.5' } }); },
       skimMetrics: (cur && this.SKIM[cur.slug]) ? this.SKIM[cur.slug].metrics.map(m => {
         const pm = (m.value.match(/(\d+(?:\.\d+)?)\s*%/g) || []);
         const pct = pm.length ? parseFloat(pm[pm.length - 1]) : null;
