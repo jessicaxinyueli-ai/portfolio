@@ -390,10 +390,11 @@
      dark scrim -- two masked backdrop layers (4px + 16px) ramping to the
      bottom edge, with only a faint dark tint so the white pills stay legible
      over light covers. Next-On cards and the About grid keep the shared scrim. */
+  .entry-imgwrap .feat-blur{height:55%;}
   .entry-imgwrap .feat-blur-bg{-webkit-backdrop-filter:none;backdrop-filter:none;background:none;-webkit-mask-image:none;mask-image:none;}
   .entry-imgwrap .feat-blur-bg::before,.entry-imgwrap .feat-blur-bg::after{content:"";position:absolute;inset:0;}
-  .entry-imgwrap .feat-blur-bg::before{-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 60%);mask-image:linear-gradient(to bottom,transparent 0%,#000 60%);}
-  .entry-imgwrap .feat-blur-bg::after{-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2);background:linear-gradient(to top,rgba(10,12,16,.28),rgba(10,12,16,0) 85%);-webkit-mask-image:linear-gradient(to bottom,transparent 30%,#000 100%);mask-image:linear-gradient(to bottom,transparent 30%,#000 100%);}
+  .entry-imgwrap .feat-blur-bg::before{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 45%);mask-image:linear-gradient(to bottom,transparent 0%,#000 45%);}
+  .entry-imgwrap .feat-blur-bg::after{-webkit-backdrop-filter:blur(30px) saturate(1.2);backdrop-filter:blur(30px) saturate(1.2);background:linear-gradient(to top,rgba(10,12,16,.28),rgba(10,12,16,0) 85%);-webkit-mask-image:linear-gradient(to bottom,transparent 15%,#000 75%);mask-image:linear-gradient(to bottom,transparent 15%,#000 75%);}
   .feat-blur-text{position:absolute;left:clamp(14.4px,2.16vw,25.2px);right:clamp(14.4px,2.16vw,25.2px);bottom:clamp(14.4px,2.16vw,23.4px);display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;font-family:var(--font-sans);}
   .feat-blur-pill{display:inline-flex;align-items:center;font-size:13.5px;font-weight:500;letter-spacing:.01em;color:#fff;text-shadow:0 1px 10px rgba(10,12,16,.35);white-space:nowrap;}
   /* Masked image entrance (bottom-up wipe), reuses [data-mask] engine on figures */
