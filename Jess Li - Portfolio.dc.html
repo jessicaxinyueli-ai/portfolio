@@ -382,9 +382,6 @@
   .feat-blur{position:absolute;left:0;right:0;bottom:0;height:42%;opacity:0;transition:opacity .15s ease-out;pointer-events:none;z-index:2;will-change:opacity;}
   .feat-figure:hover .feat-blur{opacity:1;}
   .flick-photo:hover .feat-blur{opacity:1;}
-  /* About camera roll: hovering one photo blurs all the others (focus pull). */
-  .flick-photo{transition:filter .35s ease;}
-  @media (hover:hover){ .flick-grid:hover .flick-photo:not(:hover){filter:blur(2.5px);} }
   .flick-photo .feat-cover{clip-path:none;border-radius:0 !important;}
   @media (max-width:420px){ .settings-grid{grid-template-columns:repeat(2,1fr) !important;} }
   @media (hover:none){.feat-blur{opacity:1;}}
@@ -1556,7 +1553,7 @@
 
       <!-- Flicks — 3x3 grid of snapshots, same hover-blur treatment as case-study covers -->
       <div style="font-family:var(--font-sans);font-weight:400;font-size:14.4px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin:clamp(50.4px,6.3vw,79.2px) 0 3.6px;">My Camera Roll</div>
-      <div class="flick-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:clamp(28.8px,3.6vw,43.2px) 0 clamp(36px,4.5vw,54px);">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:clamp(28.8px,3.6vw,43.2px) 0 clamp(36px,4.5vw,54px);">
         <sc-for list="{{ flickGrid }}" as="it" hint-placeholder-count="9">
           <figure class="flick-photo" style="margin:0;width:100%;aspect-ratio:1;">
             <div class="feat-cover" style="position:relative;width:100%;height:100%;overflow:hidden;background:var(--surface);border-radius:0;">
