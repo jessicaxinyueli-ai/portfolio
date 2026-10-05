@@ -450,6 +450,15 @@
   .reveal-content{position:relative;z-index:2;background:var(--color-paper);}
   .reveal-content > .reveal-blobs{position:fixed;inset:0;z-index:-1;pointer-events:none;background-color:var(--color-paper);background-repeat:no-repeat;}
   .reveal-footer{position:relative;z-index:4;background:transparent;}
+  /* Progressive blur pinned to the bottom of the viewport on Home and About:
+     two stacked backdrop-filter layers, each masked so blur ramps from none
+     at the top to full at the bottom edge. z-index 3 sits above page content
+     but below the footers (z-index 4) so footer links stay crisp, and below
+     the nav (1000). */
+  .bottom-blur{position:fixed;left:0;right:0;bottom:0;height:clamp(72px,11vh,120px);z-index:3;pointer-events:none;}
+  .bottom-blur > div{position:absolute;inset:0;}
+  .bottom-blur-soft{-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 60%);mask-image:linear-gradient(to bottom,transparent 0%,#000 60%);}
+  .bottom-blur-hard{-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);-webkit-mask-image:linear-gradient(to bottom,transparent 35%,#000 100%);mask-image:linear-gradient(to bottom,transparent 35%,#000 100%);}
   .static-footer{background:transparent;}
   @keyframes sparkle{0%,100%{opacity:.35;transform:scale(.92) rotate(0deg);}45%{opacity:1;transform:scale(1.18) rotate(90deg);}70%{opacity:.5;transform:scale(1) rotate(120deg);}}
   .navset [data-navlink]{transition:filter .3s ease,color .3s ease,opacity .3s ease;}
@@ -479,6 +488,9 @@
     <div class="bg-layer" data-layer="night"></div>
   </div>
   <div class="bg-glow" ref="{{ glowRef }}" aria-hidden="true"></div>
+  <sc-if value="{{ showBottomBlur }}" hint-placeholder-val="{{ true }}">
+    <div class="bottom-blur" aria-hidden="true"><div class="bottom-blur-soft"></div><div class="bottom-blur-hard"></div></div>
+  </sc-if>
   <svg width="0" height="0" style="position:absolute;pointer-events:none;" aria-hidden="true">
     <defs>
       <marker id="sketchArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -4074,6 +4086,7 @@ class Component extends DCLogic {
       replayQuote: () => this.startTyping(),
       onQuoteActivate: () => this.nextQuote(),
       isHome: view === 'home', isWork: view === 'work', isAbout: view === 'about',
+      showBottomBlur: view === 'home' || view === 'about',
       locked: !!(cur && cur.locked && !cur.comingSoon && !this.state.unlocked[cur.slug]),
       caseVisible: !!(cur && (!cur.locked || cur.comingSoon || this.state.unlocked[cur.slug])),
       showComingSoon,
