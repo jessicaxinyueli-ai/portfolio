@@ -503,8 +503,8 @@
 </helmet>
 <div ref="{{ rootRef }}" data-bg="" data-ambient="{{ bgMode }}" style="--accent:#000000;--paper:var(--color-paper);--paper2:var(--color-surface-2);--ink:var(--color-ink);--ink-2:var(--color-ink-2);--grey:var(--color-muted-2);--line:var(--color-line);--surface:var(--color-surface);--surface-2:var(--color-surface-2);--muted:var(--color-muted);--muted-2:var(--color-muted-2);--sel:var(--color-selection);--sel-ink:var(--color-selection-ink);--ok:var(--color-success);--warn:var(--color-warning);--err:var(--color-error);--font-serif:'Lastik Free','Instrument Serif',Georgia,serif;--font-display:'Lastik Free','Instrument Serif',Georgia,serif;--font-sans:'Manrope',ui-sans-serif,system-ui,sans-serif;min-height:90vh;font-family:var(--font-sans);font-weight:400;color:var(--color-ink);">
   <sc-if value="{{ siteIntroActive }}">
-    <div aria-hidden="true" style="position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;background:#ffffff;opacity:{{ siteIntroOverlayOpacity }};transition:opacity .7s ease;">
-      <video src="assets/intro-loader.mp4" autoplay="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" onEnded="{{ endSiteIntro }}" style="width:min(42vw,300px);height:auto;aspect-ratio:1/1;display:block;"></video>
+    <div aria-hidden="true" style="position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;background:#000000;opacity:{{ siteIntroOverlayOpacity }};transition:opacity .7s ease;">
+      <video src="assets/intro-loader-butterfly.mp4" autoplay="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" onEnded="{{ endSiteIntro }}" style="width:100%;height:100%;object-fit:contain;display:block;background:#000;"></video>
     </div>
   </sc-if>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="cc-liquid" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="2" seed="7" result="n"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="34" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter></defs></svg>
@@ -2579,7 +2579,7 @@ class Component extends DCLogic {
     // onEnded normally ends it; this timer is just a safety net in case the
     // video fails to load/play (e.g. a blocked request) so the site is never
     // stuck behind it.
-    if (this.state.siteIntroActive) { this._introFallback = setTimeout(() => this.endSiteIntro(), 6000); }
+    if (this.state.siteIntroActive) { this._introFallback = setTimeout(() => this.endSiteIntro(), 8000); }
     // Site-wide smooth/eased scroll (Lenis) — a slight, deliberate lag behind
     // the raw wheel/touch input instead of the browser's instant native
     // scroll. Lenis drives the real window scroll position each frame (not
