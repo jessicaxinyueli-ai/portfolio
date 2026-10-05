@@ -164,8 +164,15 @@
 
   /* ===== INTERACTION LAYER ===== */
   /* Navbar: transparent at top, frosted on scroll (mobile top-bar layout). */
-  [data-nav]{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-bottom:1px solid transparent;transition:background .45s ease, backdrop-filter .45s ease, border-color .45s ease, box-shadow .45s ease;will-change:backdrop-filter;}
-  [data-nav].scrolled{background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(12.6px) saturate(1.4);backdrop-filter:blur(12.6px) saturate(1.4);border-bottom-color:var(--line);box-shadow:0 1px 0 rgba(20,20,22,.02);}
+  [data-nav]{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-bottom:1px solid transparent;transition:border-color .45s ease;}
+  /* Top-bar nav (<860px): no hard frosted bar -- once scrolled, two masked
+     backdrop-filter layers (::before soft, ::after hard) sit behind the
+     links at z-index:-1 and extend below the bar, so page content blurs
+     progressively under the words and fades out downward with no edge. */
+  [data-nav]::before,[data-nav]::after{content:"";position:absolute;left:0;right:0;top:0;bottom:-44px;z-index:-1;pointer-events:none;opacity:0;transition:opacity .45s ease;}
+  [data-nav]::before{-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);-webkit-mask-image:linear-gradient(to bottom,#000 30%,transparent 100%);mask-image:linear-gradient(to bottom,#000 30%,transparent 100%);}
+  [data-nav]::after{-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);background:linear-gradient(to bottom,color-mix(in srgb,var(--paper) 62%,transparent),transparent);-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 45%,transparent 85%);mask-image:linear-gradient(to bottom,#000 0%,#000 45%,transparent 85%);}
+  [data-nav].scrolled::before,[data-nav].scrolled::after{opacity:1;}
   /* Below 774px the case-study nav is still a top bar, so the full Contents
      list (often 8+ items) can't run inline — show just "Back to Work" there
      and save the list for the >=774px sidebar. */
@@ -180,6 +187,7 @@
   @media (min-width:860px){
     [data-nav]{position:fixed !important;top:0 !important;left:var(--nav-offset) !important;right:auto !important;bottom:0 !important;width:var(--nav-w);flex-direction:column !important;align-items:flex-start !important;justify-content:flex-start !important;gap:clamp(25.2px,3.6vh,39.6px) !important;padding:clamp(144px,21.6vh,234px) clamp(18px,2.7vw,27px) clamp(21.6px,3.6vh,32.4px) !important;box-sizing:border-box;border-bottom:none !important;overflow-y:auto;}
     [data-nav].scrolled{background:transparent !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;box-shadow:none !important;}
+    [data-nav]::before,[data-nav]::after{display:none;}
     [data-nav] .nav-right{flex:1 !important;display:flex !important;flex-direction:column !important;align-items:flex-start !important;gap:clamp(18px,2.7vh,25.2px) !important;min-height:0;}
     [data-nav] .navset,[data-nav] .navset-toc{flex-direction:column !important;align-items:flex-start !important;gap:clamp(16.2px,2.34vh,25.2px) !important;}
     [data-nav] .navset-toc{overflow-y:auto;min-height:0;flex:1 1 auto !important;}
