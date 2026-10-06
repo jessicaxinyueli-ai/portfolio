@@ -1,0 +1,355 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Case Study Copy Editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Layout: fixed left rail (project + section nav) + scrolling field list on the right,
+     collapsing to a top pill-bar over a single column below 720px. */
+  :root{
+    --bg:#ffffff; --surface:#f4f4f6; --surface-2:#eeeef0; --line:rgba(20,20,22,.13);
+    --ink:#141416; --ink-2:#6b6c74; --muted:#82828a; --accent:#141416;
+    --edited:#b45309; --edited-bg:#fef3e2;
+    --font-serif:'Instrument Serif', Georgia, serif;
+    --font-sans:'Manrope', ui-sans-serif, system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#000000; --surface:#141419; --surface-2:#1b1b22; --line:rgba(255,255,255,.13);
+      --ink:#eef0f5; --ink-2:#b3b9c4; --muted:#8b8f9a; --accent:#eef0f5;
+      --edited:#f0b968; --edited-bg:#2a2010;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#000000; --surface:#141419; --surface-2:#1b1b22; --line:rgba(255,255,255,.13);
+    --ink:#eef0f5; --ink-2:#b3b9c4; --muted:#8b8f9a; --accent:#eef0f5;
+    --edited:#f0b968; --edited-bg:#2a2010;
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:var(--font-sans); margin:0; min-height:100%;}
+  a{color:inherit;}
+  .app{display:flex; min-height:100vh;}
+  .rail{
+    width:260px; flex:0 0 auto; border-right:1px solid var(--line); padding:24px 18px;
+    display:flex; flex-direction:column; gap:22px; position:sticky; top:0; height:100vh; overflow-y:auto;
+  }
+  .brand{font-family:var(--font-serif); font-size:22px; letter-spacing:-.01em;}
+  .brand small{display:block; font-family:var(--font-sans); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin-top:4px;}
+  .search{
+    width:100%; border:1px solid var(--line); background:var(--surface); color:var(--ink);
+    border-radius:8px; padding:9px 11px; font-family:var(--font-sans); font-size:13px; outline:none;
+  }
+  .search:focus{border-color:var(--ink-2);}
+  .proj-list{display:flex; flex-direction:column; gap:2px;}
+  .proj-btn{
+    text-align:left; background:none; border:0; color:var(--ink-2); font-family:var(--font-sans);
+    font-size:14px; padding:9px 10px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:8px;
+  }
+  .proj-btn:hover{background:var(--surface);}
+  .proj-btn.active{background:var(--surface-2); color:var(--ink); font-weight:600;}
+  .proj-btn .count{font-size:11px; color:var(--muted); font-weight:400;}
+  .rail-foot{margin-top:auto; font-size:11px; color:var(--muted); line-height:1.5;}
+  .status-pill{
+    display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--muted);
+    padding:5px 10px; border:1px solid var(--line); border-radius:999px; width:fit-content;
+  }
+  .status-dot{width:6px; height:6px; border-radius:50%; background:var(--muted);}
+  .status-pill.saving .status-dot{background:#e0a530;}
+  .status-pill.saved .status-dot{background:#2e9941;}
+
+  .main{flex:1 1 auto; min-width:0; padding:40px clamp(24px,4vw,64px) 120px;}
+  .proj-header{margin-bottom:8px;}
+  .proj-header h1{font-family:var(--font-serif); font-weight:400; font-size:clamp(28px,4vw,38px); margin:0 0 6px; letter-spacing:-.01em;}
+  .proj-header p{margin:0; color:var(--ink-2); font-size:14px; max-width:640px; line-height:1.5;}
+  .field-count{font-size:12px; color:var(--muted); margin-top:10px;}
+
+  .section{margin-top:38px;}
+  .section-title{
+    font-family:var(--font-sans); font-size:12px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--muted); margin-bottom:14px; display:flex; align-items:center; gap:8px;
+  }
+  .field-grid{display:flex; flex-direction:column; gap:16px;}
+  .field{
+    border:1px solid var(--line); border-radius:10px; padding:14px 16px; background:var(--surface);
+    display:flex; flex-direction:column; gap:8px; min-width:0;
+  }
+  .field.is-edited{border-color:var(--edited);}
+  .field-top{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .field-label{font-size:12px; color:var(--ink-2); font-weight:600;}
+  .field-actions{display:flex; align-items:center; gap:10px;}
+  .edited-tag{
+    font-size:10.5px; color:var(--edited); background:var(--edited-bg); padding:2px 7px;
+    border-radius:999px; letter-spacing:.02em;
+  }
+  .reset-btn{
+    font-size:11.5px; color:var(--muted); background:none; border:0; cursor:pointer; text-decoration:underline;
+    padding:0;
+  }
+  .reset-btn:hover{color:var(--ink);}
+  textarea.field-input{
+    width:100%; resize:none; overflow:hidden; border:1px solid transparent; background:transparent;
+    color:var(--ink); font-family:var(--font-sans); font-size:15px; line-height:1.55; padding:2px 0;
+    outline:none; min-height:1.55em;
+  }
+  textarea.field-input:focus{border-bottom:1px solid var(--ink-2);}
+
+  .empty{color:var(--muted); font-size:14px; padding:60px 0; text-align:center;}
+
+  /* Mobile: rail becomes a horizontal pill bar above the content */
+  @media (max-width:760px){
+    .app{flex-direction:column;}
+    .rail{
+      position:static; width:100%; height:auto; flex-direction:row; flex-wrap:nowrap;
+      overflow-x:auto; padding:16px; gap:14px; border-right:0; border-bottom:1px solid var(--line);
+      align-items:center;
+    }
+    .brand{flex:0 0 auto;}
+    .search{width:160px;}
+    .proj-list{flex-direction:row; flex:0 0 auto;}
+    .rail-foot{display:none;}
+    .main{padding:28px 16px 100px;}
+  }
+</style>
+
+<div class="app">
+  <nav class="rail">
+    <div class="brand">Copy Editor<small>Jess Li Portfolio</small></div>
+    <input class="search" id="search" type="search" placeholder="Search all text…" autocomplete="off">
+    <div class="proj-list" id="projList"></div>
+    <div class="rail-foot">
+      <div class="status-pill" id="statusPill"><span class="status-dot"></span><span id="statusText">Loading…</span></div>
+      <p style="margin-top:12px;">Edits save automatically. When you're ready, tell Claude to "sync the case study copy" and it'll pull your changes into the live site.</p>
+    </div>
+  </nav>
+  <main class="main" id="main"></main>
+</div>
+
+<script>
+(function(){
+  var DATA = null;        // baseline structure from case-copy-data.json
+  var EDITS = {};         // id -> {text, updatedAt}
+  var activeProject = null;
+  var searchQuery = '';
+  var db = null;
+  var saveTimers = {};
+
+  function el(tag, attrs, children){
+    var e = document.createElement(tag);
+    attrs = attrs || {};
+    for (var k in attrs){
+      if (k === 'class') e.className = attrs[k];
+      else if (k === 'text') e.textContent = attrs[k];
+      else e.setAttribute(k, attrs[k]);
+    }
+    (children||[]).forEach(function(c){ if (c) e.appendChild(c); });
+    return e;
+  }
+
+  function currentText(field){
+    var edit = EDITS[field.id];
+    return edit && typeof edit.text === 'string' ? edit.text : field.text;
+  }
+  function isEdited(field){
+    var edit = EDITS[field.id];
+    return !!edit && edit.text !== field.text;
+  }
+
+  function setStatus(state, text){
+    var pill = document.getElementById('statusPill');
+    pill.className = 'status-pill ' + (state||'');
+    document.getElementById('statusText').textContent = text;
+  }
+
+  function autosize(ta){
+    ta.style.height = 'auto';
+    ta.style.height = (ta.scrollHeight) + 'px';
+  }
+
+  function scheduleSave(id, text){
+    clearTimeout(saveTimers[id]);
+    setStatus('saving', 'Saving…');
+    saveTimers[id] = setTimeout(function(){
+      EDITS[id] = {text: text, updatedAt: Date.now()};
+      if (db){
+        db.doc('edits/' + id).set({text: text, updatedAt: Date.now()})
+          .then(function(){ setStatus('saved', 'Saved'); })
+          .catch(function(){ setStatus('', 'Save failed — will retry'); });
+      } else {
+        setStatus('saved', 'Saved locally (no sync)');
+      }
+    }, 500);
+  }
+
+  function fieldEditedCount(project){
+    var n = 0;
+    project.sections.forEach(function(sec){
+      sec.fields.forEach(function(f){ if (isEdited(f)) n++; });
+    });
+    return n;
+  }
+
+  function renderProjList(){
+    var list = document.getElementById('projList');
+    list.innerHTML = '';
+    Object.keys(DATA.projects).forEach(function(slug){
+      var p = DATA.projects[slug];
+      var editedCount = fieldEditedCount(p);
+      var btn = el('button', {class: 'proj-btn' + (slug === activeProject ? ' active' : '')}, [
+        el('span', {text: p.title}),
+        el('span', {class: 'count', text: editedCount ? (editedCount + ' edited') : (countFields(p) + '')})
+      ]);
+      btn.addEventListener('click', function(){ activeProject = slug; render(); });
+      list.appendChild(btn);
+    });
+  }
+
+  function countFields(project){
+    var n = 0;
+    project.sections.forEach(function(sec){ n += sec.fields.length; });
+    return n;
+  }
+
+  function matchesSearch(field, q){
+    if (!q) return true;
+    q = q.toLowerCase();
+    return currentText(field).toLowerCase().indexOf(q) !== -1 || (field.label||'').toLowerCase().indexOf(q) !== -1;
+  }
+
+  function renderMain(){
+    var main = document.getElementById('main');
+    main.innerHTML = '';
+
+    if (searchQuery){
+      var results = [];
+      Object.keys(DATA.projects).forEach(function(slug){
+        var p = DATA.projects[slug];
+        p.sections.forEach(function(sec){
+          sec.fields.forEach(function(f){
+            if (matchesSearch(f, searchQuery)) results.push({project: p, sec: sec, field: f});
+          });
+        });
+      });
+      main.appendChild(el('div', {class:'proj-header'}, [
+        el('h1', {text: 'Search results'}),
+        el('p', {text: results.length + ' match' + (results.length===1?'':'es') + ' for “' + searchQuery + '”'})
+      ]));
+      var grid = el('div', {class:'field-grid'});
+      results.forEach(function(r){ grid.appendChild(renderField(r.field, r.project.title + ' — ' + r.sec.name)); });
+      main.appendChild(grid);
+      if (!results.length) main.appendChild(el('div', {class:'empty', text:'No matches.'}));
+      return;
+    }
+
+    var project = DATA.projects[activeProject];
+    if (!project){ main.appendChild(el('div', {class:'empty', text:'Pick a case study on the left.'})); return; }
+
+    main.appendChild(el('div', {class:'proj-header'}, [
+      el('h1', {text: project.title}),
+      el('p', {text: 'Every editable line of copy for this case study, in the order it appears on the live site: password-gate teaser, home-card summary, then the full case study body.'}),
+      el('div', {class:'field-count', text: countFields(project) + ' text fields'})
+    ]));
+
+    project.sections.forEach(function(sec){
+      var block = el('div', {class:'section'}, [
+        el('div', {class:'section-title', text: sec.name})
+      ]);
+      var grid = el('div', {class:'field-grid'});
+      sec.fields.forEach(function(f){ grid.appendChild(renderField(f)); });
+      block.appendChild(grid);
+      main.appendChild(block);
+    });
+  }
+
+  function renderField(field, overrideLabel){
+    var wrap = el('div', {class:'field'});
+    var top = el('div', {class:'field-top'}, [
+      el('span', {class:'field-label', text: overrideLabel || field.label || field.key})
+    ]);
+    var actions = el('div', {class:'field-actions'});
+    top.appendChild(actions);
+    wrap.appendChild(top);
+
+    function syncActionsUI(nowEdited){
+      wrap.classList.toggle('is-edited', nowEdited);
+      actions.innerHTML = '';
+      if (!nowEdited) return;
+      actions.appendChild(el('span', {class:'edited-tag', text:'edited'}));
+      var resetBtn = el('button', {class:'reset-btn', text:'Reset'});
+      resetBtn.addEventListener('click', function(){
+        delete EDITS[field.id];
+        if (db) db.doc('edits/' + field.id).delete().catch(function(){});
+        ta.value = field.text;
+        autosize(ta);
+        syncActionsUI(false);
+      });
+      actions.appendChild(resetBtn);
+    }
+    syncActionsUI(isEdited(field));
+
+    var ta = el('textarea', {class:'field-input', id:'f_' + field.id, rows:'1'});
+    ta.value = currentText(field);
+    ta.addEventListener('input', function(){
+      autosize(ta);
+      scheduleSave(field.id, ta.value);
+      syncActionsUI(ta.value !== field.text);
+    });
+    wrap.appendChild(ta);
+    requestAnimationFrame(function(){ autosize(ta); });
+    return wrap;
+  }
+
+  function render(){
+    renderProjList();
+    renderMain();
+  }
+
+  document.getElementById('search').addEventListener('input', function(e){
+    searchQuery = e.target.value.trim();
+    render();
+  });
+
+  function boot(data){
+    DATA = data;
+    activeProject = Object.keys(DATA.projects)[0];
+    render();
+  }
+
+  fetch('case-copy-data.json').then(function(r){ return r.json(); }).then(function(data){
+    boot(data);
+    setStatus('', 'Ready');
+    // Load capability + subscribe to existing edits
+    if (window.claude && window.claude.use){
+      window.claude.use('db').then(function(d){
+        if (!d) { setStatus('', 'No sync (viewing only)'); return; }
+        db = d;
+        // Load the current edits once. We intentionally don't stay subscribed:
+        // this is a single-editor tool, and re-rendering on every snapshot
+        // (including our own debounced writes) would blow away whatever
+        // textarea the user is mid-keystroke in. A fresh page load always
+        // picks up the latest saved state.
+        var unsub = db.collection('edits').onSnapshot(function(snap){
+          var fresh = {};
+          snap.docs.forEach(function(doc){
+            if (doc.exists) fresh[doc.id] = doc.data();
+          });
+          EDITS = fresh;
+          render();
+          if (unsub) { unsub(); unsub = null; }
+        }, function(err){
+          console.error('db onSnapshot error', err);
+          setStatus('', 'Sync error — edits may not persist');
+        });
+      }).catch(function(){ setStatus('', 'No sync (viewing only)'); });
+    } else {
+      setStatus('', 'No sync (viewing only)');
+    }
+  }).catch(function(err){
+    setStatus('', 'Failed to load data');
+    console.error(err);
+  });
+})();
+</script>
+
+</body></html>
