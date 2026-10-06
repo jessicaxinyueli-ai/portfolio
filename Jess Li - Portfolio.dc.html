@@ -1683,10 +1683,10 @@ class Component extends DCLogic {
         {type:'tension', label:`Recommend → Explain → Control → Recover`, text:``},
         {type:'section', eyebrow:'What I Designed', heading:`One AI interaction model across the source lifecycle.`},
         {type:'para', text:`I owned the experience from initial onboarding through later edits and provisioning. Each stage asks something different from the AI, but the interaction contract stays consistent: AI recommends, explains when needed, and never takes a high-consequence decision away from the admin.`},
-        {type:'stepflow', items:[
-          {num:'01', label:'Onboard', text:'AI generates and validates the initial source configuration.'},
-          {num:'02', label:'Edit', text:'AI reruns checks after configuration changes and recommends what should change next.'},
-          {num:'03', label:'Provision', text:'AI recommends new or updated access rules, but the admin explicitly approves them.'}
+        {type:'carousel', ratio:'1.7286', slides:[
+          {label:'Onboard', title:'Onboard', text:`AI generates and validates the initial source configuration.`, img:'assets/sailpoint-step-onboard.webp'},
+          {label:'Edit', title:'Edit', text:`AI reruns checks after configuration changes and recommends what should change next.`, img:'assets/sailpoint-step-edit.webp'},
+          {label:'Provision', title:'Provision', text:`AI recommends new or updated access rules, but the admin explicitly approves them.`, img:'assets/sailpoint-step-provision.webp'}
         ]},
         {type:'section', eyebrow:'The Problem', heading:`Accuracy was only half the problem. The other half was trust.`},
         {type:'para', text:`SailPoint was exploring whether an LLM could configure applications without an existing connector, replacing work that normally required custom development or manually reading API documentation. But these recommendations influence access control. A technically correct answer was not enough. Admins needed to understand what the AI changed, why it recommended it, and when they should intervene.`},
