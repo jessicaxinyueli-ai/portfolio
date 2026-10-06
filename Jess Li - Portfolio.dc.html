@@ -999,7 +999,7 @@
               </figure>
             </sc-if>
             <sc-if value="{{ block.isPair }}">
-              <div data-reveal="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(234px,1fr));gap:clamp(16.2px,2.16vw,28.8px);margin:clamp(27px,3.6vw,46.8px) auto;width:calc(100% * var(--sc-media,1));max-width:100%;">
+              <div data-reveal="" style="display:grid;grid-template-columns:{{ block.pairCols }};gap:clamp(16.2px,2.16vw,28.8px);margin:clamp(27px,3.6vw,46.8px) auto;width:calc(100% * var(--sc-media,1));max-width:100%;">
                 <sc-for list="{{ block.pairs }}" as="pair" hint-placeholder-count="2">
                   <figure style="margin:0;">
                     <button type="button" onClick="{{ pair.open }}" aria-label="Expand image" style="position:relative;display:block;width:100%;padding:0;border:none;background:none;cursor:zoom-in;">
@@ -1740,9 +1740,8 @@ class Component extends DCLogic {
         {type:'para', text:``},
         {type:'para', text:``},
         {type:'para', text:``},
-        {type:'imagepair', ratio:'0.6483', sharedCaption:`One journey, two surfaces.`, images:[
-          {img:'assets/seed-machine-frog.png'},
-          {img:'assets/seed-physical-steps.png'}
+        {type:'imagepair', ratio:'1.4759', sharedCaption:`One journey, two surfaces.`, images:[
+          {img:'assets/seed-disconnected-handoff.webp'}
         ]},
         {type:'section', eyebrow:'Research', heading:`Different methods pointed to the same failure`},
         {type:'para', text:`We studied the experience through 185 field observations, 53 survey responses, early usability testing, and site analytics. The methods were different, but the signal was unusually consistent: students struggled to discover the resource, and even those who did rarely made it through the full experience.`},
@@ -2042,7 +2041,7 @@ class Component extends DCLogic {
       if (b.type==='statuscards') { o.items = (b.items||[]).map(s => { const err = s.tone==='error'; return { ...s, isError:err, isSuccess:!err, hasActions:Array.isArray(s.actions)&&s.actions.length>0, borderColor: err?'#e3b0aa':'#a9d4b3', bgColor: err?'#fbeeec':'#eaf5ec', iconBg: err?'rgba(192,57,43,.12)':'rgba(31,122,61,.12)', actions:(s.actions||[]).map(a => ({ ...a, isPrimary:a.variant==='primary', isLink:a.variant==='link', isDefault:!a.variant||a.variant==='default' })) }; }); }
       if (b.type==='compare') { o.hasBeforeMockEndpoint = b.beforeMock==='endpointOptOut'; }
       if (b.type==='image') { fig++; o.figNum = String(fig).padStart(2,'0'); o.hasImg = !!b.img; o.img = b.img || this.BLANK_IMG; o.ratio = b.ratio || '1.778'; o.videos = (b.videoSrcs || (b.videoSrc ? [b.videoSrc] : [])).map(s => ({src:s})); o.videoMaxW = b.videoMaxW || (o.videos.length ? '360px' : '100%'); o.needsSlot = !b.video && !b.videoSrc && !b.videoSrcs && !b.img; o.hasNotes = Array.isArray(b.notes) && b.notes.length>0; o.openFig = () => this.setState({ lightbox: { img: o.img, title:'', label:'Fig. ' + o.figNum, caption: b.caption || '', ratio: o.ratio } }); }
-      if (b.type==='imagepair') { const shared = b.sharedCaption || ''; let sharedNum = ''; if (shared) { fig++; sharedNum = String(fig).padStart(2,'0'); o.figNum = sharedNum; o.sharedCaption = shared; o.hasShared = true; } o.showPairCap = !shared; o.pairs = (b.images||[]).map((im, pi) => { let figNum = sharedNum; if (!shared) { fig++; figNum = String(fig).padStart(2,'0'); } const img = im.img || this.BLANK_IMG; const ratio = b.ratio || im.ratio || '1.173'; const caption = im.caption || shared; return { img, ratio, caption, figNum, uid: figNum + '-' + pi, showCap: !shared, hasImg: !!im.img, hasLabel: !!im.label, label: im.label || '', labelColor: im.labelColor || 'var(--accent)', open: () => this.setState({ lightbox: { img, title:'', label:'Fig. ' + figNum, caption, ratio } }) }; }); }
+      if (b.type==='imagepair') { o.pairCols = (b.images||[]).length === 1 ? 'minmax(0,1fr)' : 'repeat(auto-fit,minmax(234px,1fr))'; const shared = b.sharedCaption || ''; let sharedNum = ''; if (shared) { fig++; sharedNum = String(fig).padStart(2,'0'); o.figNum = sharedNum; o.sharedCaption = shared; o.hasShared = true; } o.showPairCap = !shared; o.pairs = (b.images||[]).map((im, pi) => { let figNum = sharedNum; if (!shared) { fig++; figNum = String(fig).padStart(2,'0'); } const img = im.img || this.BLANK_IMG; const ratio = b.ratio || im.ratio || '1.173'; const caption = im.caption || shared; return { img, ratio, caption, figNum, uid: figNum + '-' + pi, showCap: !shared, hasImg: !!im.img, hasLabel: !!im.label, label: im.label || '', labelColor: im.labelColor || 'var(--accent)', open: () => this.setState({ lightbox: { img, title:'', label:'Fig. ' + figNum, caption, ratio } }) }; }); }
       if (b.type==='shotnotes') { fig++; o.figNum = String(fig).padStart(2,'0'); o.hasImg = !!b.img; o.img = b.img || this.BLANK_IMG; o.ratio = b.ratio || '1.25'; o.needsSlot = !b.img; }
       if (b.type==='compare' || b.type==='diagram') { fig++; o.figNum = String(fig).padStart(2,'0'); }
       if (b.type==='process') {
