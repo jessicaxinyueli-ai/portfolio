@@ -971,7 +971,7 @@
                   <div style="display:flex;flex-direction:column;align-items:center;gap:clamp(10.8px,1.44vw,18px);">
                     <sc-for list="{{ block.videos }}" as="vid" hint-placeholder-count="2">
                       <div data-videowrap="" style="position:relative;width:100%;max-width:{{ block.videoMaxW }};">
-                        <video src="{{ vid.src }}" autoplay="{{ true }}" loop="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" preload="metadata" style="width:100%;height:auto;display:block;border-radius:10.8px;"></video>
+                        <video src="{{ vid.src }}" autoplay="{{ true }}" loop="{{ block.vidLoop }}" muted="{{ true }}" playsInline="{{ true }}" preload="metadata" style="width:100%;height:auto;display:block;border-radius:10.8px;"></video>
                       </div>
                     </sc-for>
                   </div>
@@ -1709,7 +1709,7 @@ class Component extends DCLogic {
         {type:'tension', label:`One entry point, three levels of depth.`, text:``},
         {type:'para', text:`The drawer gives admins control over information density instead of forcing every user through the same amount of explanation. Someone comfortable with the recommendation can keep moving. Someone who needs confidence can progressively inspect the reasoning, sources, or ask Harbor Pilot without leaving the field they are evaluating.`},
         {type:'image', videoSrc:'assets/sailpoint-v3-ai-reasoning.mp4', ratio:'1.333', videoMaxW:'100%', caption:`The wand, opened: confidence, reasoning, and Harbor Pilot, one click deep instead of stacked on the field.`},
-        {type:'image', img:'assets/sailpoint-drawer-levels.webp', ratio:'1.6013', caption:`Understand, verify, escalate: the three levels of the drawer, from a plain-language recommendation to its sourced reasoning to Harbor Pilot.`},
+        {type:'image', videoSrc:'assets/sailpoint-drawer-levels.mp4', noVidLoop:true, ratio:'1.6', videoMaxW:'100%', caption:`Understand, verify, escalate: the three levels of the drawer, from a plain-language recommendation to its sourced reasoning to Harbor Pilot.`},
         {type:'tension', label:`The interface stopped deciding how much explanation everyone needed. The admin did.`, text:``},
         {type:'tension', label:`Even waiting needed to explain itself.`, text:``},
         {type:'para', text:`The existing generation state was a pulsing grey dot with a generic loading message, even when recommendations took noticeably longer. I redesigned it as visible system progress, showing completed checks and the task currently running so admins could tell the difference between working, waiting, and stuck.`},
@@ -2059,7 +2059,7 @@ class Component extends DCLogic {
         isList:b.type==='list', isHmw:b.type==='hmwcards', isMetrics:b.type==='metrics', isProcess:b.type==='process', isBars:b.type==='bars', isStatrow:b.type==='statrow', isZoomImg:b.type==='zoomimage', isPair:b.type==='imagepair', isScrolly:b.type==='scrolly', isCarousel:b.type==='carousel', isShot:b.type==='shotnotes', isCompare:b.type==='compare', isDiagram:b.type==='diagram', isProtoShowcase:b.type==='protoshowcase',
         isCardGrid:b.type==='cardgrid', isStepFlow:b.type==='stepflow', isFlowPath:b.type==='flowpath', isVersionCards:b.type==='versioncards', isQuoteGrid:b.type==='quotegrid', isCompareTable:b.type==='comparetable', isStatusCards:b.type==='statuscards',
         quoteLabel: b.type==='quote' ? (b.label || 'Marginalia') : undefined,
-        isVideo:b.type==='image'&&!!b.video, isVideoFile:b.type==='image'&&(!!b.videoSrc||!!b.videoSrcs), showVidCtl:!b.noVidControls, notVideo:b.type==='image'&&!b.video&&!b.videoSrc&&!b.videoSrcs,
+        isVideo:b.type==='image'&&!!b.video, isVideoFile:b.type==='image'&&(!!b.videoSrc||!!b.videoSrcs), showVidCtl:!b.noVidControls, vidLoop:!b.noVidLoop, notVideo:b.type==='image'&&!b.video&&!b.videoSrc&&!b.videoSrcs,
         hasNote:b.type==='para'&&!!b.note&&(this.props.showMarginNotes!==false) };
       if (b.type==='section') { sec++; o.secNum = String(sec).padStart(2,'0'); o.anchor = 'sec-' + sec; firstPara = true; }
       if (b.type==='stepflow') { o.items = (b.items||[]).map((s,i) => ({ ...s, needsArrow: i>0 })); }
