@@ -204,6 +204,7 @@
     '  transition:border-color .12s}' +
     ':host([data-over]) .ring{border-color:#c96442}' +
     ':host([data-filled]) .ring{display:none}' +
+    ':host(:not([data-editable])) .ring{display:none}' +
     // Controls sit BELOW the mask (top:100%), absolutely positioned so the
     // author-declared slot height is unaffected. The gap is padding, not a
     // top offset, so the hover target stays contiguous with the frame.
