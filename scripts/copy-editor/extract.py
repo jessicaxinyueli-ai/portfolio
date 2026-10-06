@@ -10,7 +10,7 @@ TEXT_KEYS = {
     'text', 'title', 'heading', 'eyebrow', 'label', 'caption', 'desc', 'descA', 'descB',
     'body', 'overview', 'value', 'beforeCaption', 'afterCaption', 'beforeLabel', 'afterLabel',
     'badge', 'note', 'startPill', 'endPill', 'sharedCaption', 'category', 'role', 'timeline',
-    'team', 'status', 'statusLabel', 'publicImgCaption', 'date',
+    'team', 'status', 'statusLabel', 'publicImgCaption', 'date', 'metaLabel2', 'metaValue2',
 }
 CONTAINER_KEYS = {'metrics', 'items', 'notes', 'stats', 'slides', 'steps', 'publicIntro', 'takeaways'}
 SKIP_KEYS = {
@@ -87,7 +87,7 @@ def main():
 
         # --- Overview / meta fields ---
         meta_records = []
-        for k in ('overview', 'category', 'role', 'timeline', 'team', 'status', 'statusLabel', 'date'):
+        for k in ('overview', 'category', 'role', 'timeline', 'metaLabel2', 'metaValue2', 'team', 'status', 'statusLabel', 'date'):
             v = proj.get(k)
             if isinstance(v, str):
                 meta_records.append(mk(f'{slug}.{k}', k, v, k))

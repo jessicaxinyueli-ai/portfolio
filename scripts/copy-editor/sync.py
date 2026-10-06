@@ -33,7 +33,7 @@ TEXT_KEYS = {
     'text', 'title', 'heading', 'eyebrow', 'label', 'caption', 'desc', 'descA', 'descB',
     'body', 'overview', 'value', 'beforeCaption', 'afterCaption', 'beforeLabel', 'afterLabel',
     'badge', 'note', 'startPill', 'endPill', 'sharedCaption', 'category', 'role', 'timeline',
-    'team', 'status', 'statusLabel', 'publicImgCaption', 'date',
+    'team', 'status', 'statusLabel', 'publicImgCaption', 'date', 'metaLabel2', 'metaValue2',
 }
 SKIP_KEYS = {
     'type', 'icon', 'iconD', 'dir', 'ratio', 'beforeRatio', 'afterRatio', 'img', 'images',
@@ -81,7 +81,7 @@ def build_fresh_records(content):
     records = []
     for proj in PROJECTS:
         slug = proj['slug']
-        for k in ('overview', 'category', 'role', 'timeline', 'team', 'status', 'statusLabel', 'date'):
+        for k in ('overview', 'category', 'role', 'timeline', 'metaLabel2', 'metaValue2', 'team', 'status', 'statusLabel', 'date'):
             v = proj.get(k)
             if isinstance(v, str):
                 records.append(mk(f'{slug}.{k}', v))
