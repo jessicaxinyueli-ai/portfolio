@@ -1319,7 +1319,9 @@
             <sc-if value="{{ block.isCarousel }}">
               <div data-reveal="" style="margin:clamp(25.2px,3.24vw,45px) 0 clamp(30.6px,3.96vw,54px);">
                 <div style="position:relative;border:1px solid var(--line);border-radius:3.6px;background:var(--surface);overflow:hidden;">
+                  <sc-if value="{{ block.showBadge }}" hint-placeholder-val="{{ true }}">
                   <span style="position:absolute;top:12.6px;right:16.2px;z-index:4;font-family:var(--font-sans);font-size:11.7px;letter-spacing:.02em;color:var(--muted-2);background:var(--paper);border:1px solid var(--line);border-radius:2.7px;padding:4.5px 10.8px;">{{ block.activeLabel }}</span>
+                  </sc-if>
                   <div style="position:relative;width:100%;aspect-ratio:{{ block.frameRatio }};display:flex;align-items:center;justify-content:center;padding:clamp(25.2px,3.06vw,43.2px);">
                     <sc-for list="{{ block.slides }}" as="bgslide" hint-placeholder-count="4">
                       <sc-if value="{{ bgslide.active }}" hint-placeholder-val="{{ true }}">
@@ -1683,7 +1685,7 @@ class Component extends DCLogic {
         {type:'tension', label:`Recommend → Explain → Control → Recover`, text:``},
         {type:'section', eyebrow:'What I Designed', heading:`One AI interaction model across the source lifecycle.`},
         {type:'para', text:`I owned the experience from initial onboarding through later edits and provisioning. Each stage asks something different from the AI, but the interaction contract stays consistent: AI recommends, explains when needed, and never takes a high-consequence decision away from the admin.`},
-        {type:'carousel', ratio:'1.7286', slides:[
+        {type:'carousel', ratio:'1.7286', noBadge:true, slides:[
           {label:'Onboard', title:'Onboard', text:`AI generates and validates the initial source configuration.`, img:'assets/sailpoint-step-onboard.webp'},
           {label:'Edit', title:'Edit', text:`AI reruns checks after configuration changes and recommends what should change next.`, img:'assets/sailpoint-step-edit.webp'},
           {label:'Provision', title:'Provision', text:`AI recommends new or updated access rules, but the admin explicitly approves them.`, img:'assets/sailpoint-step-provision.webp'}
@@ -2103,6 +2105,7 @@ class Component extends DCLogic {
             open: () => this.setState({ lightbox: { img: src || '', title: s.title || '', label: s.label || '', caption: s.text || '', ratio: b.ratio || '1.6' } }) })) }));
         const as = sl[active] || {};
         o.activeLabel = as.label || as.title || '';
+        o.showBadge = !b.noBadge;
         o.activeTitle = as.title || '';
         o.activeText = as.text || '';
         o.carPrev = () => this.selectCarousel(idx, (active - 1 + n) % n);
