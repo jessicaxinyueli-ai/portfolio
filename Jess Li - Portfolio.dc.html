@@ -1318,11 +1318,23 @@
             </sc-if>
             <sc-if value="{{ block.isCarousel }}">
               <div data-reveal="" style="margin:clamp(25.2px,3.24vw,45px) 0 clamp(30.6px,3.96vw,54px);">
-                <div style="position:relative;border:1px solid var(--line);border-radius:3.6px;overflow:hidden;">
+                <div style="position:relative;border:1px solid var(--line);border-radius:3.6px;overflow:hidden;{{ block.frameBg }}">
                   <sc-if value="{{ block.showBadge }}" hint-placeholder-val="{{ true }}">
                   <span style="position:absolute;top:12.6px;right:16.2px;z-index:4;font-family:var(--font-sans);font-size:11.7px;letter-spacing:.02em;color:var(--muted-2);background:var(--paper);border:1px solid var(--line);border-radius:2.7px;padding:4.5px 10.8px;">{{ block.activeLabel }}</span>
                   </sc-if>
-                  <div style="position:relative;width:100%;aspect-ratio:{{ block.frameRatio }};display:flex;align-items:center;justify-content:center;">
+                  <div style="position:relative;width:100%;aspect-ratio:{{ block.frameRatio }};display:flex;align-items:center;justify-content:center;{{ block.framePad }}">
+                    <sc-if value="{{ block.showBg }}" hint-placeholder-val="{{ true }}">
+                      <sc-for list="{{ block.slides }}" as="bgslide" hint-placeholder-count="4">
+                        <sc-if value="{{ bgslide.active }}" hint-placeholder-val="{{ true }}">
+                          <sc-if value="{{ bgslide.bgImg }}">
+                            <div aria-hidden="true" style="position:absolute;inset:0;overflow:hidden;z-index:0;opacity:{{ bgslide.op }};transition:opacity .45s ease;">
+                              <img src="{{ bgslide.bgImg }}" alt="" style="position:absolute;top:-15%;left:-15%;width:130%;height:130%;object-fit:cover;filter:blur(54px) saturate(1.4) brightness(1.08);transform:scale(1.05);">
+                              <div style="position:absolute;inset:0;background:color-mix(in srgb, var(--surface) 30%, transparent);"></div>
+                            </div>
+                          </sc-if>
+                        </sc-if>
+                      </sc-for>
+                    </sc-if>
                     <sc-for list="{{ block.slides }}" as="slide" hint-placeholder-count="4">
                       <sc-if value="{{ slide.active }}" hint-placeholder-val="{{ true }}">
                         <div style="position:relative;z-index:1;width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:clamp(10.8px,1.44vw,19.8px);opacity:{{ slide.op }};transition:opacity .45s ease;">
@@ -1675,7 +1687,7 @@ class Component extends DCLogic {
         {type:'tension', label:`Recommend → Explain → Control → Recover`, text:``},
         {type:'section', eyebrow:'What I Designed', heading:`One AI interaction model across the source lifecycle.`},
         {type:'para', text:`I owned the experience from initial onboarding through later edits and provisioning. Each stage asks something different from the AI, but the interaction contract stays consistent: AI recommends, explains when needed, and never takes a high-consequence decision away from the admin.`},
-        {type:'carousel', ratio:'1.7286', noBadge:true, slides:[
+        {type:'carousel', ratio:'1.7286', noBadge:true, noBg:true, slides:[
           {label:'Onboard', title:'Onboard', text:`AI generates and validates the initial source configuration.`, img:'assets/sailpoint-step-onboard.webp'},
           {label:'Edit', title:'Edit', text:`AI reruns checks after configuration changes and recommends what should change next.`, img:'assets/sailpoint-step-edit.webp'},
           {label:'Provision', title:'Provision', text:`AI recommends new or updated access rules, but the admin explicitly approves them.`, img:'assets/sailpoint-step-provision.webp'}
@@ -1686,7 +1698,7 @@ class Component extends DCLogic {
         {type:'quote', label:'The Design Question', text:`How might AI move faster without asking admins to surrender judgment?`},
         {type:'section', eyebrow:'Redesigning the Interaction', heading:`How the interaction model evolved`},
         {type:'para', text:`The first solution treated AI as a conversation. Moving recommendations directly into the workflow made them more contextual, but my first attempt exposed too much information at once. Across three iterations, the interaction shifted from guiding the entire experience, to competing with it, to appearing only when the admin needed more context.`},
-        {type:'carousel', ratio:'1.45', noBadge:true, slides:[
+        {type:'carousel', ratio:'1.45', noBadge:true, noBg:true, slides:[
           {title:'V1 · Scripted chat', text:`Guided, but rigid. AI sat beside the workflow.`, img:'assets/sailpoint-schema-v1.png'},
           {title:'V2 · Inline AI', text:`Contextual, but noisy. AI moved into the workflow, but every signal competed for attention.`, img:'assets/sailpoint-schema-v2.png'},
           {title:'V3 · Wand + drawer', text:`Progressive and inspectable. One entry point reveals deeper reasoning only when needed.`, img:'assets/sailpoint-schema-v3.png'}
@@ -2089,6 +2101,9 @@ class Component extends DCLogic {
         const as = sl[active] || {};
         o.activeLabel = as.label || as.title || '';
         o.showBadge = !b.noBadge;
+        o.showBg = !b.noBg;
+        o.frameBg = o.showBg ? 'background:var(--surface);' : '';
+        o.framePad = o.showBg ? 'padding:clamp(25.2px,3.06vw,43.2px);' : '';
         o.activeTitle = as.title || '';
         o.activeText = as.text || '';
         o.carPrev = () => this.selectCarousel(idx, (active - 1 + n) % n);
