@@ -1894,11 +1894,6 @@ class Component extends DCLogic {
       ],
       umgpt: [
         {type:'lede', text:`UM GPT is the University of Michigan's AI platform for student group work, free, private, and already in wide use. Students were bouncing between ChatGPT, Docs, Slack, and task tools to complete one group project, losing context at every handoff. I first explored the problem for SI 307, then continued independently to see how far AI-assisted design tools could take the product. I used Claude, Lovable, and Figma Make to move quickly, then tested each generated direction against what students actually needed and redesigned the gaps myself.`},
-        {type:'metrics', metrics:[
-          {icon:'clock', dir:'up', eyebrow:'Task assignment', value:'48 sec', desc:`Average time to assign a task from a chat message.`},
-          {icon:'check', dir:'up', eyebrow:'Shortcut discovery', value:'5 of 5', desc:`Participants used the AI shortcuts without any instruction.`},
-          {icon:'layers', dir:'flat', eyebrow:'Design partners', value:'3', desc:`AI tools used as active design partners: Claude, Lovable, Figma Make.`}
-        ]},
         {type:'image', videoSrcs:['assets/umgpt-slides-start.mp4'], ratio:'1.33', videoMaxW:'100%', caption:`Walkthrough of the initial UM GPT design, built for SI 307, before I continued the project independently.`},
         {type:'section', eyebrow:'The Problem', heading:`Four tools were solving pieces of one workflow.`},
         {type:'para', text:`Students already had capable tools. The problem was moving between them. Brainstorming happened in ChatGPT, work moved into Docs, coordination happened in Slack, and task management lived somewhere else. Each handoff lost part of the context that made the original work useful.`},
