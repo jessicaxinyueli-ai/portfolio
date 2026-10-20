@@ -1923,7 +1923,7 @@ class Component extends DCLogic {
         {type:'para', text:`Students repeatedly used similar prompts, so my first instinct was to expose more shortcuts. I designed twelve. During testing, participants paused for more than eight seconds just scanning the list, turning a feature meant to save time into another decision point.`},
         {type:'tension', label:`More choice created more hesitation.`, text:``},
         {type:'para', text:`The better shortcut was subtraction. I reduced the system to four persistent actions that covered roughly 80% of the AI interactions I had observed, kept them in a predictable location, and required each one to return its result inline instead of opening another workflow. Five of five participants found and used the shortcuts without instruction.`},
-        {type:'carousel', ratio:'1.33', slides:[
+        {type:'carousel', ratio:'1.33', bgCss:'linear-gradient(135deg, #fff3c4 0%, #ffd93d 45%, #f7a834 100%)', slides:[
           {label:'Summarize', title:'Summarize', text:`Answered inline without leaving the conversation.`, video:'assets/umgpt-summarize-chat.mp4'},
           {label:'Draft email', title:'Draft email', text:`Opens a focused panel below the chat input.`, video:'assets/umgpt-draft-email.mp4'},
           {label:'Research', title:'Research', text:`Sources surfaced in place.`, video:'assets/umgpt-research.mp4'},
@@ -1932,7 +1932,11 @@ class Component extends DCLogic {
         {type:'tension', label:`12 options → 4 predictable actions.`, text:``},
         {type:'section', eyebrow:'Impact', heading:`The strongest improvements came from removing context switches.`},
         {type:'para', text:`Across all three features, the pattern was consistent: keep actions close to the work that created them, reduce unnecessary decisions, and preserve context instead of asking students to rebuild it somewhere else.`},
-        {type:'metrics', metrics:[{icon:'clock', dir:'up', eyebrow:'Task assignment', value:'48 sec', desc:`Average time to assign a task from a chat message.`},{icon:'check', dir:'up', eyebrow:'Shortcuts', value:'100%', desc:`Unaided shortcut discovery, up from three of five on the old full-screen design.`},{icon:'lock', dir:'up', eyebrow:'Instructor view', value:'Comparison removed', desc:`The pattern participants described as "judged" and "watched" was redesigned while preserving the visibility instructors needed.`}]},
+        {type:'cardgrid', items:[
+          {icon:'clock', label:'48 sec average task assignment', text:`Average time to assign a task from a chat message.`},
+          {icon:'check', label:'100% unaided shortcut discovery', text:`Up from three of five on the old full-screen design.`},
+          {icon:'lock', label:'Comparison removed from the instructor view', text:`The pattern participants described as "judged" and "watched" was redesigned while preserving the visibility instructors needed.`}
+        ]},
         {type:'para', text:`Continuing the project independently gave me room to learn tools I had not used before and test where they were actually useful. They could generate a task form, metrics panel, or shortcut flow quickly, but they could not tell me when the form belonged in the wrong place, when visibility became comparison, or when a shortcut had stopped being short.`},
         {type:'tension', label:`Use new tools aggressively, but keep the product decisions grounded in evidence.`, text:``}
       ]
@@ -2092,7 +2096,7 @@ class Component extends DCLogic {
         o.activeLabel = as.label || as.title || '';
         o.showBadge = !b.noBadge;
         o.showBg = !b.noBg;
-        o.frameBg = o.showBg ? 'background:var(--surface);' : '';
+        o.frameBg = o.showBg ? 'background:' + (b.bgCss || 'var(--surface)') + ';' : '';
         o.framePad = o.showBg ? 'padding:clamp(25.2px,3.06vw,43.2px);' : '';
         o.activeTitle = as.title || '';
         o.activeText = as.text || '';
