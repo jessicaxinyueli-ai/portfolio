@@ -1923,11 +1923,11 @@ class Component extends DCLogic {
         {type:'para', text:`Students repeatedly used similar prompts, so my first instinct was to expose more shortcuts. I designed twelve. During testing, participants paused for more than eight seconds just scanning the list, turning a feature meant to save time into another decision point.`},
         {type:'tension', label:`More choice created more hesitation.`, text:``},
         {type:'para', text:`The better shortcut was subtraction. I reduced the system to four persistent actions that covered roughly 80% of the AI interactions I had observed, kept them in a predictable location, and required each one to return its result inline instead of opening another workflow. Five of five participants found and used the shortcuts without instruction.`},
-        {type:'carousel', ratio:'1.33', bgCss:'linear-gradient(135deg, #fff3c4 0%, #ffd93d 45%, #f7a834 100%)', slides:[
-          {label:'Summarize', title:'Summarize', text:`Answered inline without leaving the conversation.`, video:'assets/umgpt-summarize-chat.mp4'},
-          {label:'Draft email', title:'Draft email', text:`Opens a focused panel below the chat input.`, video:'assets/umgpt-draft-email.mp4'},
-          {label:'Research', title:'Research', text:`Sources surfaced in place.`, video:'assets/umgpt-research.mp4'},
-          {label:'Agenda', title:'Agenda', text:`Generated inline in one step.`, video:'assets/umgpt-agenda.mp4'}
+        {type:'carousel', ratio:'1.33', slides:[
+          {label:'Summarize', title:'Summarize', text:`Answered inline without leaving the conversation.`, video:'assets/umgpt-summarize-chat.mp4', bgImgSrc:'assets/umgpt-shortcuts-bg.jpg'},
+          {label:'Draft email', title:'Draft email', text:`Opens a focused panel below the chat input.`, video:'assets/umgpt-draft-email.mp4', bgImgSrc:'assets/umgpt-shortcuts-bg.jpg'},
+          {label:'Research', title:'Research', text:`Sources surfaced in place.`, video:'assets/umgpt-research.mp4', bgImgSrc:'assets/umgpt-shortcuts-bg.jpg'},
+          {label:'Agenda', title:'Agenda', text:`Generated inline in one step.`, video:'assets/umgpt-agenda.mp4', bgImgSrc:'assets/umgpt-shortcuts-bg.jpg'}
         ]},
         {type:'tension', label:`12 options → 4 predictable actions.`, text:``},
         {type:'section', eyebrow:'Impact', heading:`The strongest improvements came from removing context switches.`},
@@ -2089,14 +2089,14 @@ class Component extends DCLogic {
         o.frameRatio = b.ratio || '1.6';
         o.slides = sl.map((s, i) => ({ ...s, i, active: i === active, op: i === active ? 1 : 0,
           hasVideo: !!s.video,
-          bgImg: s.video ? '' : (s.bgImgSrc || (s.images && s.images[0]) || s.img || ''),
+          bgImg: s.bgImgSrc || (s.video ? '' : ((s.images && s.images[0]) || s.img || '')),
           imgs: s.video ? [] : (s.images || [s.img]).map((src, k) => ({ src: src || '', hasSrc: !!src, noSrc: !src, key: i + '-' + k,
             open: () => this.setState({ lightbox: { img: src || '', title: s.title || '', label: s.label || '', caption: s.text || '', ratio: b.ratio || '1.6' } }) })) }));
         const as = sl[active] || {};
         o.activeLabel = as.label || as.title || '';
         o.showBadge = !b.noBadge;
         o.showBg = !b.noBg;
-        o.frameBg = o.showBg ? 'background:' + (b.bgCss || 'var(--surface)') + ';' : '';
+        o.frameBg = o.showBg ? 'background:var(--surface);' : '';
         o.framePad = o.showBg ? 'padding:clamp(25.2px,3.06vw,43.2px);' : '';
         o.activeTitle = as.title || '';
         o.activeText = as.text || '';
