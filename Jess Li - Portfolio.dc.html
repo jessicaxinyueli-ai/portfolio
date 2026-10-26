@@ -518,7 +518,7 @@
       </marker>
     </defs>
   </svg>
-  <nav data-nav="" style="position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:14.4px clamp(18px,4.5vw,57.6px);--font-sans:'Manrope',ui-sans-serif,system-ui,sans-serif;opacity:{{ siteContentOpacity }};filter:{{ siteContentFilter }};transition:opacity .9s ease,filter .9s ease;">
+  <nav data-nav="" style="position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:14.4px clamp(18px,4.5vw,57.6px);--font-sans:'Manrope',ui-sans-serif,system-ui,sans-serif;opacity:{{ siteContentOpacity }};filter:{{ siteContentFilter }};transition:opacity 1.5s ease,filter 1.5s ease;">
     <button class="logo-btn" onClick="{{ goHome }}" aria-label="Home — Jess Li" style="background:none;border:none;cursor:pointer;padding:0;line-height:0;display:flex;align-items:center;transition:filter .35s ease;" style-hover="filter:blur(1.8px)"><img class="logo-mark" src="assets/yue-logo.png" alt="悦" style="height:27px;width:auto;display:block;"></button>
     <div class="nav-right" style="display:flex;align-items:center;gap:clamp(16.2px,2.7vw,34.2px);">
       <sc-if value="{{ showCaseNav }}">
@@ -552,7 +552,7 @@
 
   <!-- ================= HOME ================= -->
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
-  <section data-screen-label="Home" style="--font-sans:'Manrope',ui-sans-serif,system-ui,sans-serif;opacity:{{ siteContentOpacity }};filter:{{ siteContentFilter }};transition:opacity .9s ease,filter .9s ease;">
+  <section data-screen-label="Home" style="--font-sans:'Manrope',ui-sans-serif,system-ui,sans-serif;opacity:{{ siteContentOpacity }};filter:{{ siteContentFilter }};transition:opacity 1.5s ease,filter 1.5s ease;">
     <div class="reveal-content" data-reveal-content="">
     <div class="reveal-blobs" aria-hidden="true"></div>
     <header style="position:relative;max-width:1206px;margin:0 auto;padding:clamp(144px,21.6vh,234px) clamp(21.6px,5.4vw,72px) clamp(28.8px,4.5vh,57.6px);overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;">
@@ -680,7 +680,7 @@
 
   <!-- ================= CASE STUDY ================= -->
   <sc-if value="{{ isWork }}" hint-placeholder-val="{{ true }}">
-  <section data-screen-label="Case Study" style="--font-sans:'Manrope',ui-sans-serif,system-ui,sans-serif;opacity:{{ siteContentOpacity }};filter:{{ siteContentFilter }};transition:opacity .9s ease,filter .9s ease;">
+  <section data-screen-label="Case Study" style="--font-sans:'Manrope',ui-sans-serif,system-ui,sans-serif;opacity:{{ siteContentOpacity }};filter:{{ siteContentFilter }};transition:opacity 1.5s ease,filter 1.5s ease;">
     <!-- PASSWORD GATE -->
     <sc-if value="{{ locked }}" hint-placeholder-val="{{ false }}">
       <div style="max-width:1062px;margin:0 auto;padding:clamp(93.6px,11.7vw,135px) clamp(36px,7.2vw,86.4px) 0;">
@@ -1511,7 +1511,7 @@
 
   <!-- ================= ABOUT / JOURNAL ================= -->
   <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ true }}">
-  <section data-screen-label="About" style="min-height:90vh;padding:clamp(106.2px,13.5vh,158.4px) clamp(21.6px,5.4vw,57.6px) clamp(25.2px,2.7vw,36px);display:flex;flex-direction:column;--font-sans:'Manrope',ui-sans-serif,system-ui,sans-serif;opacity:{{ siteContentOpacity }};filter:{{ siteContentFilter }};transition:opacity .9s ease,filter .9s ease;">
+  <section data-screen-label="About" style="min-height:90vh;padding:clamp(106.2px,13.5vh,158.4px) clamp(21.6px,5.4vw,57.6px) clamp(25.2px,2.7vw,36px);display:flex;flex-direction:column;--font-sans:'Manrope',ui-sans-serif,system-ui,sans-serif;opacity:{{ siteContentOpacity }};filter:{{ siteContentFilter }};transition:opacity 1.5s ease,filter 1.5s ease;">
     <div class="about-wrap" style="max-width:900px;margin:0 auto;width:100%;flex:1 0 auto;">
       <div style="display:flex;gap:clamp(25.2px,4.5vw,57.6px);align-items:flex-start;flex-wrap:wrap;">
         <div style="flex:1 1 306px;min-width:min(100%,270px);display:flex;flex-direction:column;gap:12.6px;">
@@ -4165,7 +4165,7 @@ class Component extends DCLogic {
       coverSketchSrc: (cur && cur.slug==='seed-library') ? ((window.__resources&&window.__resources.seedCompareOriginal)||'assets/seed-compare-original.png') : '',
       goHome: () => this.goHome(),
       siteContentOpacity: this.state.siteIntroActive ? 0 : 1,
-      siteContentFilter: this.state.siteIntroActive ? 'blur(16px)' : 'none',
+      siteContentFilter: this.state.siteIntroActive ? 'blur(28px)' : 'none',
       goWork: () => this.gotoWork(),
       panelCTA: () => { const s = this._featSlug || this.PROJECTS[0].slug; this.fadeSwap(() => this.setState({ view:'work', slug:s })); },
       openAbout: () => this.setView('about'),
