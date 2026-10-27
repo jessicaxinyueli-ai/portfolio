@@ -1632,7 +1632,7 @@ class Component extends DCLogic {
     this.CASE = {
       sailpoint: [
         {type:'section', eyebrow:'TL;DR', heading:`AI could do the heavy lifting. The admin still owned the decision.`},
-        {type:'para', text:`Identity administrators are responsible for every access decision SailPoint helps automate. I redesigned its AI-assisted source configuration experience across three iterations, moving from scripted chat to contextual recommendations with reasoning on demand, recovery when AI fails, and explicit approval when the consequences get higher. The redesign cut setup time by 60% and expanded into editing and provisioning as a reusable human-in-the-loop interaction model.`},
+        {type:'para', text:`SailPoint was exploring whether AI could configure applications that did not have an existing connector, replacing work that normally required custom development or manually reading API documentation. I redesigned the experience across three iterations, moving from scripted chat to contextual recommendations with reasoning on demand, explicit approval for higher-risk actions, and recovery when the AI failed. The final workflow reduced source setup time by 60%.`},
         {type:'metrics', metrics:[
           {icon:'clock', dir:'up', eyebrow:'Setup Time', value:'60%', desc:`Faster setup compared to the previous manual flow.`},
           {icon:'user', dir:'flat', eyebrow:'Validation', value:'10', desc:`Enterprise customers included in validation.`},
@@ -1640,14 +1640,14 @@ class Component extends DCLogic {
         ]},
         {type:'tension', label:`Recommend → Explain → Control → Recover`, text:``},
         {type:'section', eyebrow:'What I Designed', heading:`One AI interaction model across the source lifecycle.`},
-        {type:'para', text:`I owned the experience from initial onboarding through later edits and provisioning. Each stage asks something different from the AI, but the interaction contract stays consistent: AI recommends, explains when needed, and never takes a high-consequence decision away from the admin.`},
+        {type:'para', text:`I owned the experience from initial onboarding through later edits and provisioning. The task changes at each stage, but the contract stays consistent: AI recommends, the admin remains accountable.`},
         {type:'carousel', ratio:'1.7286', noBadge:true, noBg:true, slides:[
           {label:'Onboard', title:'Onboard', text:`AI generates and validates the initial source configuration.`, img:'assets/sailpoint-step-onboard.webp'},
           {label:'Edit', title:'Edit', text:`AI reruns checks after configuration changes and recommends what should change next.`, img:'assets/sailpoint-step-edit.webp'},
           {label:'Provision', title:'Provision', text:`AI recommends new or updated access rules, but the admin explicitly approves them.`, img:'assets/sailpoint-step-provision.webp'}
         ]},
         {type:'section', eyebrow:'The Problem', heading:`Accuracy was only half the problem. The other half was trust.`},
-        {type:'para', text:`SailPoint was exploring whether an LLM could configure applications without an existing connector, replacing work that normally required custom development or manually reading API documentation. But these recommendations influence access control. A technically correct answer was not enough. Admins needed to understand what the AI changed, why it recommended it, and when they should intervene.`},
+        {type:'para', text:`These recommendations could eventually influence who gets access to what. The admins using SailPoint understand their applications and identity systems, but they are not expected to work through developer tooling or raw API configuration. So, the real design problem was not simply making AI accurate; it was giving admins enough context to decide when a recommendation was actually worth acting on.`},
         {type:'quote', label:'The Design Question', text:`How might AI move faster without asking admins to surrender judgment?`},
         {type:'section', eyebrow:'Redesigning the Interaction', heading:`How the interaction model evolved`},
         {type:'para', text:`The first solution treated AI as a conversation. Moving recommendations directly into the workflow made them more contextual, but my first attempt exposed too much information at once. Across three iterations, the interaction shifted from guiding the entire experience, to competing with it, to appearing only when the admin needed more context.`},
@@ -1657,23 +1657,23 @@ class Component extends DCLogic {
           {title:'V3 · Wand + drawer', text:`Progressive and inspectable. One entry point reveals deeper reasoning only when needed.`, img:'assets/sailpoint-schema-v3.png'}
         ]},
         {type:'tension', label:`One entry point, three levels of depth.`, text:``},
-        {type:'para', text:`The drawer gives admins control over information density instead of forcing every user through the same amount of explanation. Someone comfortable with the recommendation can keep moving. Someone who needs confidence can progressively inspect the reasoning, sources, or ask Harbor Pilot without leaving the field they are evaluating.`},
+        {type:'para', text:`My latest V3 design structures AI explanation as progressive disclosure. Understand gives the admin the recommendation at a glance. Verify exposes the reasoning and supporting sources. Escalate opens Harbor Pilot when the structured explanation is not enough, while keeping the question tied to the field being reviewed.`},
         {type:'image', videoSrc:'assets/sailpoint-drawer-levels.mp4', noVidLoop:true, ratio:'1.6', videoMaxW:'100%', caption:`Understand, verify, escalate: the three levels of the drawer, from a plain-language recommendation to its sourced reasoning to Harbor Pilot.`},
         {type:'section', eyebrow:'Key Designs', heading:`How the trust model holds up when AI has to explain, recover, wait, and act.`},
         {type:'tension', label:`AI reasoning walkthrough`, text:``},
-        {type:'para', text:`This prototype walks through the core reasoning model: Overview, Deep Dive, and Ask Harbor Pilot. The transition was designed to feel progressive rather than heavy handed, moving from a quick recommendation, to supporting rationale and sources, to open-ended help only when needed. It made AI reasoning easier to inspect without forcing every admin through the same amount of explanation, which was key to making recommendations feel usable instead of opaque.`},
+        {type:'para', text:`The recommendation moves from a quick Overview to sourced reasoning in Deep Dive, then to Harbor Pilot only when more help is needed. The transition keeps explanation available without forcing every admin through the same amount of detail.`},
         {type:'image', videoSrc:'assets/sailpoint-reasoning-walkthrough.mp4', ratio:'1.3333', videoMaxW:'100%', caption:`Overview, Deep Dive, and Ask Harbor Pilot: the three-part reasoning model, walked through end to end.`},
         {type:'tension', label:`Error handling and recovery`, text:``},
-        {type:'para', text:`This prototype shows what happens when the AI gets something wrong. Instead of blaming the admin for a failed recommendation, the flow clearly attributes the failure to the system and offers a way forward: suggested fix, retry, manual edit, or Harbor Pilot. The impact was not just better messaging, but a more trustworthy experience, because failure became something admins could recover from instead of a dead end.`},
+        {type:'para', text:`When an AI-generated recommendation fails, the interface owns the error instead of blaming the admin and immediately offers ways forward: apply the suggested fix, retry, edit manually, or ask Harbor Pilot. Failure becomes a recoverable state instead of a dead end.`},
         {type:'image', videoSrc:'assets/sailpoint-error-handling.mp4', ratio:'1.3333', videoMaxW:'100%', caption:`A failed recommendation, attributed to the system: suggested fix, retry, manual edit, or ask Harbor Pilot.`},
         {type:'tension', label:`Loading state redesign`, text:``},
-        {type:'para', text:`This prototype captures a smaller but important trust moment: waiting. The original loading state was just a pulsing dot and a generic label, which gave no sense of what the AI was doing during longer generation times. I redesigned it to show visible progress across each step, making the transition from "working" to "done" feel more transparent and reducing the sense that the system was stalled or uncertain.`},
+        {type:'para', text:`The original experience used a pulsing grey dot while recommendations generated, giving admins little indication of whether the system was working or stalled. I redesigned it to expose the steps being completed in real time, turning an opaque wait into visible system progress.`},
         {type:'image', videoSrc:'assets/sailpoint-loading-redesign.mp4', ratio:'1.3333', videoMaxW:'100%', caption:`From a pulsing dot to visible progress: each step shown as it completes, so admins can tell working from stuck.`},
         {type:'tension', label:`Provisioning`, text:``},
-        {type:'para', text:`This prototype shows how the interaction model extends into provisioning, where the stakes are higher because recommendations can affect real access. The flow separates AI recommendation from admin approval, so the transition from suggestion to action is always explicit. That distinction helped carry the broader principle of the project forward: AI can speed up the work, but the admin stays responsible for the final decision.`},
+        {type:'para', text:`Provisioning applies the same interaction model at a higher-risk moment. AI can recommend a new rule or change to an existing one, but recommendation and action stay separate: the admin reviews the reasoning and explicitly approves the final configuration before anything activates.`},
         {type:'image', videoSrc:'assets/sailpoint-provisioning-walkthrough.mp4', ratio:'1.3333', videoMaxW:'100%', caption:`Provisioning: AI recommends a rule, the admin reviews it, and nothing takes effect until it's explicitly approved.`},
         {type:'section', eyebrow:'Validation', heading:`I tested where trust was most likely to break.`},
-        {type:'para', text:`Instead of focusing only on the happy path, I structured validation around hesitation: what admins needed before accepting a recommendation, what they did when confidence dropped, and how much control they expected over higher-risk actions. We tested the experience with 10 enterprise customers across several weeks.`},
+        {type:'para', text:`We validated the experience across 10 enterprise customers, focusing on what admins needed before accepting a recommendation, what happened when the AI was wrong, and how much authority it should have over higher-risk actions.`},
         {type:'statrow', stats:[
           {icon:'user', label:'Enterprise customers', value:'10'},
           {icon:'check', label:'Positive reception on the evaluated AI discovery flow', value:'+50%'},
@@ -1684,13 +1684,14 @@ class Component extends DCLogic {
         {type:'para', text:`Five of eight customers independently asked whether the AI could use private API documentation. The current experience works best for straightforward applications with well-documented public APIs, but many enterprise environments also rely on homegrown systems the AI cannot fully understand yet. That gap became the clearest direction for what comes next.`},
         {type:'tension', label:`A useful first release did not need to solve every source. It needed to make its boundaries clear.`, text:``},
         {type:'section', eyebrow:'Impact', heading:`The project started as a wizard redesign. It became a reusable model for human-in-the-loop AI.`},
-        {type:'para', text:`The validated experience moved toward broader release with a target of routing 10% of new source configurations through the AI wizard. More importantly, the same interaction model expanded across onboarding, editing, provisioning, loading, and recovery, giving the product a consistent approach to how AI recommends, explains, and responds when things change.`},
+        {type:'para', text:`The redesigned source configuration experience reduced setup time by 60%, moved through enterprise validation, and extended from onboarding into editing and provisioning. The wand-and-drawer interaction also became a reference model for surfacing AI reasoning elsewhere in the platform.`},
         {type:'cardgrid', items:[
           {label:'Recommend', text:`AI handles the repetitive work.`},
           {label:'Explain', text:`Reasoning and sources are available when needed.`},
           {label:'Control', text:`Higher-risk decisions require explicit approval.`},
           {label:'Recover', text:`Failure always has a path forward.`}
-        ]}
+        ]},
+        {type:'tension', label:`The goal was never to make administrators blindly trust AI.`, text:`It was to make automation inspectable, reversible, and worth trusting when it earned it.`}
       ],
       'seed-library': [
         {type:'section', eyebrow:'Context', heading:`Two experiences that did not feel connected`},
@@ -4158,11 +4159,17 @@ class Component extends DCLogic {
     document.head.appendChild(s);
   }
 
-  function makeEditable(root) {
-    (root || document).querySelectorAll('.sc-interp').forEach(function (el) {
-      if (el.dataset.ccOrig === undefined) el.dataset.ccOrig = el.textContent;
-      el.setAttribute('contenteditable', 'plaintext-only');
-    });
+  // Elements the user has actually typed into at least once. Only these
+  // are trusted to carry a real edit; any other .sc-interp whose text
+  // changes (carousel auto-advance, route change, etc.) gets its
+  // baseline silently resynced instead of being treated as dirty or, worse,
+  // saved against a now-stale "original" string (see the resync observer
+  // below — this is what corrupted a carousel slide before this fix).
+  var editedEls = new WeakSet();
+
+  function beginEditing(el) {
+    if (el.dataset.ccOrig === undefined) el.dataset.ccOrig = el.textContent;
+    el.setAttribute('contenteditable', 'plaintext-only');
   }
 
   function unmakeEditable() {
@@ -4188,8 +4195,7 @@ class Component extends DCLogic {
     document.body.classList.toggle('cc-edit-mode', active);
     toggleBtn.classList.toggle('cc-on', active);
     toggleBtn.textContent = active ? 'Editing…' : 'Edit text';
-    if (active) makeEditable();
-    else unmakeEditable();
+    if (!active) unmakeEditable();
     refreshStatus();
   }
 
@@ -4246,15 +4252,41 @@ class Component extends DCLogic {
     panel.appendChild(statusEl);
     document.body.appendChild(panel);
 
+    // Lazily arm a span for editing only when actually clicked, and only
+    // capture its "original text" baseline at that moment — not for
+    // every span up front when edit mode turns on. Capturing eagerly is
+    // what let a carousel auto-advance (or any other app re-render)
+    // change a span's text out from under an already-captured baseline.
+    document.body.addEventListener('click', function (e) {
+      if (!active) return;
+      var el = e.target && e.target.closest && e.target.closest('.sc-interp');
+      if (el && !el.hasAttribute('contenteditable')) beginEditing(el);
+    });
+
     document.body.addEventListener('input', function (e) {
-      if (e.target && e.target.classList && e.target.classList.contains('sc-interp')) refreshStatus();
+      var el = e.target;
+      if (el && el.classList && el.classList.contains('sc-interp')) {
+        editedEls.add(el);
+        refreshStatus();
+      }
     }, true);
 
-    // The app re-renders on navigation/interaction (carousels, route
-    // changes, etc.), which can swap in fresh .sc-interp nodes — keep
-    // those editable too while edit mode is on.
-    var mo = new MutationObserver(function () { if (active) makeEditable(); });
-    mo.observe(document.body, { childList: true, subtree: true });
+    // The app re-renders nodes on its own (carousel auto-advance, route
+    // changes, etc.). If a span we've already armed gets its text
+    // changed that way — i.e. not via the user actually typing into it —
+    // resync its baseline instead of leaving a stale one that a later
+    // edit could get saved against.
+    var mo = new MutationObserver(function (mutations) {
+      mutations.forEach(function (m) {
+        var node = m.target.nodeType === 3 ? m.target.parentElement : m.target;
+        var el = node && node.closest && node.closest('.sc-interp');
+        if (el && el.dataset.ccOrig !== undefined && !editedEls.has(el)) {
+          el.dataset.ccOrig = el.textContent;
+          el.classList.remove('cc-edit-skip');
+        }
+      });
+    });
+    mo.observe(document.body, { characterData: true, childList: true, subtree: true });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
