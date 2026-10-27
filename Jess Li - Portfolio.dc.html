@@ -484,8 +484,8 @@
   .navset:hover [data-navlink]{filter:blur(1.44px);opacity:.6;}
   .navset [data-navlink]:hover{filter:none;opacity:1;color:var(--ink);}
 </style>
-  <title>Jess Li — Product Designer</title>
-  <meta name="description" content="Product design portfolio of Jess Li — SailPoint, UM Seed Library, Copperhill, and UM GPT case studies. Ann Arbor, MI.">
+  <title>Jessica Li</title>
+  <meta name="description" content="Jessica Li is a product designer creating thoughtful, human-centered experiences across AI, enterprise software, and everyday life.">
   <link rel="icon" type="image/png" href="assets/yue-logo.png">
   <link rel="apple-touch-icon" href="assets/yue-logo.png">
   <meta property="og:type" content="website">
@@ -1597,7 +1597,7 @@ class Component extends DCLogic {
     this.PATH_SLUG = { sailpoint:'sailpoint', seedlibrary:'seed-library', copperhill:'copperhill', umgpt:'umgpt' };
     this.SKIM = {
       'seed-library': {
-        body:`85% of students had never heard of a free campus seed library, and 96% of the flows we observed never finished. I led the digital experience and design system, including the homepage and events experience. We cut the physical checkout from six steps to four, redesigned the digital experience around how people actually used the system, and made the Seed Library's free value impossible to miss.`,
+        body:`Students could discover a physical seed dispenser without understanding what they had received, then reach a digital catalog that did little to continue the journey. Research showed the breakdown clearly: 85% of surveyed students had never heard of the Seed Library, and 96% of observed flows never finished. We simplified the physical journey, connected its visual cues into the digital experience, and redesigned the next steps around what users actually needed to do.`,
         img:'assets/seed-overview.webp', imgRatio:'1.3928',
         metrics:[
           {dir:'up', value:`83%`, label:`seed identification accuracy`},
@@ -1649,7 +1649,7 @@ class Component extends DCLogic {
         {type:'section', eyebrow:'The Problem', heading:`Accuracy was only half the problem. The other half was trust.`},
         {type:'para', text:`These recommendations could eventually influence who gets access to what. The admins using SailPoint understand their applications and identity systems, but they are not expected to work through developer tooling or raw API configuration. So, the real design problem was not simply making AI accurate; it was giving admins enough context to decide when a recommendation was actually worth acting on.`},
         {type:'quote', label:'The Design Question', text:`How might AI move faster without asking admins to surrender judgment?`},
-        {type:'section', eyebrow:'Redesigning the Interaction', heading:`How the interaction model evolved`},
+        {type:'section', eyebrow:'Design Decisions', heading:`How the interaction model evolved`},
         {type:'para', text:`The first solution treated AI as a conversation. Moving recommendations directly into the workflow made them more contextual, but my first attempt exposed too much information at once. Across three iterations, the interaction shifted from guiding the entire experience, to competing with it, to appearing only when the admin needed more context.`},
         {type:'carousel', ratio:'1.45', noBadge:true, noBg:true, slides:[
           {title:'V1 · Scripted chat', text:`Guided, but rigid. AI sat beside the workflow.`, img:'assets/sailpoint-schema-v1.png'},
@@ -1659,7 +1659,7 @@ class Component extends DCLogic {
         {type:'tension', label:`One entry point, three levels of depth.`, text:``},
         {type:'para', text:`My latest V3 design structures AI explanation as progressive disclosure. Understand gives the admin the recommendation at a glance. Verify exposes the reasoning and supporting sources. Escalate opens Harbor Pilot when the structured explanation is not enough, while keeping the question tied to the field being reviewed.`},
         {type:'image', videoSrc:'assets/sailpoint-drawer-levels.mp4', noVidLoop:true, ratio:'1.6', videoMaxW:'100%', caption:`Understand, verify, escalate: the three levels of the drawer, from a plain-language recommendation to its sourced reasoning to Harbor Pilot.`},
-        {type:'section', eyebrow:'Key Designs', heading:`How the trust model holds up when AI has to explain, recover, wait, and act.`},
+        {type:'section', eyebrow:'Key User Flows', heading:`How the trust model holds up when AI has to explain, recover, wait, and act.`},
         {type:'tension', label:`AI reasoning walkthrough`, text:``},
         {type:'para', text:`The recommendation moves from a quick Overview to sourced reasoning in Deep Dive, then to Harbor Pilot only when more help is needed. The transition keeps explanation available without forcing every admin through the same amount of detail.`},
         {type:'image', videoSrc:'assets/sailpoint-reasoning-walkthrough.mp4', ratio:'1.3333', videoMaxW:'100%', caption:`Overview, Deep Dive, and Ask Harbor Pilot: the three-part reasoning model, walked through end to end.`},
@@ -1695,7 +1695,7 @@ class Component extends DCLogic {
       ],
       'seed-library': [
         {type:'section', eyebrow:'Context', heading:`Two experiences that did not feel connected`},
-        {type:'lede', text:`Students could walk up to a machine labeled “Free Seeds,” take a capsule, and still have no idea what they had received or what to do next. The physical dispenser and digital catalog technically belonged to the same service, but users experienced them as two separate products. My focus became the handoff between them.`},
+        {type:'lede', text:`A student could walk up to a machine labeled “Free Seeds,” take a capsule, and still have no idea what they had received or what to do next. The physical dispenser and digital catalog technically belonged to the same service, but users experienced them as separate products. The design problem lived in the handoff between them.`},
         {type:'para', text:``},
         {type:'para', text:``},
         {type:'para', text:``},
@@ -1704,8 +1704,8 @@ class Component extends DCLogic {
           {img:'assets/seed-disconnected-handoff.webp'}
         ]},
         {type:'section', eyebrow:'Research', heading:`Different methods pointed to the same failure`},
-        {type:'para', text:`We studied the experience through 185 field observations, 53 survey responses, early usability testing, and site analytics. The methods were different, but the signal was unusually consistent: students struggled to discover the resource, and even those who did rarely made it through the full experience.`},
-        {type:'para', text:`The numbers told us there was a problem. Watching people use the system showed us where it lived.`},
+        {type:'para', text:`We looked at the experience through field observation, surveys, usability testing, and analytics. The methods were different, but the pattern was unusually consistent: students struggled to discover the resource, and even those who did rarely completed the full journey.`},
+        {type:'para', text:`The numbers told us there was a problem. Watching the journey showed us why.`},
         {type:'statrow', stats:[{icon:'eye', label:'Field study', value:'185 observations'},{icon:'message', label:'Survey', value:'53 responses'},{icon:'user', label:'Usability testing', value:'7 participants'},{icon:'chart', label:'Analytics', value:'110 site visitors'}]},
         {type:'metrics', metrics:[{icon:'target', dir:'down', eyebrow:'Awareness', value:'85%', desc:`of surveyed students had never heard of the Seed Library.`},{icon:'nav', dir:'down', eyebrow:'Completion', value:'96%', desc:`of observed flows never reached completion.`}]},
         {type:'para', text:`The awareness gap explained why students were not finding the resource. The incomplete flows showed that even when they did, the physical and digital experiences were not handing users off to each other.`},
@@ -1714,11 +1714,11 @@ class Component extends DCLogic {
         {type:'para', text:`We mapped the intended journey from discovery to checkout to plant identification, then watched real people try to complete it.`},
         {type:'zoomimage', img:'assets/seed-userflow-full.jpg', ratio:'2.695', caption:`The full phygital user-flow map: physical flow (left) meeting digital flow (right), with every off-script branch a real tester took. Click to expand.`},
         {type:'image', img:'assets/seed-dropoff-chart.png', ratio:'1.485', caption:`Field-study drop-off: of 147 users who discovered the Seed Library, only 8 (4.32%) made it out with seeds in hand.`},
-        {type:'para', text:`The field study revealed the same breakdowns repeatedly. Users skipped the envelope dispenser. Capsules landed on the floor. Seeds were sometimes identified only after a facilitator stepped in. Some users were not even sure whether the machine cost money.`},
-        {type:'para', text:`Two steps were causing most of the friction: an envelope dispenser nobody needed and a manual capsule-to-envelope transfer nobody wanted.`},
-        {type:'tension', label:`So we cut them.`, text:`Six steps became four, creating a shorter path from finding a seed to actually leaving with one.`},
+        {type:'para', text:`In the field, users skipped the envelope dispenser, capsules landed on the floor, some needed help identifying their seeds, and others were not even sure whether the machine cost money. Mapping those behaviors against the intended journey made the failure points visible.`},
+        {type:'para', text:``},
+        {type:'tension', label:``, text:`The envelope dispenser and manual capsule-to-envelope transfer repeatedly caused confusion without adding meaningful value. Rather than redesign instructions around unnecessary steps, we removed them. The physical journey went from six steps to four.`},
         {type:'image', videoSrcs:['assets/seed-before-after-journey.mp4'], ratio:'2.306', videoMaxW:'100%', caption:`The revised flow, before and after: the two greyed-out steps (envelope dispenser, capsule-to-envelope transfer) removed, leaving a cleaner loop.`},
-        {type:'para', text:`The important part was not simply removing steps. Multiple research methods had independently pointed toward the same problem, giving us confidence that we were simplifying the experience rather than removing something users needed.`},
+        {type:'para', text:`Once the journey was simpler, the instructions could follow the way people actually used the system: obtain the seed, open the capsule, return it, then continue online to identify and grow what they received.`},
         {type:'image', img:'assets/seed-howto-handoff.webp', ratio:'1.5637', caption:`How to use the Shapiro Seed Library, and the handoff from machine to landing page.`},
         {type:'section', eyebrow:'Ideation', heading:`Identification and community became the spine`},
         {type:'para', text:`Once a student had a seed in hand, the website had to answer the next question without making them start over. I focused the digital redesign around continuity: preserve the cues users already understood, surface the next action clearly, and reduce the number of new decisions introduced at the handoff.`},
