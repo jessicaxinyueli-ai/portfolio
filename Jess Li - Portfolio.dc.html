@@ -4124,5 +4124,142 @@ class Component extends DCLogic {
   }
 }
 </script>
+<script>
+// Local-only inline text editor. Never runs outside localhost/127.0.0.1,
+// so it has no effect once this file is deployed anywhere else. Lets you
+// click into any rendered piece of copy (every {{ }} binding the
+// templating engine renders comes wrapped in a `.sc-interp` span) and
+// edit it in place; "Save changes" POSTs the edits to the dev server's
+// /api/save-text endpoint (see scripts/dev-server.mjs), which splices
+// each edited string back into "Jess Li - Portfolio.dc.html" itself —
+// only when the original text is found exactly once in the file, so an
+// ambiguous or already-changed snippet is reported back, never guessed.
+(function () {
+  if (!/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)) return;
+
+  var active = false;
+  var panel, toggleBtn, saveBtn, statusEl;
+
+  function style() {
+    var s = document.createElement('style');
+    s.textContent =
+      '#cc-edit-panel{position:fixed;right:16px;bottom:16px;z-index:999999;display:flex;align-items:center;gap:8px;' +
+      'font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:12.5px;}' +
+      '#cc-edit-panel button{border:1px solid #d7d7db;background:#fff;color:#141416;border-radius:7px;' +
+      'padding:7px 12px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.08);}' +
+      '#cc-edit-panel button:hover{border-color:#8a8a92;}' +
+      '#cc-edit-panel button.cc-on{background:#141416;color:#fff;border-color:#141416;}' +
+      '#cc-edit-status{color:#55555c;background:rgba(255,255,255,.9);padding:5px 9px;border-radius:7px;' +
+      'max-width:260px;box-shadow:0 1px 4px rgba(0,0,0,.08);}' +
+      'body.cc-edit-mode .sc-interp{cursor:text;}' +
+      'body.cc-edit-mode .sc-interp:hover{outline:1px dashed #3b82f6;outline-offset:1px;}' +
+      'body.cc-edit-mode .sc-interp:focus{outline:2px solid #3b82f6;outline-offset:1px;}' +
+      '.cc-edit-skip{outline:1px dashed #d1544f !important;}';
+    document.head.appendChild(s);
+  }
+
+  function makeEditable(root) {
+    (root || document).querySelectorAll('.sc-interp').forEach(function (el) {
+      if (el.dataset.ccOrig === undefined) el.dataset.ccOrig = el.textContent;
+      el.setAttribute('contenteditable', 'plaintext-only');
+    });
+  }
+
+  function unmakeEditable() {
+    document.querySelectorAll('.sc-interp[contenteditable]').forEach(function (el) {
+      el.removeAttribute('contenteditable');
+    });
+  }
+
+  function dirtySpans() {
+    return Array.prototype.slice.call(document.querySelectorAll('.sc-interp')).filter(function (el) {
+      return el.dataset.ccOrig !== undefined && el.textContent !== el.dataset.ccOrig;
+    });
+  }
+
+  function refreshStatus() {
+    var n = dirtySpans().length;
+    statusEl.textContent = n ? (n + ' unsaved change' + (n === 1 ? '' : 's')) : '';
+    statusEl.style.display = n ? '' : 'none';
+  }
+
+  function setActive(on) {
+    active = on;
+    document.body.classList.toggle('cc-edit-mode', active);
+    toggleBtn.classList.toggle('cc-on', active);
+    toggleBtn.textContent = active ? 'Editing…' : 'Edit text';
+    if (active) makeEditable();
+    else unmakeEditable();
+    refreshStatus();
+  }
+
+  function save() {
+    var spans = dirtySpans();
+    if (!spans.length) {
+      statusEl.style.display = '';
+      statusEl.textContent = 'No changes to save';
+      return;
+    }
+    var edits = spans.map(function (el) { return { old: el.dataset.ccOrig, new: el.textContent }; });
+    statusEl.style.display = '';
+    statusEl.textContent = 'Saving…';
+    fetch('/api/save-text', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ edits: edits })
+    }).then(function (r) { return r.json(); }).then(function (res) {
+      var appliedOld = (res.applied || []).map(function (e) { return e.old; });
+      spans.forEach(function (el) {
+        el.classList.remove('cc-edit-skip');
+        if (appliedOld.indexOf(el.dataset.ccOrig) !== -1) el.dataset.ccOrig = el.textContent;
+      });
+      var skipped = res.skipped || [];
+      skipped.forEach(function (s) {
+        var match = spans.filter(function (el) { return el.dataset.ccOrig === s.old; })[0];
+        if (match) { match.classList.add('cc-edit-skip'); match.title = 'Not saved: ' + s.reason; }
+      });
+      var parts = [];
+      if (res.applied && res.applied.length) parts.push('Saved ' + res.applied.length);
+      if (skipped.length) parts.push(skipped.length + ' skipped (hover the red-outlined text)');
+      statusEl.style.display = '';
+      statusEl.textContent = parts.join(', ') || 'No changes applied';
+    }).catch(function (err) {
+      statusEl.textContent = 'Save failed: ' + err.message;
+    });
+  }
+
+  function init() {
+    style();
+    panel = document.createElement('div');
+    panel.id = 'cc-edit-panel';
+    toggleBtn = document.createElement('button');
+    toggleBtn.textContent = 'Edit text';
+    toggleBtn.addEventListener('click', function () { setActive(!active); });
+    saveBtn = document.createElement('button');
+    saveBtn.textContent = 'Save changes';
+    saveBtn.addEventListener('click', save);
+    statusEl = document.createElement('span');
+    statusEl.id = 'cc-edit-status';
+    statusEl.style.display = 'none';
+    panel.appendChild(toggleBtn);
+    panel.appendChild(saveBtn);
+    panel.appendChild(statusEl);
+    document.body.appendChild(panel);
+
+    document.body.addEventListener('input', function (e) {
+      if (e.target && e.target.classList && e.target.classList.contains('sc-interp')) refreshStatus();
+    }, true);
+
+    // The app re-renders on navigation/interaction (carousels, route
+    // changes, etc.), which can swap in fresh .sc-interp nodes — keep
+    // those editable too while edit mode is on.
+    var mo = new MutationObserver(function () { if (active) makeEditable(); });
+    mo.observe(document.body, { childList: true, subtree: true });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
 </body>
 </html>
