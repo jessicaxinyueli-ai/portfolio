@@ -338,7 +338,8 @@
   .qa-flow{position:relative;margin:clamp(32.4px,4.5vw,57.6px) 0;}
   .qa-flow .qa-arrows{display:none;}
   .qa-flow .qa-stagehead,.qa-flow .qa-step{position:static;width:100%;margin-bottom:14.4px;}
-  .qa-flow .qa-step{border:1px solid var(--line);border-radius:10.8px;background:var(--paper);padding:14.4px 16.2px;box-sizing:border-box;}
+  .qa-flow .qa-step{border:1px solid var(--line);border-radius:22px;background:var(--paper);padding:14.4px 16.2px;box-sizing:border-box;}
+  .qa-flow .qa-icon{background:#efe9dd;}
   @media (min-width:681px){
     .qa-flow{aspect-ratio:960/520;}
     .qa-flow .qa-arrows{display:block;position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
@@ -932,16 +933,16 @@
               <figure class="qa-flow" data-reveal="">
                 <svg class="qa-arrows" viewBox="0 0 960 520" preserveAspectRatio="none">
                   <defs>
-                    <marker id="qaArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                      <path d="M1,1 L9,5 L1,9 Z" fill="var(--muted-2)"></path>
+                    <marker id="qaArrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                      <path d="M2,1.3 L8,5 L2,8.7" fill="none" stroke="var(--muted-2)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
                     </marker>
                   </defs>
-                  <path d="M220,278 L240,278 L240,131 L260,131" fill="none" stroke="var(--muted-2)" stroke-width="1.6" stroke-dasharray="6 5" stroke-linecap="round" vector-effect="non-scaling-stroke" marker-end="url(#qaArrow)"></path>
-                  <path d="M220,278 L240,278 L240,425 L260,425" fill="none" stroke="var(--muted-2)" stroke-width="1.6" stroke-dasharray="6 5" stroke-linecap="round" vector-effect="non-scaling-stroke" marker-end="url(#qaArrow)"></path>
-                  <path d="M480,131 L505,131 L505,278 L530,278" fill="none" stroke="var(--muted-2)" stroke-width="1.6" stroke-dasharray="6 5" stroke-linecap="round" vector-effect="non-scaling-stroke" marker-end="url(#qaArrow)"></path>
-                  <path d="M480,425 L505,425 L505,278 L530,278" fill="none" stroke="var(--muted-2)" stroke-width="1.6" stroke-dasharray="6 5" stroke-linecap="round" vector-effect="non-scaling-stroke" marker-end="url(#qaArrow)"></path>
-                  <path d="M730,278 L755,278 L755,131 L780,131" fill="none" stroke="var(--muted-2)" stroke-width="1.6" stroke-dasharray="6 5" stroke-linecap="round" vector-effect="non-scaling-stroke" marker-end="url(#qaArrow)"></path>
-                  <path d="M865,206 L865,350" fill="none" stroke="var(--muted-2)" stroke-width="1.6" stroke-dasharray="6 5" stroke-linecap="round" vector-effect="non-scaling-stroke" marker-end="url(#qaArrow)"></path>
+                  <path d="M220,278 L240,278 L240,131 L260,131" fill="none" stroke="var(--muted-2)" stroke-width="2" stroke-dasharray="0.3 7" stroke-linecap="round" vector-effect="non-scaling-stroke" marker-end="url(#qaArrow)"></path>
+                  <path d="M220,278 L240,278 L240,425 L260,425" fill="none" stroke="var(--muted-2)" stroke-width="2" stroke-dasharray="0.3 7" stroke-linecap="round" vector-effect="non-scaling-stroke" marker-end="url(#qaArrow)"></path>
+                  <path d="M480,131 L505,131 L505,278 L530,278" fill="none" stroke="var(--muted-2)" stroke-width="2" stroke-dasharray="0.3 7" stroke-linecap="round" vector-effect="non-scaling-stroke" marker-end="url(#qaArrow)"></path>
+                  <path d="M480,425 L505,425 L505,278 L530,278" fill="none" stroke="var(--muted-2)" stroke-width="2" stroke-dasharray="0.3 7" stroke-linecap="round" vector-effect="non-scaling-stroke" marker-end="url(#qaArrow)"></path>
+                  <path d="M730,278 L755,278 L755,131 L780,131" fill="none" stroke="var(--muted-2)" stroke-width="2" stroke-dasharray="0.3 7" stroke-linecap="round" vector-effect="non-scaling-stroke" marker-end="url(#qaArrow)"></path>
+                  <path d="M865,206 L865,350" fill="none" stroke="var(--muted-2)" stroke-width="2" stroke-dasharray="0.3 7" stroke-linecap="round" vector-effect="non-scaling-stroke" marker-end="url(#qaArrow)"></path>
                 </svg>
                 <div class="qa-stagehead qa-pos-find" style="font-family:var(--font-sans);">
                   <div style="font-weight:700;letter-spacing:.07em;font-size:clamp(9.9px,.945vw,11.7px);color:var(--ink);">01 · FIND</div>
@@ -956,32 +957,32 @@
                   <div style="font-size:clamp(9.45px,.9vw,10.8px);line-height:1.4;color:var(--muted-2);margin-top:3.6px;">Keep every response tied to its part.</div>
                 </div>
                 <div class="qa-step qa-pos-triage" style="padding:clamp(9px,1.08vw,13.5px);">
-                  <div style="width:clamp(18px,1.98vw,23.4px);aspect-ratio:1;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;margin-bottom:clamp(3.6px,.54vw,5.4px);">{{ block.triage.iconEl }}</div>
+                  <div class="qa-icon" style="width:clamp(21.6px,2.43vw,27px);aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:clamp(3.6px,.54vw,5.4px);">{{ block.triage.iconEl }}</div>
                   <div style="font-family:var(--font-serif);font-size:clamp(12.6px,1.26vw,14.4px);line-height:1.2;color:var(--ink);">{{ block.triage.label }}</div>
                   <div style="font-family:var(--font-sans);font-size:clamp(9.45px,.945vw,10.8px);line-height:1.32;color:var(--ink-2);margin-top:3.6px;">{{ block.triage.text }}</div>
                 </div>
                 <div class="qa-step qa-pos-ask" style="padding:clamp(9px,1.08vw,13.5px);">
-                  <div style="width:clamp(18px,1.98vw,23.4px);aspect-ratio:1;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;margin-bottom:clamp(3.6px,.54vw,5.4px);">{{ block.ask.iconEl }}</div>
+                  <div class="qa-icon" style="width:clamp(21.6px,2.43vw,27px);aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:clamp(3.6px,.54vw,5.4px);">{{ block.ask.iconEl }}</div>
                   <div style="font-family:var(--font-serif);font-size:clamp(12.6px,1.26vw,14.4px);line-height:1.2;color:var(--ink);">{{ block.ask.label }}</div>
                   <div style="font-family:var(--font-sans);font-size:clamp(9.45px,.945vw,10.8px);line-height:1.32;color:var(--ink-2);margin-top:3.6px;">{{ block.ask.text }}</div>
                 </div>
                 <div class="qa-step qa-pos-batch" style="padding:clamp(9px,1.08vw,13.5px);">
-                  <div style="width:clamp(18px,1.98vw,23.4px);aspect-ratio:1;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;margin-bottom:clamp(3.6px,.54vw,5.4px);">{{ block.batch.iconEl }}</div>
+                  <div class="qa-icon" style="width:clamp(21.6px,2.43vw,27px);aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:clamp(3.6px,.54vw,5.4px);">{{ block.batch.iconEl }}</div>
                   <div style="font-family:var(--font-serif);font-size:clamp(12.6px,1.26vw,14.4px);line-height:1.2;color:var(--ink);">{{ block.batch.label }}</div>
                   <div style="font-family:var(--font-sans);font-size:clamp(9.45px,.945vw,10.8px);line-height:1.32;color:var(--ink-2);margin-top:3.6px;">{{ block.batch.text }}</div>
                 </div>
-                <div class="qa-step qa-pos-send" style="padding:clamp(9px,1.08vw,13.5px);border-color:#9cc3ef;background:#eaf3ff;">
-                  <div style="width:clamp(18px,1.98vw,23.4px);aspect-ratio:1;border-radius:50%;background:#d6e8fc;display:flex;align-items:center;justify-content:center;margin-bottom:clamp(3.6px,.54vw,5.4px);">{{ block.send.iconEl }}</div>
+                <div class="qa-step qa-pos-send" style="padding:clamp(9px,1.08vw,13.5px);border-color:#bfdfa8;background:#eaf6e0;">
+                  <div style="width:clamp(21.6px,2.43vw,27px);aspect-ratio:1;border-radius:50%;background:#cfe8b5;display:flex;align-items:center;justify-content:center;margin-bottom:clamp(3.6px,.54vw,5.4px);">{{ block.send.iconEl }}</div>
                   <div style="font-family:var(--font-serif);font-size:clamp(12.6px,1.26vw,14.4px);line-height:1.2;color:var(--ink);">{{ block.send.label }}</div>
                   <div style="font-family:var(--font-sans);font-size:clamp(9.45px,.945vw,10.8px);line-height:1.32;color:var(--ink-2);margin-top:3.6px;">{{ block.send.text }}</div>
                 </div>
                 <div class="qa-step qa-pos-track" style="padding:clamp(9px,1.08vw,13.5px);">
-                  <div style="width:clamp(18px,1.98vw,23.4px);aspect-ratio:1;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;margin-bottom:clamp(3.6px,.54vw,5.4px);">{{ block.track.iconEl }}</div>
+                  <div class="qa-icon" style="width:clamp(21.6px,2.43vw,27px);aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:clamp(3.6px,.54vw,5.4px);">{{ block.track.iconEl }}</div>
                   <div style="font-family:var(--font-serif);font-size:clamp(12.6px,1.26vw,14.4px);line-height:1.2;color:var(--ink);">{{ block.track.label }}</div>
                   <div style="font-family:var(--font-sans);font-size:clamp(9.45px,.945vw,10.8px);line-height:1.32;color:var(--ink-2);margin-top:3.6px;">{{ block.track.text }}</div>
                 </div>
                 <div class="qa-step qa-pos-resolve" style="padding:clamp(9px,1.08vw,13.5px);">
-                  <div style="width:clamp(18px,1.98vw,23.4px);aspect-ratio:1;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;margin-bottom:clamp(3.6px,.54vw,5.4px);">{{ block.resolve.iconEl }}</div>
+                  <div class="qa-icon" style="width:clamp(21.6px,2.43vw,27px);aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:clamp(3.6px,.54vw,5.4px);">{{ block.resolve.iconEl }}</div>
                   <div style="font-family:var(--font-serif);font-size:clamp(12.6px,1.26vw,14.4px);line-height:1.2;color:var(--ink);">{{ block.resolve.label }}</div>
                   <div style="font-family:var(--font-sans);font-size:clamp(9.45px,.945vw,10.8px);line-height:1.32;color:var(--ink-2);margin-top:3.6px;">{{ block.resolve.text }}</div>
                 </div>
