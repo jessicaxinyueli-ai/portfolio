@@ -30,32 +30,27 @@ def flood_fill_from_border(is_bg_color):
         visited = new_visited
 
 FILES = [
-    "assets/reveal-apple.png",
-    "assets/moodboard-bag.png",
-    "assets/moodboard-notebook.png",
-    "assets/moodboard-tree.webp",
-    "assets/moodboard-cloud.png",
-    "assets/moodboard-sushi.png",
-    "assets/moodboard-boba.png",
-    "assets/moodboard-croissant.png",
-    "assets/moodboard-book.png",
-    "assets/moodboard-glasses.png",
-    "assets/moodboard-moon.png",
-    "assets/moodboard-tulip.png",
-    "assets/moodboard-candle.png",
+    "assets/reveal-pushpin-src.webp",
+    "assets/moodboard-safetypin-src.webp",
 ]
 
 
-def remove_bg(path, threshold=245, feather=2.5):
+def remove_bg(path, margin=10, feather=2.5):
+    """margin: how far below the lightest border pixel (per channel) the
+    cutoff sits. Adaptive per image instead of one fixed threshold, so a
+    light-gray studio background or a textured paper background (both
+    well below pure white) still gets caught."""
     im = Image.open(path).convert("RGB")
     arr = np.array(im)
+    border = np.concatenate([arr[0, :], arr[-1, :], arr[:, 0], arr[:, -1]])
+    threshold = border.min(axis=0).astype(int) - margin
     is_bg_color = np.all(arr >= threshold, axis=-1)
     bg_mask = flood_fill_from_border(is_bg_color)
     alpha = np.where(bg_mask, 0, 255).astype(np.uint8)
     alpha_img = Image.fromarray(alpha, mode="L").filter(ImageFilter.GaussianBlur(feather))
     out = im.convert("RGBA")
     out.putalpha(alpha_img)
-    out_path = path.rsplit(".", 1)[0] + ".png"
+    out_path = path.rsplit(".", 1)[0].replace("-src", "") + ".png"
     out.save(out_path)
     return out_path, path != out_path
 

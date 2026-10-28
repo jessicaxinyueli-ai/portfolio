@@ -1476,10 +1476,10 @@
       </div>
 
       <!-- My October Moodboard — one icon per day, blurred until hovered, today always sharp -->
-      <div style="font-family:var(--font-sans);font-weight:400;font-size:14.4px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin:clamp(50.4px,6.3vw,79.2px) 0 0;">my moodboard</div>
-      <h2 style="font-family:var(--font-serif);font-weight:400;font-size:calc(36px * var(--sc-header,1));line-height:.98;letter-spacing:-.026em;margin:3.6px 0 0;">October</h2>
+      <div style="font-family:var(--font-sans);font-weight:400;font-size:14.4px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin:clamp(50.4px,6.3vw,79.2px) 0 19.8px;">my moodboard</div>
+      <h2 style="font-family:var(--font-serif);font-weight:400;font-size:calc(36px * var(--sc-header,1));line-height:.98;letter-spacing:-.026em;margin:0;">A little more Jess</h2>
       <div style="margin:clamp(14.4px,1.8vw,21.6px) 0 clamp(36px,4.5vw,54px);">
-        <div style="display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:13.5px;">
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:clamp(8.1px,1.35vw,16.2px);margin-bottom:13.5px;">
           <sc-for list="{{ moodboardDow }}" as="wd" hint-placeholder-count="7">
             <div style="text-align:center;font-family:var(--font-sans);font-weight:600;font-size:14.4px;color:var(--ink-2);">{{ wd }}</div>
           </sc-for>
