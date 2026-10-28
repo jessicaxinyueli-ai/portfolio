@@ -793,12 +793,14 @@
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(162px,1fr));gap:clamp(18px,2.7vw,36px);margin-top:clamp(21.6px,2.7vw,30.6px);">
               <sc-for list="{{ skimMetrics }}" as="m" hint-placeholder-count="3">
                 <div style="display:flex;flex-direction:column;gap:5.4px;">
-                  <div style="display:flex;align-items:baseline;gap:7.2px;font-family:var(--font-display);font-weight:400;font-size:clamp(25.2px,3.06vw,36px);line-height:1;color:var(--ink);letter-spacing:-.01em;">
-                    <sc-if value="{{ m.isUp }}"><span style="color:#1f9d63;font-size:.72em;font-family:var(--font-sans);">↑</span></sc-if>
-                    <sc-if value="{{ m.isDown }}"><span style="color:#d1544f;font-size:.72em;font-family:var(--font-sans);">↓</span></sc-if>
-                    <span>{{ m.value }}</span>
+                  <div style="display:flex;align-items:baseline;gap:7.2px;font-family:var(--font-sans);font-weight:600;font-size:clamp(25.2px,3.06vw,36px);line-height:1;color:var(--ink);letter-spacing:-.01em;">
+                    <sc-if value="{{ m.isUp }}"><span style="color:#1f9d63;font-size:.6em;">↑</span></sc-if>
+                    <sc-if value="{{ m.isDown }}"><span style="color:#d1544f;font-size:.6em;">↓</span></sc-if>
+                    <sc-if value="{{ m.isPureNum }}">
+                      <span class="metric-num" data-count-to="{{ m.countTo }}" data-prefix="{{ m.countPrefix }}" data-suffix="{{ m.countSuffix }}" data-decimals="{{ m.countDecimals }}">0{{ m.countSuffix }}</span>
+                    </sc-if>
+                    <sc-if value="{{ m.notPureNum }}"><span>{{ m.value }}</span></sc-if>
                   </div>
-                  <sc-if value="{{ m.hasBar }}">{{ m.barEl }}</sc-if>
                   <div style="font-family:var(--font-sans);font-size:calc(11.7px * var(--sc-cap,1));line-height:1.4;color:var(--muted-2);text-wrap:pretty;">{{ m.label }}</div>
                 </div>
               </sc-for>
@@ -2422,21 +2424,6 @@ class Component extends DCLogic {
     const shapes = icons[key] || icons.growth;
     return React.createElement('svg', { width: 26, height: 26, viewBox: '0 0 24 24', fill: 'none', stroke: 'var(--muted-2)', strokeWidth: 1.4, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': 'true' },
       shapes.map(([tag, props], i) => React.createElement(tag, { key: i, ...props })));
-  }
-  // Segmented tick-bar for a percentage metric: N ticks fill proportionally,
-  // colored by direction (green = growth, red = decrease). Purely decorative.
-  metricBar(pct, dir){
-    const N = 22;
-    const p = Math.max(0, Math.min(100, pct));
-    const filled = Math.max(1, Math.round(p / 100 * N));
-    const on = dir === 'down' ? '#d1544f' : '#1f9d63';
-    const off = dir === 'down' ? 'rgba(209,84,79,.20)' : 'rgba(31,157,99,.22)';
-    return React.createElement('div', {
-      role: 'img', 'aria-label': (dir === 'down' ? 'down ' : 'up ') + p + '%',
-      style: { display: 'flex', gap: '2.5px', alignItems: 'stretch', height: '24px', width: '100%', maxWidth: '210px', marginTop: '2px' }
-    }, Array.from({ length: N }).map((_, i) => React.createElement('span', {
-      key: i, style: { flex: '1 1 0', minWidth: 0, borderRadius: '1.5px', background: i < filled ? on : off }
-    })));
   }
   selectCarousel(blockIdx, i){
     if (!this._carActive) this._carActive = {};
@@ -4111,15 +4098,17 @@ class Component extends DCLogic {
       hasSkimImg: !!(cur && this.SKIM[cur.slug] && this.SKIM[cur.slug].img),
       openSkimImg: () => { const sk = cur && this.SKIM[cur.slug]; if (sk && sk.img) this.setState({ lightbox: { img: sk.img, title:'', label:'', caption:'', ratio: sk.imgRatio || '1.5' } }); },
       skimMetrics: (cur && this.SKIM[cur.slug]) ? this.SKIM[cur.slug].metrics.map(m => {
-        const pm = (m.value.match(/(\d+(?:\.\d+)?)\s*%/g) || []);
-        const pct = pm.length ? parseFloat(pm[pm.length - 1]) : null;
-        const dirIsMove = m.dir === 'up' || m.dir === 'down';
-        const hasBar = pct !== null && dirIsMove;
+        const raw = String(m.value).trim();
+        const pureMatch = raw.match(/^([+-]?)(\d[\d.]*)(%\+|%|\+)?$/);
+        const isPureNum = !!pureMatch;
+        const countPrefix = isPureNum ? pureMatch[1] : '';
+        const countTo = isPureNum ? parseFloat(pureMatch[2]) : 0;
+        const countSuffix = isPureNum ? (pureMatch[3] || '') : '';
+        const countDecimals = isPureNum ? ((pureMatch[2].split('.')[1] || '').length) : 0;
         return {
-          value: m.value, label: m.label,
-          arrow: m.dir === 'up' ? '↑' : (m.dir === 'down' ? '↓' : ''),
-          hasArrow: dirIsMove, isUp: m.dir === 'up', isDown: m.dir === 'down',
-          hasBar, barEl: hasBar ? this.metricBar(pct, m.dir) : null,
+          value: raw, label: m.label,
+          isUp: m.dir === 'up', isDown: m.dir === 'down',
+          isPureNum, notPureNum: !isPureNum, countPrefix, countTo, countSuffix, countDecimals,
         };
       }) : [],
       hasSkim: !!(cur && this.SKIM[cur.slug]),
