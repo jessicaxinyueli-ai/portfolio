@@ -1478,7 +1478,7 @@
       <!-- My October Moodboard — one icon per day, blurred until hovered, today always sharp -->
       <div style="font-family:var(--font-sans);font-weight:400;font-size:14.4px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin:clamp(50.4px,6.3vw,79.2px) 0 19.8px;">my moodboard</div>
       <h2 style="font-family:var(--font-serif);font-weight:400;font-size:calc(36px * var(--sc-header,1));line-height:.98;letter-spacing:-.026em;margin:0;">October 2026</h2>
-      <div style="margin:clamp(14.4px,1.8vw,21.6px) 0 clamp(36px,4.5vw,54px);">
+      <div style="margin:clamp(28.8px,3.6vw,43.2px) 0 clamp(36px,4.5vw,54px);">
         <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:clamp(8.1px,1.35vw,16.2px);margin-bottom:13.5px;">
           <sc-for list="{{ moodboardDow }}" as="wd" hint-placeholder-count="7">
             <div style="text-align:center;font-family:var(--font-sans);font-weight:600;font-size:14.4px;color:var(--ink-2);">{{ wd }}</div>
@@ -1488,7 +1488,7 @@
           <sc-for list="{{ moodboardCells }}" as="c" hint-placeholder-count="35">
             <div style="min-width:0;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8.1px;padding-top:5.4px;">
               <sc-if value="{{ c.hasDay }}">
-                <span style="font-family:var(--font-sans);font-size:13.5px;color:var(--muted-2);">{{ c.day }}</span>
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:22.5px;height:22.5px;border-radius:50%;font-family:var(--font-sans);font-size:13.5px;background:{{ c.dayBg }};color:{{ c.dayColor }};">{{ c.day }}</span>
                 <sc-if value="{{ c.hasImg }}">
                   <div class="moodboard-imgwrap" onMouseEnter="{{ c.onEnter }}" style="position:relative;width:78%;aspect-ratio:1;">
                     <img src="{{ c.img }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;filter:{{ c.filter }};transition:filter .4s ease;">
@@ -4141,7 +4141,7 @@ class Component extends DCLogic {
           const img = this.OCT_MOODBOARD[d] || '';
           const isToday = d === todayNum;
           const isRevealed = isToday || !!this.state.moodboardRevealed[d];
-          cells.push({ hasDay:true, hasImg:!!img, day:d, img, filter: isRevealed ? 'blur(0px)' : 'blur(9px)', onEnter: () => this.revealMoodboardDay(d) });
+          cells.push({ hasDay:true, hasImg:!!img, day:d, img, isToday, dayBg: isToday ? '#1a73e8' : 'transparent', dayColor: isToday ? '#fff' : 'var(--muted-2)', filter: isRevealed ? 'blur(0px)' : 'blur(9px)', onEnter: () => this.revealMoodboardDay(d) });
         }
         while (cells.length % 7 !== 0) cells.push({ hasDay:false, hasImg:false, day:'', img:'', filter:'' });
         return cells;
