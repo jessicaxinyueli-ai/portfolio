@@ -379,7 +379,6 @@
   .flick-photo:hover .feat-blur{opacity:1;}
   .moodboard-imgwrap:hover img{filter:blur(0) !important;}
   .flick-photo .feat-cover{clip-path:none;border-radius:0 !important;}
-  @media (max-width:420px){ .settings-grid{grid-template-columns:repeat(2,1fr) !important;} }
   @media (hover:none){.feat-blur{opacity:1;}}
   .feat-blur-bg{position:absolute;inset:0;-webkit-backdrop-filter:blur(18px) saturate(1.3);backdrop-filter:blur(18px) saturate(1.3);background:linear-gradient(to top,rgba(10,12,16,.42) 0%,rgba(10,12,16,.14) 60%,rgba(10,12,16,0) 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 55%);mask-image:linear-gradient(to bottom,transparent 0,#000 55%);}
   /* Home cards only (.entry-imgwrap): soft progressive blur instead of the
@@ -1474,45 +1473,6 @@
           <h1 style="font-family:var(--font-serif);font-weight:400;font-size:calc(36px * var(--sc-header,1));line-height:.98;letter-spacing:-.026em;margin:0;transition:filter .35s ease;" style-hover="filter:blur(1.8px)">Hi, I'm Jess</h1>
           <p style="font-family:var(--font-sans);font-size:calc(14.4px * var(--sc-body,1));line-height:1.7;color:var(--ink-2);margin:5.4px 0 0;text-wrap:pretty;">Design started as the thing I did instead of the thing I was supposed to be doing. I grew up in Shanghai painting and doing calligraphy, convinced I'd end up an artist, until I found UX and realized I liked problems with constraints better than a blank canvas.</p>
           <p style="font-family:var(--font-sans);font-size:calc(14.4px * var(--sc-body,1));line-height:1.7;color:var(--ink-2);margin:12.6px 0 3.6px;text-wrap:pretty;">Today I design enterprise tools and AI products, identity software, trade compliance, one civic seed library that won an award, and most of my job turns out to be subtraction. I like the work best when it starts as a mess and ends looking obvious, and the best compliment I get isn't "this looks great," it's "oh, that makes sense."</p>
-          <div style="font-family:var(--font-sans);font-weight:400;font-size:14.4px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin:10.8px 0 3.6px;">Settings</div>
-          <div class="settings-grid" data-reveal="" style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,2.7vw,27px) clamp(10.8px,1.8vw,18px);margin:0 0 3.6px;">
-            <div class="metric-item" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(9px,1.26vw,12.6px);">
-              <div class="metric-ringwrap" aria-hidden="true" style="position:relative;flex:none;width:clamp(64.8px,6.3vw,86.4px);aspect-ratio:1;">
-                <div class="metric-ring" style="position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(var(--line) 0deg 2.2deg, transparent 2.2deg 9deg);-webkit-mask:radial-gradient(circle,transparent 60%,#000 63%,#000 100%);mask:radial-gradient(circle,transparent 60%,#000 63%,#000 100%);"></div>
-                <div class="metric-circle" style="position:absolute;width:62%;height:62%;left:34%;top:34%;border-radius:50%;display:flex;align-items:center;justify-content:center;">
-                  <span class="metric-num" data-count-to="92" data-prefix="" data-suffix="%" data-decimals="0" style="font-family:var(--font-sans);font-weight:600;font-size:clamp(11.7px,1.17vw,14.4px);letter-spacing:-.01em;color:var(--ink);">0%</span>
-                </div>
-              </div>
-              <span style="display:inline-block;font-family:var(--font-sans);font-size:10.35px;font-weight:500;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:3.6px 10.8px;">Curiosity</span>
-            </div>
-            <div class="metric-item" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(9px,1.26vw,12.6px);">
-              <div class="metric-ringwrap" aria-hidden="true" style="position:relative;flex:none;width:clamp(64.8px,6.3vw,86.4px);aspect-ratio:1;">
-                <div class="metric-ring" style="position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(var(--line) 0deg 2.2deg, transparent 2.2deg 9deg);-webkit-mask:radial-gradient(circle,transparent 60%,#000 63%,#000 100%);mask:radial-gradient(circle,transparent 60%,#000 63%,#000 100%);"></div>
-                <div class="metric-circle" style="position:absolute;width:62%;height:62%;left:34%;top:34%;border-radius:50%;display:flex;align-items:center;justify-content:center;">
-                  <span class="metric-num" data-count-to="88" data-prefix="" data-suffix="%" data-decimals="0" style="font-family:var(--font-sans);font-weight:600;font-size:clamp(11.7px,1.17vw,14.4px);letter-spacing:-.01em;color:var(--ink);">0%</span>
-                </div>
-              </div>
-              <span style="display:inline-block;font-family:var(--font-sans);font-size:10.35px;font-weight:500;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:3.6px 10.8px;">Coachability</span>
-            </div>
-            <div class="metric-item" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(9px,1.26vw,12.6px);">
-              <div class="metric-ringwrap" aria-hidden="true" style="position:relative;flex:none;width:clamp(64.8px,6.3vw,86.4px);aspect-ratio:1;">
-                <div class="metric-ring" style="position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(var(--line) 0deg 2.2deg, transparent 2.2deg 9deg);-webkit-mask:radial-gradient(circle,transparent 60%,#000 63%,#000 100%);mask:radial-gradient(circle,transparent 60%,#000 63%,#000 100%);"></div>
-                <div class="metric-circle" style="position:absolute;width:62%;height:62%;left:34%;top:34%;border-radius:50%;display:flex;align-items:center;justify-content:center;">
-                  <span class="metric-num" data-count-to="65" data-prefix="" data-suffix="%" data-decimals="0" style="font-family:var(--font-sans);font-weight:600;font-size:clamp(11.7px,1.17vw,14.4px);letter-spacing:-.01em;color:var(--ink);">0%</span>
-                </div>
-              </div>
-              <span style="display:inline-block;font-family:var(--font-sans);font-size:10.35px;font-weight:500;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:3.6px 10.8px;">Extroversion</span>
-            </div>
-            <div class="metric-item" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(9px,1.26vw,12.6px);">
-              <div class="metric-ringwrap" aria-hidden="true" style="position:relative;flex:none;width:clamp(64.8px,6.3vw,86.4px);aspect-ratio:1;">
-                <div class="metric-ring" style="position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(var(--line) 0deg 2.2deg, transparent 2.2deg 9deg);-webkit-mask:radial-gradient(circle,transparent 60%,#000 63%,#000 100%);mask:radial-gradient(circle,transparent 60%,#000 63%,#000 100%);"></div>
-                <div class="metric-circle" style="position:absolute;width:62%;height:62%;left:34%;top:34%;border-radius:50%;display:flex;align-items:center;justify-content:center;">
-                  <span class="metric-num" data-count-to="45" data-prefix="" data-suffix="%" data-decimals="0" style="font-family:var(--font-sans);font-weight:600;font-size:clamp(11.7px,1.17vw,14.4px);letter-spacing:-.01em;color:var(--ink);">0%</span>
-                </div>
-              </div>
-              <span style="display:inline-block;font-family:var(--font-sans);font-size:10.35px;font-weight:500;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:3.6px 10.8px;">Perfectionism</span>
-            </div>
-          </div>
         </div>
       </div>
 
