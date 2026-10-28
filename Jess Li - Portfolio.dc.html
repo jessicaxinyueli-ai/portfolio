@@ -377,6 +377,7 @@
   .feat-blur{position:absolute;left:0;right:0;bottom:0;height:42%;opacity:0;transition:opacity .15s ease-out;pointer-events:none;z-index:2;will-change:opacity;}
   .feat-figure:hover .feat-blur{opacity:1;}
   .flick-photo:hover .feat-blur{opacity:1;}
+  .moodboard-imgwrap:hover img{filter:blur(0) !important;}
   .flick-photo .feat-cover{clip-path:none;border-radius:0 !important;}
   @media (max-width:420px){ .settings-grid{grid-template-columns:repeat(2,1fr) !important;} }
   @media (hover:none){.feat-blur{opacity:1;}}
@@ -1515,18 +1516,28 @@
         </div>
       </div>
 
-      <!-- A few small things — click to reveal each photo (blurred until tapped) -->
-      <div style="font-family:var(--font-sans);font-weight:400;font-size:14.4px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin:clamp(50.4px,6.3vw,79.2px) 0 3.6px;">A few small things</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14.4px,1.98vw,21.6px);margin:clamp(14.4px,1.8vw,21.6px) 0 clamp(36px,4.5vw,54px);">
-        <sc-for list="{{ revealItems }}" as="rv" hint-placeholder-count="4">
-          <button type="button" onClick="{{ rv.toggle }}" aria-label="Reveal" style="display:flex;flex-direction:column;align-items:center;gap:9px;padding:0;border:none;background:none;cursor:pointer;text-align:center;">
-            <div style="position:relative;width:100%;aspect-ratio:1;border-radius:12.6px;overflow:hidden;background:var(--surface);">
-              <img src="{{ rv.img }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;filter:{{ rv.blurFilter }};transform:scale(1.08);transition:filter .6s cubic-bezier(.2,.7,.3,1);">
+      <!-- My October Moodboard — one icon per day, blurred until hovered, today always sharp -->
+      <div style="font-family:var(--font-sans);font-weight:400;font-size:14.4px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin:clamp(50.4px,6.3vw,79.2px) 0 3.6px;">My October Moodboard</div>
+      <div style="margin:clamp(14.4px,1.8vw,21.6px) 0 clamp(36px,4.5vw,54px);">
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:9px;">
+          <sc-for list="{{ moodboardDow }}" as="wd" hint-placeholder-count="7">
+            <div style="text-align:center;font-family:var(--font-sans);font-weight:600;font-size:11.7px;color:var(--ink-2);">{{ wd }}</div>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:clamp(5.4px,.9vw,10.8px);">
+          <sc-for list="{{ moodboardCells }}" as="c" hint-placeholder-count="35">
+            <div style="aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:5.4px;padding-top:3.6px;">
+              <sc-if value="{{ c.hasDay }}">
+                <span style="font-family:var(--font-sans);font-size:10.35px;color:var(--muted-2);">{{ c.day }}</span>
+                <sc-if value="{{ c.hasImg }}">
+                  <div class="moodboard-imgwrap" style="position:relative;width:62%;aspect-ratio:1;">
+                    <img src="{{ c.img }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;filter:{{ c.filter }};transition:filter .4s ease;">
+                  </div>
+                </sc-if>
+              </sc-if>
             </div>
-            <div style="font-family:var(--font-sans);font-size:11.7px;color:var(--ink);min-height:1.4em;opacity:{{ rv.textOp }};transition:opacity .5s ease;">{{ rv.label }}</div>
-            <div style="font-family:var(--font-sans);font-style:italic;font-size:10.35px;line-height:1.4;color:var(--muted-2);opacity:{{ rv.textOp }};transition:opacity .5s ease .1s;">{{ rv.note }}</div>
-          </button>
-        </sc-for>
+          </sc-for>
+        </div>
       </div>
 
       <!-- Flicks — 3x3 grid of snapshots, same hover-blur treatment as case-study covers -->
@@ -1901,14 +1912,23 @@ class Component extends DCLogic {
       { t:`Carpe diem. Seize the day.`, a:`Dead Poets Society, 1989`, note:`It's fine to feel lost sometimes. I do, often. What I know for sure is that I want to enjoy the day, even when the day's best offer is a new sweet treat.` },
       { t:`Happiness can be found even in the darkest of times.`, a:`Harry Potter and the Prisoner of Azkaban, 2004`, note:`Stress has knocked me flat before. What helped was stopping, breathing, and naming one thing I was grateful for. Usually family, friends, or food. A small light, but enough to work by.` }
     ];
-    this.REVEAL_ITEMS = [
-      { id:'rv-apple', img:'assets/reveal-apple.png', label:`An apple, halved`, note:`I like a problem that only shows its structure once you cut into it.` },
-      { id:'rv-perfume', img:'assets/reveal-perfume.png', label:`Chanel No°5`, note:`My mom's, then mine. Some things don't need a redesign.` },
-      { id:'rv-pushpin', img:'assets/reveal-pushpin.webp', label:`A pushpin`, note:`Small, sharp, and it holds more than it looks like it should.` },
-      { id:'rv-clock', img:'assets/reveal-clock.png', label:`A clock, drawn`, note:`Hour and minute, minute and hour. I still mix them up sometimes.` }
-    ];
+    // One icon per day for the About page's October moodboard. Add more
+    // entries here as they come in — the grid just renders whatever's
+    // mapped and leaves the rest of that day's cell empty.
+    this.OCT_MOODBOARD = {
+      18: 'assets/reveal-apple.png',
+      19: 'assets/reveal-perfume.png',
+      20: 'assets/reveal-pushpin.webp',
+      21: 'assets/reveal-clock.png',
+      22: 'assets/moodboard-moss.webp',
+      23: 'assets/moodboard-archiv.png',
+      24: 'assets/moodboard-cursor.png',
+      25: 'assets/moodboard-safetypin.webp',
+      26: 'assets/moodboard-tomato.webp',
+      27: 'assets/moodboard-speechbubble.png'
+    };
     const initRoute = this.resolveRoute(window.location.pathname);
-    this.state = { view:initRoute.view, slug:initRoute.slug, leaf:0, bookScale: this.computeScale(), quoteIdx:0, typed:'', typing:false, opened:false, unlocked:{}, revealed:{}, passError:false, bgMode:'plain', siteIntroActive: !this.prefersReduced() };
+    this.state = { view:initRoute.view, slug:initRoute.slug, leaf:0, bookScale: this.computeScale(), quoteIdx:0, typed:'', typing:false, opened:false, unlocked:{}, passError:false, bgMode:'plain', siteIntroActive: !this.prefersReduced() };
     // Case studies still in progress require a passphrase before the account opens.
     this.PASSWORDS = { sailpoint: 'sailu2026' };
     // About page "Flicks" 3x3 grid — a handful of personal snapshots, unrelated to work.
@@ -2440,7 +2460,6 @@ class Component extends DCLogic {
     this.forceUpdate();
   }
   goHome(){ this.fadeSwap(() => this.setState({ view:'home' })); }
-  toggleReveal(id){ this.setState({ revealed: { ...this.state.revealed, [id]: !this.state.revealed[id] } }); }
   openProject(slug){ this.transitionToCase(slug); }
   tryUnlock(){
     const cur = this.state.slug;
@@ -4124,13 +4143,23 @@ class Component extends DCLogic {
       coverFinalSrc: (cur && cur.slug==='seed-library') ? ((window.__resources&&window.__resources.seedCompareImproved)||'assets/seed-compare-improved.png') : '',
       coverSketchSrc: (cur && cur.slug==='seed-library') ? ((window.__resources&&window.__resources.seedCompareOriginal)||'assets/seed-compare-original.png') : '',
       goHome: () => this.goHome(),
-      revealItems: this.REVEAL_ITEMS.map((it) => {
-        const isRevealed = !!this.state.revealed[it.id];
-        return { ...it, isRevealed,
-          blurFilter: isRevealed ? 'blur(0px) saturate(1)' : 'blur(22px) saturate(1.3)',
-          textOp: isRevealed ? 1 : 0,
-          toggle: () => this.toggleReveal(it.id) };
-      }),
+      moodboardDow: ['S','M','T','W','T','F','S'],
+      moodboardCells: (() => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const firstDow = new Date(year, 9, 1).getDay(); // October = month index 9
+        const daysInOct = 31;
+        const todayNum = now.getMonth() === 9 ? now.getDate() : -1;
+        const cells = [];
+        for (let i = 0; i < firstDow; i++) cells.push({ hasDay:false, hasImg:false, day:'', img:'', filter:'' });
+        for (let d = 1; d <= daysInOct; d++) {
+          const img = this.OCT_MOODBOARD[d] || '';
+          const isToday = d === todayNum;
+          cells.push({ hasDay:true, hasImg:!!img, day:d, img, filter: isToday ? 'blur(0px)' : 'blur(9px)' });
+        }
+        while (cells.length % 7 !== 0) cells.push({ hasDay:false, hasImg:false, day:'', img:'', filter:'' });
+        return cells;
+      })(),
       siteContentOpacity: this.state.siteIntroActive ? 0 : 1,
       siteContentFilter: this.state.siteIntroActive ? 'blur(28px)' : 'none',
       goWork: () => this.gotoWork(),
