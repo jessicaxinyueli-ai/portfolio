@@ -377,7 +377,6 @@
   .feat-blur{position:absolute;left:0;right:0;bottom:0;height:42%;opacity:0;transition:opacity .15s ease-out;pointer-events:none;z-index:2;will-change:opacity;}
   .feat-figure:hover .feat-blur{opacity:1;}
   .flick-photo:hover .feat-blur{opacity:1;}
-  .moodboard-imgwrap:hover img{filter:blur(0) !important;}
   .flick-photo .feat-cover{clip-path:none;border-radius:0 !important;}
   @media (hover:none){.feat-blur{opacity:1;}}
   .feat-blur-bg{position:absolute;inset:0;-webkit-backdrop-filter:blur(18px) saturate(1.3);backdrop-filter:blur(18px) saturate(1.3);background:linear-gradient(to top,rgba(10,12,16,.42) 0%,rgba(10,12,16,.14) 60%,rgba(10,12,16,0) 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 55%);mask-image:linear-gradient(to bottom,transparent 0,#000 55%);}
@@ -1490,7 +1489,7 @@
               <sc-if value="{{ c.hasDay }}">
                 <span style="font-family:var(--font-sans);font-size:10.35px;color:var(--muted-2);">{{ c.day }}</span>
                 <sc-if value="{{ c.hasImg }}">
-                  <div class="moodboard-imgwrap" style="position:relative;width:62%;aspect-ratio:1;">
+                  <div class="moodboard-imgwrap" onMouseEnter="{{ c.onEnter }}" style="position:relative;width:62%;aspect-ratio:1;">
                     <img src="{{ c.img }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;filter:{{ c.filter }};transition:filter .4s ease;">
                   </div>
                 </sc-if>
@@ -1876,19 +1875,28 @@ class Component extends DCLogic {
     // entries here as they come in — the grid just renders whatever's
     // mapped and leaves the rest of that day's cell empty.
     this.OCT_MOODBOARD = {
+      1: 'assets/moodboard-wing.png',
+      2: 'assets/moodboard-figurine.png',
+      3: 'assets/moodboard-skincare.png',
+      4: 'assets/moodboard-earphones.png',
+      5: 'assets/moodboard-candy.png',
+      6: 'assets/moodboard-babyfig.png',
+      7: 'assets/moodboard-applecake.png',
+      8: 'assets/moodboard-peach.png',
+      9: 'assets/moodboard-coconut.png',
       18: 'assets/reveal-apple.png',
       19: 'assets/reveal-perfume.png',
-      20: 'assets/reveal-pushpin.webp',
+      20: 'assets/reveal-pushpin.png',
       21: 'assets/reveal-clock.png',
-      22: 'assets/moodboard-moss.webp',
+      22: 'assets/moodboard-moss.png',
       23: 'assets/moodboard-archiv.png',
       24: 'assets/moodboard-cursor.png',
-      25: 'assets/moodboard-safetypin.webp',
-      26: 'assets/moodboard-tomato.webp',
+      25: 'assets/moodboard-safetypin.png',
+      26: 'assets/moodboard-tomato.png',
       27: 'assets/moodboard-speechbubble.png'
     };
     const initRoute = this.resolveRoute(window.location.pathname);
-    this.state = { view:initRoute.view, slug:initRoute.slug, leaf:0, bookScale: this.computeScale(), quoteIdx:0, typed:'', typing:false, opened:false, unlocked:{}, passError:false, bgMode:'plain', siteIntroActive: !this.prefersReduced() };
+    this.state = { view:initRoute.view, slug:initRoute.slug, leaf:0, bookScale: this.computeScale(), quoteIdx:0, typed:'', typing:false, opened:false, unlocked:{}, moodboardRevealed:{}, passError:false, bgMode:'plain', siteIntroActive: !this.prefersReduced() };
     // Case studies still in progress require a passphrase before the account opens.
     this.PASSWORDS = { sailpoint: 'sailu2026' };
     // About page "Flicks" 3x3 grid — a handful of personal snapshots, unrelated to work.
@@ -2420,6 +2428,10 @@ class Component extends DCLogic {
     this.forceUpdate();
   }
   goHome(){ this.fadeSwap(() => this.setState({ view:'home' })); }
+  revealMoodboardDay(day){
+    if (this.state.moodboardRevealed[day]) return;
+    this.setState({ moodboardRevealed: { ...this.state.moodboardRevealed, [day]: true } });
+  }
   openProject(slug){ this.transitionToCase(slug); }
   tryUnlock(){
     const cur = this.state.slug;
@@ -4115,7 +4127,8 @@ class Component extends DCLogic {
         for (let d = 1; d <= daysInOct; d++) {
           const img = this.OCT_MOODBOARD[d] || '';
           const isToday = d === todayNum;
-          cells.push({ hasDay:true, hasImg:!!img, day:d, img, filter: isToday ? 'blur(0px)' : 'blur(9px)' });
+          const isRevealed = isToday || !!this.state.moodboardRevealed[d];
+          cells.push({ hasDay:true, hasImg:!!img, day:d, img, filter: isRevealed ? 'blur(0px)' : 'blur(9px)', onEnter: () => this.revealMoodboardDay(d) });
         }
         while (cells.length % 7 !== 0) cells.push({ hasDay:false, hasImg:false, day:'', img:'', filter:'' });
         return cells;
