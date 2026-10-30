@@ -431,7 +431,12 @@
   [data-ambient="plain"] .grain{mix-blend-mode:multiply;opacity:.07;}
   .paper-grain{position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;opacity:.16;background-size:153px 153px;background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNzAnIGhlaWdodD0nMTcwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC44NScgbnVtT2N0YXZlcz0nMicgc3RpdGNoVGlsZXM9J3N0aXRjaCcvPjxmZUNvbG9yTWF0cml4IHR5cGU9J3NhdHVyYXRlJyB2YWx1ZXM9JzAnLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWx0ZXI9J3VybCgjbiknLz48L3N2Zz4=");}
   [data-ambient="night"] .logo-mark{filter:invert(1);}
-  [data-ambient="night"] .diagram-invert{filter:invert(1);}
+  /* image-slot's internal .frame keeps a faint rgba(0,0,0,.04) tint until
+     its data-filled attribute lands, which races the initial src render for
+     custom elements here — visible as grey bars through a transparent PNG's
+     letterboxing. ::part(frame) reaches past the shadow boundary to kill it
+     outright for diagrams with real transparency. */
+  #figimg-copperhill-01::part(frame){background:transparent;}
   .logo-mark{transition:transform .35s cubic-bezier(.2,.7,.2,1);}
   .logo-btn:hover .logo-mark{transform:rotate(-12deg);}
   [data-ambient="night"] .cube-face{background:var(--ink);border-color:rgba(255,255,255,.1);}
@@ -962,7 +967,7 @@
                 </sc-if>
                 <sc-if value="{{ block.hasImg }}" hint-placeholder-val="{{ false }}">
                   <button type="button" onClick="{{ block.openFig }}" aria-label="Expand image" style="position:relative;display:block;width:100%;padding:0;border:none;background:none;cursor:zoom-in;">
-                    <image-slot id="figimg-{{ cur.slug }}-{{ block.figNum }}" class="{{ block.imgClass }}" src="{{ block.img }}" style="width:100%;height:auto;aspect-ratio:{{ block.ratio }};display:block;pointer-events:none;" shape="rect" fit="contain" placeholder="{{ block.caption }}"></image-slot>
+                    <image-slot id="figimg-{{ cur.slug }}-{{ block.figNum }}" src="{{ block.img }}" style="width:100%;height:auto;aspect-ratio:{{ block.ratio }};display:block;pointer-events:none;filter:{{ block.invertFilter }};" shape="rect" fit="contain" placeholder="{{ block.caption }}"></image-slot>
                     <sc-if value="{{ block.hasNotes }}">
                       <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;">
                         <sc-for list="{{ block.notes }}" as="note" hint-placeholder-count="1">
@@ -2014,7 +2019,7 @@ class Component extends DCLogic {
       if (b.type==='cardgrid') { o.items = (b.items||[]).map(c => ({ ...c, hasIcon: !!c.icon, iconEl: c.icon ? this.metricIcon(c.icon) : null })); }
       if (b.type==='statuscards') { o.items = (b.items||[]).map(s => { const err = s.tone==='error'; return { ...s, isError:err, isSuccess:!err, hasActions:Array.isArray(s.actions)&&s.actions.length>0, borderColor: err?'#e3b0aa':'#a9d4b3', bgColor: err?'#fbeeec':'#eaf5ec', iconBg: err?'rgba(192,57,43,.12)':'rgba(31,122,61,.12)', actions:(s.actions||[]).map(a => ({ ...a, isPrimary:a.variant==='primary', isLink:a.variant==='link', isDefault:!a.variant||a.variant==='default' })) }; }); }
       if (b.type==='compare') { o.hasBeforeMockEndpoint = b.beforeMock==='endpointOptOut'; }
-      if (b.type==='image') { fig++; o.figNum = String(fig).padStart(2,'0'); o.hasImg = !!b.img; o.img = b.img || this.BLANK_IMG; o.ratio = b.ratio || '1.778'; o.videos = (b.videoSrcs || (b.videoSrc ? [b.videoSrc] : [])).map(s => ({src:s})); o.videoMaxW = b.videoMaxW || (o.videos.length ? '360px' : '100%'); o.needsSlot = !b.video && !b.videoSrc && !b.videoSrcs && !b.img; o.hasNotes = Array.isArray(b.notes) && b.notes.length>0; o.imgClass = b.invertDark ? 'diagram-invert' : ''; o.openFig = () => this.setState({ lightbox: { img: o.img, title:'', label:'Fig. ' + o.figNum, caption: b.caption || '', ratio: o.ratio, invert: !!b.invertDark } }); }
+      if (b.type==='image') { fig++; o.figNum = String(fig).padStart(2,'0'); o.hasImg = !!b.img; o.img = b.img || this.BLANK_IMG; o.ratio = b.ratio || '1.778'; o.videos = (b.videoSrcs || (b.videoSrc ? [b.videoSrc] : [])).map(s => ({src:s})); o.videoMaxW = b.videoMaxW || (o.videos.length ? '360px' : '100%'); o.needsSlot = !b.video && !b.videoSrc && !b.videoSrcs && !b.img; o.hasNotes = Array.isArray(b.notes) && b.notes.length>0; o.invertFilter = (b.invertDark && this.state.bgMode === 'night') ? 'invert(1)' : 'none'; o.openFig = () => this.setState({ lightbox: { img: o.img, title:'', label:'Fig. ' + o.figNum, caption: b.caption || '', ratio: o.ratio, invert: !!b.invertDark } }); }
       if (b.type==='imagepair') { o.pairCols = (b.images||[]).length === 1 ? 'minmax(0,1fr)' : 'repeat(auto-fit,minmax(234px,1fr))'; const shared = b.sharedCaption || ''; let sharedNum = ''; if (shared) { fig++; sharedNum = String(fig).padStart(2,'0'); o.figNum = sharedNum; o.sharedCaption = shared; o.hasShared = true; } o.showPairCap = !shared; o.pairs = (b.images||[]).map((im, pi) => { let figNum = sharedNum; if (!shared) { fig++; figNum = String(fig).padStart(2,'0'); } const img = im.img || this.BLANK_IMG; const ratio = b.ratio || im.ratio || '1.173'; const caption = im.caption || shared; return { img, ratio, caption, figNum, uid: figNum + '-' + pi, showCap: !shared && !!caption, hasImg: !!im.img, hasLabel: !!im.label, label: im.label || '', labelColor: im.labelColor || 'var(--accent)', open: () => this.setState({ lightbox: { img, title:'', label:'Fig. ' + figNum, caption, ratio } }) }; }); }
       if (b.type==='shotnotes') { fig++; o.figNum = String(fig).padStart(2,'0'); o.hasImg = !!b.img; o.img = b.img || this.BLANK_IMG; o.ratio = b.ratio || '1.25'; o.needsSlot = !b.img; }
       if (b.type==='compare' || b.type==='diagram') { fig++; o.figNum = String(fig).padStart(2,'0'); }
