@@ -523,6 +523,10 @@
     <div class="nav-right" style="display:flex;align-items:center;gap:clamp(16.2px,2.7vw,34.2px);">
       <sc-if value="{{ showCaseNav }}">
         <div class="navset navset-toc" style="display:flex;gap:clamp(16.2px,2.7vw,34.2px);align-items:center;font-family:var(--font-sans);font-size:14.4px;letter-spacing:.01em;color:#96969c;">
+          <button data-navback="" onClick="{{ goWork }}" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:7.2px;padding:9px 0;font-family:var(--font-sans);color:var(--muted-2);" style-hover="color:var(--accent)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg>
+            <span style="font-size:12.15px;letter-spacing:.01em;line-height:1.4;">Back to Work</span>
+          </button>
           <nav class="toc-list" style="display:flex;flex-direction:column;">
             <sc-for list="{{ toc }}" as="t" hint-placeholder-count="6">
               <button data-tocitem="" onClick="{{ t.go }}" style="background:none;border:none;cursor:pointer;text-align:left;display:flex;align-items:baseline;gap:9px;padding:9px 0;font-family:var(--font-sans);color:var(--muted-2);" style-hover="color:var(--accent)">
