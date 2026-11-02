@@ -1485,7 +1485,7 @@
 
       <!-- My October Moodboard — one icon per day, blurred until hovered, today always sharp -->
       <div style="font-family:var(--font-sans);font-weight:400;font-size:14.4px;letter-spacing:.02em;text-transform:lowercase;color:var(--muted-2);margin:clamp(50.4px,6.3vw,79.2px) 0 19.8px;">my moodboard</div>
-      <h2 style="font-family:var(--font-serif);font-weight:400;font-size:calc(36px * var(--sc-header,1));line-height:.98;letter-spacing:-.026em;margin:0;">October 2026</h2>
+      <h2 style="font-family:var(--font-serif);font-weight:400;font-size:calc(36px * var(--sc-header,1));line-height:.98;letter-spacing:-.026em;margin:0;">November 2026</h2>
       <div style="margin:clamp(28.8px,3.6vw,43.2px) 0 clamp(36px,4.5vw,54px);">
         <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:clamp(8.1px,1.35vw,16.2px);margin-bottom:13.5px;">
           <sc-for list="{{ moodboardDow }}" as="wd" hint-placeholder-count="7">
@@ -1889,10 +1889,10 @@ class Component extends DCLogic {
       { t:`Carpe diem. Seize the day.`, a:`Dead Poets Society, 1989`, note:`It's fine to feel lost sometimes. I do, often. What I know for sure is that I want to enjoy the day, even when the day's best offer is a new sweet treat.` },
       { t:`Happiness can be found even in the darkest of times.`, a:`Harry Potter and the Prisoner of Azkaban, 2004`, note:`Stress has knocked me flat before. What helped was stopping, breathing, and naming one thing I was grateful for. Usually family, friends, or food. A small light, but enough to work by.` }
     ];
-    // One icon per day for the About page's October moodboard. Add more
+    // One icon per day for the About page's November moodboard. Add more
     // entries here as they come in — the grid just renders whatever's
     // mapped and leaves the rest of that day's cell empty.
-    this.OCT_MOODBOARD = {
+    this.NOV_MOODBOARD = {
       1: 'assets/moodboard-wing.png',
       2: 'assets/moodboard-figurine.png',
       3: 'assets/moodboard-skincare.png',
@@ -4136,13 +4136,13 @@ class Component extends DCLogic {
       moodboardCells: (() => {
         const now = new Date();
         const year = now.getFullYear();
-        const firstDow = new Date(year, 9, 1).getDay(); // October = month index 9
-        const daysInOct = 31;
-        const todayNum = now.getMonth() === 9 ? now.getDate() : -1;
+        const firstDow = new Date(year, 10, 1).getDay(); // November = month index 10
+        const daysInNov = 30;
+        const todayNum = now.getMonth() === 10 ? now.getDate() : -1;
         const cells = [];
         for (let i = 0; i < firstDow; i++) cells.push({ hasDay:false, hasImg:false, day:'', img:'', filter:'' });
-        for (let d = 1; d <= daysInOct; d++) {
-          const img = this.OCT_MOODBOARD[d] || '';
+        for (let d = 1; d <= daysInNov; d++) {
+          const img = this.NOV_MOODBOARD[d] || '';
           const isToday = d === todayNum;
           const isRevealed = isToday || !!this.state.moodboardRevealed[d];
           cells.push({ hasDay:true, hasImg:!!img, day:d, img, isToday, dayBg: isToday ? '#1a73e8' : 'transparent', dayColor: isToday ? '#fff' : 'var(--muted-2)', filter: isRevealed ? 'blur(0px)' : 'blur(9px)', onEnter: () => this.revealMoodboardDay(d) });
