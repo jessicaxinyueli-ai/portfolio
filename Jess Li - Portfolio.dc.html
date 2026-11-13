@@ -1277,7 +1277,7 @@
                   <sc-if value="{{ block.showBadge }}" hint-placeholder-val="{{ true }}">
                   <span style="position:absolute;top:12.6px;right:16.2px;z-index:4;font-family:var(--font-sans);font-size:11px;letter-spacing:.02em;color:var(--muted-2);background:var(--paper);border:1px solid var(--line);border-radius:2.7px;padding:4.5px 10.8px;">{{ block.activeLabel }}</span>
                   </sc-if>
-                  <div style="position:relative;width:100%;aspect-ratio:{{ block.frameRatio }};display:flex;align-items:center;justify-content:center;{{ block.framePad }}">
+                  <div onTouchStart="{{ block.onCarTouchStart }}" onTouchEnd="{{ block.onCarTouchEnd }}" style="position:relative;width:100%;aspect-ratio:{{ block.frameRatio }};display:flex;align-items:center;justify-content:center;touch-action:pan-y;{{ block.framePad }}">
                     <sc-if value="{{ block.showBg }}" hint-placeholder-val="{{ true }}">
                       <sc-for list="{{ block.slides }}" as="bgslide" hint-placeholder-count="4">
                         <sc-if value="{{ bgslide.active }}" hint-placeholder-val="{{ true }}">
@@ -2072,6 +2072,14 @@ class Component extends DCLogic {
         o.activeText = as.text || '';
         o.carPrev = () => this.selectCarousel(idx, (active - 1 + n) % n);
         o.carNext = () => this.selectCarousel(idx, (active + 1) % n);
+        o.onCarTouchStart = (e) => { this._carTouchX = e.touches[0].clientX; };
+        o.onCarTouchEnd = (e) => {
+          if (this._carTouchX == null) return;
+          const dx = e.changedTouches[0].clientX - this._carTouchX;
+          this._carTouchX = null;
+          if (Math.abs(dx) < 40) return;
+          this.selectCarousel(idx, dx < 0 ? (active + 1) % n : (active - 1 + n) % n);
+        };
         o.carDots = sl.map((s, i) => ({ i, dotStyle: 'height:6px;border-radius:6px;border:none;cursor:pointer;padding:0;transition:width .3s ease,background-color .3s ease;' + (i === active ? 'width:24px;background:var(--ink);' : 'width:6px;background:var(--line);'), select: () => this.selectCarousel(idx, i) }));
       }
       if (b.type==='scrolly') { const n = (b.steps||[]).length || 1; const active = (this._scrollyActive && this._scrollyActive[idx]) || 0; o.steps = (b.steps||[]).map((s,i) => ({ ...s, i, num:String(i+1).padStart(2,'0'), hasImg:!!s.img, img: s.img || this.BLANK_IMG, ratio: s.ratio || '1.556', hasNotes:Array.isArray(s.notes)&&s.notes.length>0, active:i===active, panelOpacity:i===active?1:0, panelTransform:i===active?'translateY(0)':'translateY(10px)', tabStyle:'font-family:var(--font-sans);font-size:12px;letter-spacing:.06em;border-radius:20px;padding:7px 16px;cursor:pointer;transition:color .25s ease,background-color .25s ease,border-color .25s ease;' + (i===active ? 'background:var(--ink);border:1px solid var(--ink);color:var(--paper);' : 'background:none;border:1px solid var(--line);color:var(--muted-2);'), select: () => this.selectScrolly(idx, i) })); o.stepCount = String((b.steps||[]).length).padStart(2,'0'); o.trackWidthPct = n*100; o.slideBasisPct = +(100/n).toFixed(4); o.activeStep = active; o.activeStepNum = String(active+1).padStart(2,'0'); o.trackOffsetPct = -(active * (100/n)); o.activeRatio = (b.steps[active] && b.steps[active].ratio) || '1.556';
