@@ -60,7 +60,9 @@
   button{font:inherit;}
   @keyframes viewIn{from{opacity:0;transform:translateY(10.8px);}to{opacity:1;transform:none;}}
   @keyframes lightboxFade{from{opacity:0;}to{opacity:1;}}
-  @media (prefers-reduced-motion:reduce){.lightbox-backdrop,.lightbox-panel{animation:none!important;}}
+  @keyframes cardPopUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+  .cardgrid-item{animation:cardPopUp .55s cubic-bezier(.2,.7,.2,1) both;}
+  @media (prefers-reduced-motion:reduce){.lightbox-backdrop,.lightbox-panel{animation:none!important;}.cardgrid-item{animation:none!important;}}
 
   /* ===== Hero: dot -> isometric box reveal ===== */
   @keyframes boxGrow{
@@ -877,9 +879,9 @@
               </blockquote>
             </sc-if>
             <sc-if value="{{ block.isCardGrid }}">
-              <div data-reveal="" style="display:flex;flex-direction:column;gap:clamp(14.4px,1.98vw,19.8px);margin:clamp(21.6px,2.7vw,34.2px) 0;">
+              <div class="cardgrid-row" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(198px,1fr));gap:clamp(14.4px,1.98vw,19.8px);margin:clamp(21.6px,2.7vw,34.2px) 0;">
                 <sc-for list="{{ block.items }}" as="c" hint-placeholder-count="4">
-                  <div style="border:1px solid var(--line);border-radius:12.6px;padding:clamp(19.8px,2.7vw,27px);">
+                  <div class="cardgrid-item" style="animation-delay:{{ c.popDelay }};border:1px solid var(--line);border-radius:12.6px;padding:clamp(19.8px,2.7vw,27px);">
                     <sc-if value="{{ c.hasIcon }}">
                       <div style="margin-bottom:12.6px;">{{ c.iconEl }}</div>
                     </sc-if>
@@ -2004,7 +2006,7 @@ class Component extends DCLogic {
         hasNote:b.type==='para'&&!!b.note&&(this.props.showMarginNotes!==false) };
       if (b.type==='section') { sec++; o.secNum = String(sec).padStart(2,'0'); o.anchor = 'sec-' + sec; firstPara = true; }
       if (b.type==='stepflow') { o.items = (b.items||[]).map((s,i) => ({ ...s, needsArrow: i>0 })); }
-      if (b.type==='cardgrid') { o.items = (b.items||[]).map(c => ({ ...c, hasIcon: !!c.icon, iconEl: c.icon ? this.metricIcon(c.icon) : null })); }
+      if (b.type==='cardgrid') { o.items = (b.items||[]).map((c, ci) => ({ ...c, hasIcon: !!c.icon, iconEl: c.icon ? this.metricIcon(c.icon) : null, popDelay: (ci * 110) + 'ms' })); }
       if (b.type==='statuscards') { o.items = (b.items||[]).map(s => { const err = s.tone==='error'; return { ...s, isError:err, isSuccess:!err, hasActions:Array.isArray(s.actions)&&s.actions.length>0, borderColor: err?'#e3b0aa':'#a9d4b3', bgColor: err?'#fbeeec':'#eaf5ec', iconBg: err?'rgba(192,57,43,.12)':'rgba(31,122,61,.12)', actions:(s.actions||[]).map(a => ({ ...a, isPrimary:a.variant==='primary', isLink:a.variant==='link', isDefault:!a.variant||a.variant==='default' })) }; }); }
       if (b.type==='compare') { o.hasBeforeMockEndpoint = b.beforeMock==='endpointOptOut'; }
       if (b.type==='image') { fig++; o.figNum = String(fig).padStart(2,'0'); o.hasImg = !!b.img; o.img = b.img || this.BLANK_IMG; o.ratio = b.ratio || '1.778'; o.videos = (b.videoSrcs || (b.videoSrc ? [b.videoSrc] : [])).map(s => ({src:s})); o.videoMaxW = b.videoMaxW || (o.videos.length ? '360px' : '100%'); o.needsSlot = !b.video && !b.videoSrc && !b.videoSrcs && !b.img; o.hasNotes = Array.isArray(b.notes) && b.notes.length>0; o.invertFilter = (b.invertDark && this.state.bgMode === 'night') ? 'invert(1)' : 'none'; o.openFig = () => this.setState({ lightbox: { img: o.img, title:'', label:'Fig. ' + o.figNum, caption: b.caption || '', ratio: o.ratio, invert: !!b.invertDark } }); }
