@@ -201,18 +201,14 @@
   /* Nav active indicator */
   [data-navlink]{position:relative;}
 
-  /* Project card entrance: staggered rise-and-fade as the Work list mounts */
-  @keyframes projCardIn{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:none;}}
-  .projcard-pop{animation:projCardIn .7s cubic-bezier(.2,.7,.2,1) both;}
-  @media (prefers-reduced-motion:reduce){.projcard-pop{animation:none!important;}}
   /* Project card hover: image breathes, type shifts */
   .entry-imgwrap{overflow:hidden;}
   .entry-imgwrap image-slot{transition:transform .7s cubic-bezier(.2,.7,.2,1);will-change:transform;transform:translateZ(0);}
   .entry-card:hover .entry-imgwrap image-slot{transform:scale(1.045);}
   .entry-card .entry-title{transition:transform .5s cubic-bezier(.2,.7,.2,1),color .4s ease;will-change:transform;}
   .entry-card:hover .entry-title{transform:translateX(-5.4px);color:var(--accent);}
-  .entry-card .entry-cta{gap:7.2px;transition:gap .35s ease,color .35s ease;color:var(--muted-2);}
-  .entry-card:hover .entry-cta{gap:14.4px;color:var(--accent);}
+  .entry-card .entry-cta{transition:gap .35s ease;}
+  .entry-card:hover .entry-cta{gap:14.4px;}
 
   /* Sticky-note lift on hover already handled; add GPU hint */
   .sticky-face{will-change:transform;}
@@ -601,19 +597,13 @@
         <div class="feat-visual work-grid" style="min-width:0;display:flex;flex-direction:column;gap:clamp(50.4px,6.3vw,79.2px);">
           <sc-for list="{{ projects }}" as="project" hint-placeholder-count="4">
             <section id="entry-{{ project.slug }}" data-projblock="" data-idx="{{ project.i0 }}" data-slug="{{ project.slug }}" style="position:relative;min-width:0;">
-              <div class="feat-sticky entry-card projcard-pop" style="display:flex;flex-direction:column;align-items:stretch;gap:clamp(18px,2.7vw,27px);box-sizing:border-box;padding:0;animation-delay:{{ project.popDelay }};">
-                <button type="button" onClick="{{ project.open }}" style="display:block;width:100%;text-align:left;background:none;border:none;padding:0;cursor:{{ project.coverCursor }};order:1;">
-                <figcaption class="feat-caption" style="max-width:100%;display:flex;flex-direction:column;gap:clamp(12.6px,1.44vw,18px);">
+              <div class="feat-sticky" style="display:flex;flex-direction:column;align-items:stretch;gap:clamp(18px,2.7vw,27px);box-sizing:border-box;padding:0;">
+                <figcaption class="feat-caption" style="max-width:100%;display:flex;flex-direction:column;gap:clamp(12.6px,1.44vw,18px);order:1;">
                   <div>
-                    <div class="entry-title" style="font-family:var(--font-serif);font-weight:400;font-size:clamp(18px,1.8vw,24px);line-height:1.12;letter-spacing:-.015em;color:var(--ink);">{{ project.title }}</div>
+                    <div style="font-family:var(--font-serif);font-weight:400;font-size:clamp(18px,1.8vw,24px);line-height:1.12;letter-spacing:-.015em;color:var(--ink);">{{ project.title }}</div>
                     <p style="font-family:var(--font-sans);font-size:14px;line-height:1.55;color:var(--ink-2);margin:9px 0 0;text-wrap:pretty;">{{ project.overview }}</p>
                   </div>
-                  <div class="entry-cta" style="display:flex;align-items:center;font-family:var(--font-sans);font-size:13px;letter-spacing:.01em;">
-                    <span>{{ project.ctaLabel }}</span>
-                    <span aria-hidden="true">→</span>
-                  </div>
                 </figcaption>
-                </button>
                 <figure class="entry-imgwrap feat-figure" data-cover-label="{{ project.coverLabel }}" onClick="{{ project.openImg }}" style="margin:0;cursor:{{ project.coverCursor }};width:100%;order:2;">
                   <div class="feat-cover" style="position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--surface);border-radius:18px;">
                     <sc-if value="{{ project.homeFullImg }}" hint-placeholder-val="{{ false }}">
@@ -3986,7 +3976,6 @@ class Component extends DCLogic {
       homeCoverScale: p.slug === 'sailpoint' ? 1.08 : 1,
       homeNoCoverVideo: p.slug !== 'copperhill' && p.slug !== 'sailpoint' && !p.caseCover,
       noPublicVideo: !p.publicVideo,
-      popDelay: (i * 120) + 'ms',
       coverCursor: (p.available !== false || p.locked) ? 'pointer' : 'default',
       open: () => { if (p.available === false && !p.locked) return; this.transitionToCase(p.slug); },
       openImg: () => { if (p.available === false && !p.locked) return; this.transitionToCase(p.slug); }
